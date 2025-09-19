@@ -21,7 +21,6 @@ C:\Users\matsf\source\repos\FirstWebApplication\FirstWebApplication\obj\Debug\ne
 C:\Users\matsf\source\repos\FirstWebApplication\FirstWebApplication\obj\Debug\net9.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\matsf\source\repos\FirstWebApplication\FirstWebApplication\obj\Debug\net9.0\scopedcss\bundle\FirstWebApplication.styles.css
 C:\Users\matsf\source\repos\FirstWebApplication\FirstWebApplication\obj\Debug\net9.0\scopedcss\projectbundle\FirstWebApplication.bundle.scp.css
-C:\Users\matsf\source\repos\FirstWebApplication\FirstWebApplication\obj\Debug\net9.0\compressed\o6z6in6edj-b9sayid5wm.gz
 C:\Users\matsf\source\repos\FirstWebApplication\FirstWebApplication\obj\Debug\net9.0\compressed\fko6fk432i-61n19gt1b8.gz
 C:\Users\matsf\source\repos\FirstWebApplication\FirstWebApplication\obj\Debug\net9.0\compressed\9tv0ur8ixf-xtxxf3hu2r.gz
 C:\Users\matsf\source\repos\FirstWebApplication\FirstWebApplication\obj\Debug\net9.0\compressed\gn2lhuufy4-bqjiyaj88i.gz
@@ -106,3 +105,6 @@ C:\Users\matsf\source\repos\FirstWebApplication\FirstWebApplication\obj\Debug\ne
 C:\Users\matsf\source\repos\FirstWebApplication\FirstWebApplication\obj\Debug\net9.0\compressed\dfz4orwhoo-7888sfn8yc.gz
 C:\Users\matsf\source\repos\FirstWebApplication\FirstWebApplication\obj\Debug\net9.0\compressed\kxqlq3t94p-b4adnknggc.gz
 C:\Users\matsf\source\repos\FirstWebApplication\FirstWebApplication\obj\Debug\net9.0\compressed\7gxfk2vghi-w4n1b1xhjx.gz
+C:\Users\matsf\source\repos\FirstWebApplication\FirstWebApplication\bin\Debug\net9.0\package-lock.json
+C:\Users\matsf\source\repos\FirstWebApplication\FirstWebApplication\bin\Debug\net9.0\package.json
+C:\Users\matsf\source\repos\FirstWebApplication\FirstWebApplication\obj\Debug\net9.0\compressed\o6z6in6edj-e850bvoq55.gz

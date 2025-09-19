@@ -1,0 +1,24 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build resultater
+bin/
+obj/
+Debug/
+Release/
+
+# Node
+node_modules/
+package-lock.json
+
+# Publisering
+wwwroot/css/site.css
+
+# Diverse
+*.log
+*.tmp
+*.cache
