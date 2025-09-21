@@ -108,3 +108,6 @@ C:\Users\matsf\source\repos\FirstWebApplication\FirstWebApplication\obj\Debug\ne
 C:\Users\matsf\source\repos\FirstWebApplication\FirstWebApplication\bin\Debug\net9.0\package-lock.json
 C:\Users\matsf\source\repos\FirstWebApplication\FirstWebApplication\bin\Debug\net9.0\package.json
 C:\Users\matsf\source\repos\FirstWebApplication\FirstWebApplication\obj\Debug\net9.0\compressed\o6z6in6edj-e850bvoq55.gz
+C:\Users\krist\Documents\GitHub\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\FirstWebApplication.dll
+C:\Users\krist\Documents\GitHub\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\refint\FirstWebApplication.dll
+C:\Users\krist\Documents\GitHub\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\FirstWebApplication.pdb
