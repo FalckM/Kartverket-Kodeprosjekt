@@ -1,13 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "H4O43rBIxyE=",
+  "dgSpecHash": "9Dc398RZ1ZI=",
   "success": true,
-  "projectFilePath": "C:\\Users\\matsf\\source\\repos\\FirstWebApplication\\FirstWebApplication\\FirstWebApplication.csproj",
+  "projectFilePath": "C:\\Users\\kj4sp\\My Drive\\Skole\\UiA\\IT og informasjonssystemer\\Høst 2025\\IS-202 Programmeringsprosjekt\\Kartverket-Kodeprosjekt\\FirstWebApplication\\FirstWebApplication.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\matsf\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.2\\microsoft.extensions.dependencyinjection.abstractions.8.0.2.nupkg.sha512",
-    "C:\\Users\\matsf\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.2\\microsoft.extensions.logging.abstractions.8.0.2.nupkg.sha512",
-    "C:\\Users\\matsf\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.22.1\\microsoft.visualstudio.azure.containers.tools.targets.1.22.1.nupkg.sha512",
-    "C:\\Users\\matsf\\.nuget\\packages\\mysqlconnector\\2.4.0\\mysqlconnector.2.4.0.nupkg.sha512"
+    "C:\\Users\\kj4sp\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.2\\microsoft.extensions.dependencyinjection.abstractions.8.0.2.nupkg.sha512",
+    "C:\\Users\\kj4sp\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.2\\microsoft.extensions.logging.abstractions.8.0.2.nupkg.sha512",
+    "C:\\Users\\kj4sp\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.22.1\\microsoft.visualstudio.azure.containers.tools.targets.1.22.1.nupkg.sha512",
+    "C:\\Users\\kj4sp\\.nuget\\packages\\mysqlconnector\\2.4.0\\mysqlconnector.2.4.0.nupkg.sha512"
   ],
   "logs": []
 }

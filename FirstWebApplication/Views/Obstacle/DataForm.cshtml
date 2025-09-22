@@ -1,0 +1,91 @@
+﻿@* @model FirstWebApplication.Models.ObstacleData
+
+@{
+    ViewData["Title"] = "Register obstacle";
+}
+
+<div class="max-w-md mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-2">Obstacle Registration Form</h1>
+    <p class="text-gray-600 mb-6">Please register an obstacle:</p>
+
+    <form asp-action="DataForm" method="post" class="space-y-5">
+        <div>
+            <label asp-for="ObstacleName" class="block text-sm font-medium mb-1">Obstacle name:</label>
+            <input asp-for="ObstacleName"
+                   class="w-full border border-gray-300 rounded-md p-2
+                          focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600" />
+            <span asp-validation-for="ObstacleName" class="text-sm text-red-600"></span>
+        </div>
+
+        <div>
+            <label asp-for="ObstacleHeight" class="block text-sm font-medium mb-1">Obstacle height in meters:</label>
+            <input asp-for="ObstacleHeight"
+                   class="w-full border border-gray-300 rounded-md p-2
+                          focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600" />
+            <span asp-validation-for="ObstacleHeight" class="text-sm text-red-600"></span>
+        </div>
+
+        <div>
+            <label asp-for="ObstacleDescription" class="block text-sm font-medium mb-1">Obstacle description:</label>
+            <input asp-for="ObstacleDescription"
+                   class="w-full border border-gray-300 rounded-md p-2
+                          focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600" />
+            <span asp-validation-for="ObstacleDescription" class="text-sm text-red-600"></span>
+        </div>
+
+        <button type="submit"
+                class="w-full sm:w-auto inline-flex justify-center items-center
+                       rounded-md bg-blue-600 px-4 py-2 text-white font-medium
+                       hover:bg-blue-700 focus-visible:outline focus-visible:outline-2
+                       focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+            Submit Data
+        </button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+} *@
+
+@model FirstWebApplication.Models.ObstacleData
+
+@{
+    ViewData["Title"] = "Register obstacle";
+}
+
+<div class="max-w-xl mx-auto px-4 py-8 bg-white rounded-lg shadow-lg">
+    <h1 class="text-3xl font-bold mb-2 text-center text-gray-800">Register an obstacle</h1>
+    <p class="text-gray-600 mb-6 text-center">Fill out the form below to register a new obstacle</p>
+
+    <form asp-action="DataForm" method="post" class="space-y-6">
+        <div>
+            <label asp-for="ObstacleName" class="block text-sm font-medium mb-1 text-gray-700">Obstacle name:</label>
+            <input asp-for="ObstacleName"
+                   class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600" />
+            <span asp-validation-for="ObstacleName" class="text-sm text-red-600"></span>
+        </div>
+
+        <div>
+            <label asp-for="ObstacleHeight" class="block text-sm font-medium mb-1 text-gray-700">Obstacle height in meters:</label>
+            <input asp-for="ObstacleHeight"
+                   class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600" />
+            <span asp-validation-for="ObstacleHeight" class="text-sm text-red-600"></span>
+        </div>
+
+        <div>
+            <label asp-for="ObstacleDescription" class="block text-sm font-medium mb-1 text-gray-700">Obstacle description:</label>
+            <textarea asp-for="ObstacleDescription" rows="4"
+                      class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600"></textarea>
+            <span asp-validation-for="ObstacleDescription" class="text-sm text-red-600"></span>
+        </div>
+
+        <button type="submit"
+                class="w-full sm:w-auto inline-flex justify-center items-center rounded-md bg-blue-600 px-4 py-2 text-white font-medium hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+            Submit
+        </button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

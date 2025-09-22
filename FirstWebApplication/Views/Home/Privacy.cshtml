@@ -1,6 +1,15 @@
-﻿@{
+﻿@* @{
     ViewData["Title"] = "Privacy Policy";
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<p>Use this page to detail your site's privacy policy.</p> *@
+
+@{
+    ViewData["Title"] = "Privacy";
+}
+
+<div class="max-w-4xl mx-auto px-4 py-8">
+    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">@ViewData["Title"]</h1>
+    <p class="text-lg text-gray-700">Use this page to detail your site's privacy policy. You can provide information about what data you collect, how it is used, and the measures you take to protect user information. This is an important step to build trust with your users and comply with privacy regulations.</p>
+</div>

@@ -14,6 +14,10 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["FirstWebApplication/FirstWebApplication.csproj", "FirstWebApplication/"]
 RUN dotnet restore "./FirstWebApplication/FirstWebApplication.csproj"
+COPY ["FirstWebApplication/package.json", "FirstWebApplication/"]
+# Install npm dependencies
+RUN cd FirstWebApplication && npm install
+RUN cd FirstWebApplication && npm run dev
 COPY . .
 WORKDIR "/src/FirstWebApplication"
 RUN dotnet build "./FirstWebApplication.csproj" -c $BUILD_CONFIGURATION -o /app/build
