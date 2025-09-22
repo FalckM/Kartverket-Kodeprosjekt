@@ -16,5 +16,8 @@ namespace FirstWebApplication.Models
         [MaxLength(1000)]
         public string ObstacleDescription { get; set; }
 
+        [Required(ErrorMessage = "Field is required")]
+        public string ObstacleGeometry { get; set; }
     }
 }
+

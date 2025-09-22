@@ -1,8 +1,15 @@
 ﻿@model FirstWebApplication.Models.ObstacleData
 
 @{
-    ViewData["Title"] = "Register obstacle";
+    ViewData["Title"] = "Register an obstacle";
 }
+
+<style>
+    #mapid {
+        height: 320px;
+        width: 100%;
+    }
+</style>
 
 <div class="max-w-xl mx-auto px-4 py-8 bg-white rounded-lg shadow-lg">
     <h1 class="text-3xl font-bold mb-2 text-center text-gray-800">Register an obstacle</h1>
@@ -30,6 +37,13 @@
             <span asp-validation-for="ObstacleDescription" class="text-sm text-red-600"></span>
         </div>
 
+        <div>
+            <label class="block text-sm font-medium mb-1 text-gray-700">Mark obstacle on map:</label>
+            <div id="mapid" class="w-full h-80 rounded-md"></div>
+            <input type="hidden" asp-for="ObstacleGeometry" />
+            <span asp-validation-for="ObstacleGeometry" class="text-sm text-red-600"></span>
+        </div>
+
         <button type="submit"
                 class="w-full sm:w-auto inline-flex justify-center items-center rounded-md bg-blue-600 px-4 py-2 text-white font-medium hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
             Submit
@@ -39,4 +53,35 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Map initialization
+            const map = L.map('mapid').setView([60.4720, 8.4689], 5); // Centered on Norway
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            let obstacleLayer;
+
+            // Function to handle map clicks and add markers or lines
+            map.on('click', function(e) {
+                // Remove previous layers to allow only one obstacle
+                if (obstacleLayer) {
+                    map.removeLayer(obstacleLayer);
+                }
+
+                // Create a point from the click event
+                const geoJson = {
+                    "type": "Point",
+                    "coordinates": [e.latlng.lng, e.latlng.lat]
+                };
+
+                // Add the new marker to the map
+                obstacleLayer = L.geoJSON(geoJson).addTo(map);
+
+                // Update the hidden input field with the new GeoJSON string
+                document.getElementById('ObstacleGeometry').value = JSON.stringify(geoJson);
+            });
+        });
+    </script>
 }
