@@ -1,3 +1,4 @@
+wwwroot\css\input.css
 wwwroot\css\site.css
 wwwroot\favicon.ico
 wwwroot\js\site.js
@@ -73,7 +74,6 @@ wwwroot\lib\leaflet\leaflet-src.js.map
 wwwroot\lib\leaflet\leaflet.css
 wwwroot\lib\leaflet\leaflet.js
 wwwroot\lib\leaflet\leaflet.js.map
-wwwroot\css\input.css
 C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet\leaflet.js.map
 C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet\leaflet.js
 C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet\leaflet.css

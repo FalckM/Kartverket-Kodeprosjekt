@@ -1,30 +1,7 @@
-﻿@* @model FirstWebApplication.Models.ObstacleData
+﻿@model FirstWebApplication.Models.ObstacleData
 
 @{
-    ViewData["Title"] = "Overview";
-}
-
-<div>
-    <h1>Overview</h1>
-    <p>We appreciate you taking the time to register an obstacle!</p>
-
-    <p>
-        @Model.ObstacleName
-    </p>
-
-    <p>
-        @Model.ObstacleHeight m
-    </p>
-
-    <p>
-        @Model.ObstacleDescription
-    </p>
-</div> *@
-
-@model FirstWebApplication.Models.ObstacleData
-
-@{
-    ViewData["Title"] = "Oversikt over registrering";
+    ViewData["Title"] = "Registration Overview";
 }
 
 <div class="max-w-xl mx-auto p-6 bg-white rounded-lg shadow-md mt-8">
@@ -47,7 +24,10 @@
             <p class="text-gray-800">@Model.ObstacleDescription</p>
         </div>
     </div>
-    <div class="flex justify-end mt-4">
+    <div class="flex justify-end space-x-4 mt-4">
+        <a asp-action="DataForm" asp-controller="Obstacle" class="py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition duration-150 ease-in-out">
+            Register New Obstacle
+        </a>
         <a href="@Url.Action("Index", "Home")" class="py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-md transition duration-150 ease-in-out">
             All done!
         </a>
