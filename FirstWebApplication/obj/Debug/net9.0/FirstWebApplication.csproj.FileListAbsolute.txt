@@ -218,7 +218,6 @@ C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 P
 C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\FirstWebApplication.genruntimeconfig.cache
 C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\ref\FirstWebApplication.dll
 C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\ushg1jb417-tbo5amful4.gz
-C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\o6z6in6edj-xkl2kgdp0r.gz
 C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\l7lbv8sumt-upxk5qtnit.gz
 C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\ff5w398g8v-mdyxqcwgiv.gz
 C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\yh2r78zvt8-hyel2fjbur.gz
@@ -327,3 +326,4 @@ C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 P
 C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\5dd7bgrfmw-fem8o2wd7k.gz
 C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\ofbl1hdcmw-xb3e3zwx01.gz
 C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\87f00bpqs2-nlswq0d9q5.gz
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\o6z6in6edj-x3gh7si18d.gz

@@ -6,18 +6,18 @@
 
 <style>
     #mapid-overview {
-        height: 320px;
+        height: 450px;
         width: 100%;
     }
 </style>
 
-<div class="max-w-xl mx-auto p-6 bg-white rounded-lg shadow-md mt-8">
+<div class="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md mt-8">
     <h1 class="text-3xl font-bold text-gray-900 mb-2">Thank you for your registration!</h1>
-    <p class="text-gray-600 text-lg mb-6">We appreciate you taking the time to register this obstacle.</p>
+    <p class="text-gray-600 text-lg mb-6">We appreciate you taking the time to register this obstacle</p>
 
     <div class="space-y-4">
         <div>
-            <h2 class="text-lg font-semibold text-gray-700">Obstacle name:</h2>
+            <h2 class="text-lg font-semibold text-gray-700">Name:</h2>
             <p class="text-gray-800">@Model.ObstacleName</p>
         </div>
 
@@ -32,14 +32,15 @@
         </div>
 
         <div>
-            <h2 class="text-lg font-semibold text-gray-700">Obstacle location:</h2>
+            <h2 class="text-lg font-semibold text-gray-700">Location:</h2>
             <div id="mapid-overview" class="w-full h-80 rounded-md mt-2"></div>
+            <div id="coordinates-display" class="mt-4 p-3 bg-gray-100 rounded-md text-sm font-mono text-gray-700"></div>
         </div>
     </div>
 
-    <div class="flex justify-end space-x-4 mt-6">
+    <div class="flex justify-end space-x-4 mt-8">
         <a asp-action="DataForm" asp-controller="Obstacle" class="py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition duration-150 ease-in-out">
-            Register New Obstacle
+            Register new obstacle
         </a>
         <a href="@Url.Action("Index", "Home")" class="py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-md transition duration-150 ease-in-out">
             All done!
@@ -61,10 +62,33 @@
                     }).addTo(map);
 
                     const obstacleLayer = L.geoJSON(geoJsonData).addTo(map);
+
                     map.fitBounds(obstacleLayer.getBounds());
+
+                    const coordsDisplay = document.getElementById('coordinates-display');
+                    if (coordsDisplay && geoJsonData.geometry) {
+                        const coords = geoJsonData.geometry.coordinates;
+                        let coordsText = '';
+
+                        if (geoJsonData.geometry.type === 'Point') {
+                             coordsText = `<b>Point Coordinates:</b><br>Lat: <span style="color: #0d6efd; font-weight: bold;">${coords[1].toFixed(4)}</span><br>Lng: <span style="color: #0d6efd; font-weight: bold;">${coords[0].toFixed(4)}</span>`;
+                        } else if (geoJsonData.geometry.type === 'LineString') {
+                            coordsText = `<b>Line Coordinates</b><br>Start Point - Lat: <span style="color: #0d6efd; font-weight: bold;">${coords[0][1].toFixed(4)}</span>, Lng <span style="color: #0d6efd; font-weight: bold;">${coords[0][0].toFixed(4)}</span><br>End Point - Lat: <span style="color: #0d6efd; font-weight: bold;">${coords[coords.length - 1][1].toFixed(4)}</span>, Lng <span style="color: #0d6efd; font-weight: bold;">${coords[coords.length - 1][0].toFixed(4)}</span>`;
+                                    const startPoint = L.marker([coords[0][1], coords[0][0]]).addTo(map);
+        const endPoint = L.marker([coords[coords.length - 1][1], coords[coords.length - 1][0]], { icon: L.icon({ iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png', shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png', iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41] }) }).addTo(map);
+
+        startPoint.bindTooltip("Start Point", {permanent: true, direction: "top"}).openTooltip();
+        endPoint.bindTooltip("End Point", {permanent: true, direction: "top"}).openTooltip();
+                        } else {
+                            coordsText = `The obstacle's location is displayed on the map.`;
+                        }
+                         coordsDisplay.innerHTML = coordsText;
+                    }
                 } catch (e) {
                     console.error("Failed to parse GeoJSON data:", e);
                 }
+
+
             }
         });
     </script>

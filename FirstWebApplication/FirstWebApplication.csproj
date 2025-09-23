@@ -13,6 +13,11 @@
     <None Include="wwwroot\css\input.css" />
   </ItemGroup>
 
+	<Target Name="RunNpmBuild" BeforeTargets="Build">
+		<Message Text="Running npm run dev..." Importance="high" />
+		<Exec Command="npm run dev" WorkingDirectory="." />
+	</Target>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
     <PackageReference Include="MySqlConnector" Version="2.4.0" />
