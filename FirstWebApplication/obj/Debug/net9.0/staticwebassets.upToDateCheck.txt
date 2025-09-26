@@ -1,4 +1,3 @@
-wwwroot\css\input.css
 wwwroot\css\site.css
 wwwroot\favicon.ico
 wwwroot\js\site.js
@@ -62,6 +61,19 @@ wwwroot\lib\jquery\dist\jquery.slim.js
 wwwroot\lib\jquery\dist\jquery.slim.min.js
 wwwroot\lib\jquery\dist\jquery.slim.min.map
 wwwroot\lib\jquery\LICENSE.txt
+wwwroot\lib\leaflet\images\layers-2x.png
+wwwroot\lib\leaflet\images\layers.png
+wwwroot\lib\leaflet\images\marker-icon-2x.png
+wwwroot\lib\leaflet\images\marker-icon.png
+wwwroot\lib\leaflet\images\marker-shadow.png
+wwwroot\lib\leaflet\leaflet-src.esm.js
+wwwroot\lib\leaflet\leaflet-src.esm.js.map
+wwwroot\lib\leaflet\leaflet-src.js
+wwwroot\lib\leaflet\leaflet-src.js.map
+wwwroot\lib\leaflet\leaflet.css
+wwwroot\lib\leaflet\leaflet.js
+wwwroot\lib\leaflet\leaflet.js.map
+wwwroot\css\input.css
 wwwroot\lib\leaflet-draw\.codeclimate.yml
 wwwroot\lib\leaflet-draw\.editorconfig
 wwwroot\lib\leaflet-draw\.eslintrc
@@ -224,18 +236,6 @@ wwwroot\lib\leaflet-draw\src\Leaflet.draw.js
 wwwroot\lib\leaflet-draw\src\Toolbar.js
 wwwroot\lib\leaflet-draw\src\Tooltip.js
 wwwroot\lib\leaflet-draw\TODO.md
-wwwroot\lib\leaflet\images\layers-2x.png
-wwwroot\lib\leaflet\images\layers.png
-wwwroot\lib\leaflet\images\marker-icon-2x.png
-wwwroot\lib\leaflet\images\marker-icon.png
-wwwroot\lib\leaflet\images\marker-shadow.png
-wwwroot\lib\leaflet\leaflet-src.esm.js
-wwwroot\lib\leaflet\leaflet-src.esm.js.map
-wwwroot\lib\leaflet\leaflet-src.js
-wwwroot\lib\leaflet\leaflet-src.js.map
-wwwroot\lib\leaflet\leaflet.css
-wwwroot\lib\leaflet\leaflet.js
-wwwroot\lib\leaflet\leaflet.js.map
 C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet\leaflet.js.map
 C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet\leaflet.js
 C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet\leaflet.css
