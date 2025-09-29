@@ -1275,6 +1275,176 @@
             },
             "Asset": null,
             "Patterns": null
+          },
+          "leaflet-draw": {
+            "Children": {
+              "dist": {
+                "Children": {
+                  "leaflet.draw.css": {
+                    "Children": null,
+                    "Asset": {
+                      "ContentRootIndex": 0,
+                      "SubPath": "lib/leaflet-draw/dist/leaflet.draw.css"
+                    },
+                    "Patterns": null
+                  },
+                  "leaflet.draw.css.gz": {
+                    "Children": null,
+                    "Asset": {
+                      "ContentRootIndex": 1,
+                      "SubPath": "5v03kn0fqr-4oyz0kln9j.gz"
+                    },
+                    "Patterns": null
+                  },
+                  "leaflet.draw.js": {
+                    "Children": null,
+                    "Asset": {
+                      "ContentRootIndex": 0,
+                      "SubPath": "lib/leaflet-draw/dist/leaflet.draw.js"
+                    },
+                    "Patterns": null
+                  },
+                  "leaflet.draw.js.gz": {
+                    "Children": null,
+                    "Asset": {
+                      "ContentRootIndex": 1,
+                      "SubPath": "7ncr03t8mw-6eecg8bdpe.gz"
+                    },
+                    "Patterns": null
+                  },
+                  "leaflet.draw-src.css": {
+                    "Children": null,
+                    "Asset": {
+                      "ContentRootIndex": 0,
+                      "SubPath": "lib/leaflet-draw/dist/leaflet.draw-src.css"
+                    },
+                    "Patterns": null
+                  },
+                  "leaflet.draw-src.css.gz": {
+                    "Children": null,
+                    "Asset": {
+                      "ContentRootIndex": 1,
+                      "SubPath": "cnoqr1sgpr-tonjdfi72s.gz"
+                    },
+                    "Patterns": null
+                  },
+                  "leaflet.draw-src.js": {
+                    "Children": null,
+                    "Asset": {
+                      "ContentRootIndex": 0,
+                      "SubPath": "lib/leaflet-draw/dist/leaflet.draw-src.js"
+                    },
+                    "Patterns": null
+                  },
+                  "leaflet.draw-src.js.gz": {
+                    "Children": null,
+                    "Asset": {
+                      "ContentRootIndex": 1,
+                      "SubPath": "b3wzz65zg1-suze092v1w.gz"
+                    },
+                    "Patterns": null
+                  },
+                  "leaflet.draw-src.map": {
+                    "Children": null,
+                    "Asset": {
+                      "ContentRootIndex": 0,
+                      "SubPath": "lib/leaflet-draw/dist/leaflet.draw-src.map"
+                    },
+                    "Patterns": null
+                  },
+                  "leaflet.draw-src.map.gz": {
+                    "Children": null,
+                    "Asset": {
+                      "ContentRootIndex": 1,
+                      "SubPath": "o5yutk1uii-67y7uvl1ph.gz"
+                    },
+                    "Patterns": null
+                  },
+                  "images": {
+                    "Children": {
+                      "layers.png": {
+                        "Children": null,
+                        "Asset": {
+                          "ContentRootIndex": 0,
+                          "SubPath": "lib/leaflet-draw/dist/images/layers.png"
+                        },
+                        "Patterns": null
+                      },
+                      "layers-2x.png": {
+                        "Children": null,
+                        "Asset": {
+                          "ContentRootIndex": 0,
+                          "SubPath": "lib/leaflet-draw/dist/images/layers-2x.png"
+                        },
+                        "Patterns": null
+                      },
+                      "marker-icon.png": {
+                        "Children": null,
+                        "Asset": {
+                          "ContentRootIndex": 0,
+                          "SubPath": "lib/leaflet-draw/dist/images/marker-icon.png"
+                        },
+                        "Patterns": null
+                      },
+                      "marker-icon-2x.png": {
+                        "Children": null,
+                        "Asset": {
+                          "ContentRootIndex": 0,
+                          "SubPath": "lib/leaflet-draw/dist/images/marker-icon-2x.png"
+                        },
+                        "Patterns": null
+                      },
+                      "marker-shadow.png": {
+                        "Children": null,
+                        "Asset": {
+                          "ContentRootIndex": 0,
+                          "SubPath": "lib/leaflet-draw/dist/images/marker-shadow.png"
+                        },
+                        "Patterns": null
+                      },
+                      "spritesheet.png": {
+                        "Children": null,
+                        "Asset": {
+                          "ContentRootIndex": 0,
+                          "SubPath": "lib/leaflet-draw/dist/images/spritesheet.png"
+                        },
+                        "Patterns": null
+                      },
+                      "spritesheet.svg": {
+                        "Children": null,
+                        "Asset": {
+                          "ContentRootIndex": 0,
+                          "SubPath": "lib/leaflet-draw/dist/images/spritesheet.svg"
+                        },
+                        "Patterns": null
+                      },
+                      "spritesheet.svg.gz": {
+                        "Children": null,
+                        "Asset": {
+                          "ContentRootIndex": 1,
+                          "SubPath": "f7wzkx82lq-nfg6lhfmny.gz"
+                        },
+                        "Patterns": null
+                      },
+                      "spritesheet-2x.png": {
+                        "Children": null,
+                        "Asset": {
+                          "ContentRootIndex": 0,
+                          "SubPath": "lib/leaflet-draw/dist/images/spritesheet-2x.png"
+                        },
+                        "Patterns": null
+                      }
+                    },
+                    "Asset": null,
+                    "Patterns": null
+                  }
+                },
+                "Asset": null,
+                "Patterns": null
+              }
+            },
+            "Asset": null,
+            "Patterns": null
           }
         },
         "Asset": null,
