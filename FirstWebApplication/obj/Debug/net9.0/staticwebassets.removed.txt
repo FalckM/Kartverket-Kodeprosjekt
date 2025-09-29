@@ -1,0 +1,340 @@
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\.codeclimate.yml
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\.editorconfig
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\.eslintrc
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\.gitattributes
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\.gitignore
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\.travis.yml
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\bower.json
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\BREAKINGCHANGES.md
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\build.html
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\build.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\deps.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\docs-index.leafdoc
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\docs-misc.leafdoc
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\docs.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\hintrc.json
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\leafdoc-templates\comments.hbs
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\leafdoc-templates\constructor.hbs
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\leafdoc-templates\crs.hbs
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\leafdoc-templates\destructor.hbs
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\leafdoc-templates\event.hbs
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\leafdoc-templates\example.hbs
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\leafdoc-templates\factory.hbs
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\leafdoc-templates\function.hbs
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\leafdoc-templates\html.hbs
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\leafdoc-templates\inherited.hbs
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\leafdoc-templates\method.hbs
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\leafdoc-templates\namespace.hbs
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\leafdoc-templates\option.hbs
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\leafdoc-templates\pane.hbs
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\leafdoc-templates\projection.hbs
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\leafdoc-templates\property.hbs
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\leafdoc-templates\section.hbs
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\leafdoc-templates\supersection.hbs
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\leaflet.draw-include.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\publish.sh
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\CHANGELOG.md
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\dist\images\layers-2x.png
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\dist\images\layers.png
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\dist\images\marker-icon-2x.png
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\dist\images\marker-icon.png
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\dist\images\marker-shadow.png
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\dist\images\spritesheet-2x.png
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\dist\images\spritesheet.png
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\dist\images\spritesheet.svg
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\dist\leaflet.draw-src.css
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\dist\leaflet.draw-src.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\dist\leaflet.draw-src.map
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\dist\leaflet.draw.css
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\dist\leaflet.draw.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\css\main.css
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\css\normalize.css
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples-0.7.x\basic.html
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples-0.7.x\edithandlers.html
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples-0.7.x\full.html
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples-0.7.x\libs\images\layers-2x.png
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples-0.7.x\libs\images\layers.png
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples-0.7.x\libs\images\marker-icon-2x.png
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples-0.7.x\libs\images\marker-icon.png
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples-0.7.x\libs\images\marker-icon@2x.png
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples-0.7.x\libs\images\marker-shadow.png
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples-0.7.x\libs\leaflet-src.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples-0.7.x\libs\leaflet.css
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples-0.7.x\libs\Leaflet.draw.drag-src.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples-0.7.x\libs\leaflet.geometryutil.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples-0.7.x\libs\leaflet.snap.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples-0.7.x\libs\spectrum.css
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples-0.7.x\libs\spectrum.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples-0.7.x\snapping.html
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\basic.html
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\edithandlers.html
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\full.html
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\libs\images\layers-2x.png
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\libs\images\layers.png
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\libs\images\marker-icon-2x.png
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\libs\images\marker-icon.png
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\libs\images\marker-shadow.png
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\libs\leaflet-src.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\libs\leaflet-src.map
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\libs\leaflet.css
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\libs\Leaflet.draw.drag-src.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\libs\leaflet.geometryutil.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\libs\leaflet.snap.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\libs\spectrum.css
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\libs\spectrum.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\popup.html
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\snapping.html
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\highlight\highlight.pack.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\highlight\LICENSE
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\highlight\styles\github-gist.css
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\images\favicon.ico
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\images\forum-round.png
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\images\github-round.png
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\images\sprite.png
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\images\sprite.svg
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\images\twitter-round.png
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\images\twitter.png
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\js\docs.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\leaflet-draw-0.4.12.html
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\leaflet-draw-0.4.14.html
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\leaflet-draw-0.4.2.html
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\leaflet-draw-0.4.3.html
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\leaflet-draw-0.4.4.html
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\leaflet-draw-0.4.5.html
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\leaflet-draw-0.4.7.html
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\leaflet-draw-0.4.9.html
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\leaflet-draw-latest.html
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\index.html
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\ISSUE_TEMPLATE.md
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\Jakefile.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\Leaflet.draw.iml
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\MIT-LICENSE.md
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\package-lock.json
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\package.json
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\README.md
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\spec\after.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\spec\before.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\spec\expect.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\spec\happen.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\spec\index.html
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\spec\karma.conf.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\spec\sinon.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\spec\spec.hintrc.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\spec\suites\DrawControlSpec.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\spec\suites\EditSpec.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\spec\suites\GeometryUtilSpec.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\spec\suites\LatLngUtilSpec.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\spec\suites\SpecHelper.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\Control.Draw.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\copyright.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\draw\DrawToolbar.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\draw\handler\Draw.Circle.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\draw\handler\Draw.CircleMarker.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\draw\handler\Draw.Feature.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\draw\handler\Draw.Marker.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\draw\handler\Draw.Polygon.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\draw\handler\Draw.Polyline.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\draw\handler\Draw.Rectangle.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\draw\handler\Draw.SimpleShape.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\edit\EditToolbar.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\edit\handler\Edit.Circle.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\edit\handler\Edit.CircleMarker.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\edit\handler\Edit.Marker.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\edit\handler\Edit.Poly.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\edit\handler\Edit.Rectangle.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\edit\handler\Edit.SimpleShape.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\edit\handler\EditToolbar.Delete.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\edit\handler\EditToolbar.Edit.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\ext\GeometryUtil.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\ext\LatLngUtil.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\ext\LineUtil.Intersect.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\ext\Polygon.Intersect.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\ext\Polyline.Intersect.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\ext\TouchEvents.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\images\spritesheet-2x.png
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\images\spritesheet.png
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\images\spritesheet.svg
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\leaflet.draw.css
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\Leaflet.Draw.Event.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\Leaflet.draw.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\Toolbar.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\Tooltip.js
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\TODO.md
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet\leaflet.js.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet\leaflet.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet\leaflet.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet\leaflet-src.js.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet\leaflet-src.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet\leaflet-src.esm.js.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet\leaflet-src.esm.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\jquery\LICENSE.txt
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\jquery\dist\jquery.slim.min.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\jquery\dist\jquery.slim.min.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\jquery\dist\jquery.slim.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\jquery\dist\jquery.min.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\jquery\dist\jquery.min.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\jquery\dist\jquery.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\jquery-validation\LICENSE.md
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\jquery-validation\dist\jquery.validate.min.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\jquery-validation\dist\jquery.validate.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\jquery-validation\dist\additional-methods.min.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\jquery-validation\dist\additional-methods.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.min.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\js\bootstrap.js.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\js\bootstrap.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap.css.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\favicon.ico
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\css\input.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\js\site.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\css\site.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\bower.json
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\BREAKINGCHANGES.md
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\build.html
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\build.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\deps.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\docs.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\hintrc.json
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\build\leaflet.draw-include.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\CHANGELOG.md
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\dist\images\spritesheet.svg
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\dist\leaflet.draw-src.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\dist\leaflet.draw-src.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\dist\leaflet.draw-src.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\dist\leaflet.draw.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\dist\leaflet.draw.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\css\main.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\css\normalize.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples-0.7.x\basic.html
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples-0.7.x\edithandlers.html
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples-0.7.x\full.html
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples-0.7.x\libs\leaflet-src.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples-0.7.x\libs\leaflet.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples-0.7.x\libs\Leaflet.draw.drag-src.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples-0.7.x\libs\leaflet.geometryutil.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples-0.7.x\libs\leaflet.snap.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples-0.7.x\libs\spectrum.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples-0.7.x\libs\spectrum.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples-0.7.x\snapping.html
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\basic.html
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\edithandlers.html
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\full.html
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\libs\leaflet-src.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\libs\leaflet-src.map
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\libs\leaflet.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\libs\Leaflet.draw.drag-src.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\libs\leaflet.geometryutil.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\libs\leaflet.snap.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\libs\spectrum.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\libs\spectrum.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\popup.html
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\examples\snapping.html
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\highlight\highlight.pack.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\highlight\styles\github-gist.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\images\favicon.ico
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\images\sprite.svg
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\js\docs.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\leaflet-draw-0.4.12.html
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\leaflet-draw-0.4.14.html
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\leaflet-draw-0.4.2.html
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\leaflet-draw-0.4.3.html
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\leaflet-draw-0.4.4.html
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\leaflet-draw-0.4.5.html
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\leaflet-draw-0.4.7.html
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\leaflet-draw-0.4.9.html
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\docs\leaflet-draw-latest.html
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\index.html
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\ISSUE_TEMPLATE.md
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\Jakefile.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\MIT-LICENSE.md
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\package-lock.json
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\package.json
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\README.md
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\spec\after.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\spec\before.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\spec\expect.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\spec\happen.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\spec\index.html
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\spec\karma.conf.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\spec\sinon.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\spec\spec.hintrc.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\spec\suites\DrawControlSpec.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\spec\suites\EditSpec.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\spec\suites\GeometryUtilSpec.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\spec\suites\LatLngUtilSpec.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\spec\suites\SpecHelper.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\Control.Draw.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\copyright.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\draw\DrawToolbar.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\draw\handler\Draw.Circle.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\draw\handler\Draw.CircleMarker.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\draw\handler\Draw.Feature.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\draw\handler\Draw.Marker.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\draw\handler\Draw.Polygon.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\draw\handler\Draw.Polyline.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\draw\handler\Draw.Rectangle.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\draw\handler\Draw.SimpleShape.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\edit\EditToolbar.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\edit\handler\Edit.Circle.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\edit\handler\Edit.CircleMarker.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\edit\handler\Edit.Marker.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\edit\handler\Edit.Poly.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\edit\handler\Edit.Rectangle.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\edit\handler\Edit.SimpleShape.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\edit\handler\EditToolbar.Delete.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\edit\handler\EditToolbar.Edit.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\ext\GeometryUtil.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\ext\LatLngUtil.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\ext\LineUtil.Intersect.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\ext\Polygon.Intersect.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\ext\Polyline.Intersect.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\ext\TouchEvents.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\images\spritesheet.svg
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\leaflet.draw.css
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\Leaflet.Draw.Event.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\Leaflet.draw.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\Toolbar.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\src\Tooltip.js
+C:\Users\kj4sp\My Drive\Skole\UiA\IT og informasjonssystemer\Høst 2025\IS-202 Programmeringsprosjekt\Kartverket-Kodeprosjekt\FirstWebApplication\wwwroot\lib\leaflet-draw\TODO.md

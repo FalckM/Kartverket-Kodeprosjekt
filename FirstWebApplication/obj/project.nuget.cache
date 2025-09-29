@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "9Dc398RZ1ZI=",
+  "dgSpecHash": "lLdKQWaR2Hg=",
   "success": true,
-  "projectFilePath": "C:\\Users\\kj4sp\\My Drive\\Skole\\UiA\\IT og informasjonssystemer\\Høst 2025\\IS-202 Programmeringsprosjekt\\Kartverket-Kodeprosjekt\\FirstWebApplication\\FirstWebApplication.csproj",
+  "projectFilePath": "C:\\Users\\kj4sp\\Desktop\\Kartverket-Kodeprosjekt\\FirstWebApplication\\FirstWebApplication.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\kj4sp\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.2\\microsoft.extensions.dependencyinjection.abstractions.8.0.2.nupkg.sha512",
     "C:\\Users\\kj4sp\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.2\\microsoft.extensions.logging.abstractions.8.0.2.nupkg.sha512",
