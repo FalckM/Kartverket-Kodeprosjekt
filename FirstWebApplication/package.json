@@ -19,7 +19,6 @@
   "homepage": "https://github.com/FalckM/FirstWebApplication#readme",
   "devDependencies": {
     "@tailwindcss/cli": "^4.1.13",
-    "leaflet-draw": "^1.0.4",
     "tailwindcss": "^4.1.13"
   }
 }
