@@ -1,5 +1,7 @@
 # Webapplikasjon for registrering av luftfartshindre
 
+**Gruppe 1 bestående av:** Adam Elmasry, Benjamin Fidjeland, Hans Kristian Steffenstorpet, Kasper Rustad, Kristian Stenersen & Mats Lie.
+
 ## 1. Driftsdokumentasjon: Slik kjører du applikasjonen
 
 Prosjektet er satt opp for kjøring via **Docker** for å sikre et portabelt miljø. Denne metoden sikrer at Node.js, .NET SDK, og alle avhengigheter er riktig konfigurert og tilgjengelige i containeren.
