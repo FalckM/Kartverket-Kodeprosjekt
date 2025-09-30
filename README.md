@@ -1,6 +1,6 @@
 # Webapplikasjon for registrering av luftfartshindre
 
-**Gruppe 1 bestående av:** Adam Elmasry, Benjamin Fidjeland, Hans Kristian Steffenstorpet, Kasper Rustad, Kristian Stenersen & Mats Lie.
+**Laget av Gruppe 1 bestående av:** Adam Elmasry, Benjamin Fidjeland, Hans Kristian Steffenstorpet, Kasper Rustad, Kristian Stenersen & Mats Lie.
 
 ## 1. Driftsdokumentasjon: Slik kjører du applikasjonen
 
@@ -13,7 +13,7 @@ Prosjektet er satt opp for kjøring via **Docker** for å sikre et portabelt miljø
 
 **Stegvis kjøring:**
 
-1.  **Klone Prosjektet:** Klone dette Git-repositoriet.
+1.  **Klone Prosjektet:** Klon dette Git-repositoriet.
 2.  **Åpne Løsningen:** Åpne `FirstWebApplication.sln` i Visual Studio.
 3.  **Start med Docker:** Velg `Docker` som kjøremiljø (i nedtrekksmenyen ved siden av "Start"-knappen) og trykk **Kjør** (den grønne play-knappen, det skal stå **Container (Dockerfile)** ved siden av).
 4.  **Resultat:** Applikasjonen blir tilgjengelig i nettleseren.
