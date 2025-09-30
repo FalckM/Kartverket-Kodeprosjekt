@@ -1,4 +1,4 @@
-﻿@{
+﻿@{ //Ben
     ViewData["Title"] = "Home Page";
 }
 
@@ -6,6 +6,26 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
 <div class="text-center">
     <a asp-action="DataForm">Register Obstacle</a>
 </div>
+
+<hr />
+
+<div class="text-center">
+    <h2>Obstacle Map</h2>
+
+    <div style="margin-bottom:10px;">
+        <button onclick="setMode('punkt')" class="btn btn-secondary">Punkt</button>
+        <button onclick="setMode('linje')" class="btn btn-secondary">Linje</button>
+    </div>
+
+    <div id="map" style="height: 500px; margin-bottom: 10px;"></div>
+
+    <button onclick="saveMap()" class="btn btn-primary">Lagre kart</button>
+</div>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="~/js/Kart.js"></script>
