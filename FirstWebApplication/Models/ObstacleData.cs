@@ -16,6 +16,8 @@ namespace FirstWebApplication.Models
         [MaxLength(1000)]
         public string ObstacleDescription { get; set; }
 
+        // Felt for å lagre GeoJSON (geografisk geometri) fra kartet.
+        // Dette feltet lagrer koordinatene for det tegnede punktet eller linjen.
         [Required(ErrorMessage = "Field is required")]
         public string ObstacleGeometry { get; set; }
     }

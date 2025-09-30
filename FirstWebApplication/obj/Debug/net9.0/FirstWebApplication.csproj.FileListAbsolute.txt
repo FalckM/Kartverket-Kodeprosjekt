@@ -555,3 +555,9 @@ C:\Users\kaspe\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net
 C:\Users\kaspe\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\FirstWebApplication.pdb
 C:\Users\kaspe\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\FirstWebApplication.genruntimeconfig.cache
 C:\Users\kaspe\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\ref\FirstWebApplication.dll
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\f7wzkx82lq-nfg6lhfmny.gz
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\cnoqr1sgpr-tonjdfi72s.gz
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\b3wzz65zg1-suze092v1w.gz
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\o5yutk1uii-67y7uvl1ph.gz
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\5v03kn0fqr-4oyz0kln9j.gz
+C:\Users\kj4sp\Desktop\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\7ncr03t8mw-6eecg8bdpe.gz
