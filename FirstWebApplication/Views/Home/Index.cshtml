@@ -1,11 +1,12 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model string
+
+@{
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center py-10">
+    <h1 class="text-4xl font-extrabold text-gray-900 sm:text-5xl lg:text-6xl">Welcome!</h1>
 </div>
-<div class="text-center">
-    <a asp-action="DataForm">Register Obstacle</a>
+<div class="flex justify-center mt-8">
+    <a class="py-4 px-8 bg-indigo-600 hover:bg-indigo-700 text-lg text-white font-semibold rounded-lg shadow-md transition duration-150 ease-in-out" asp-action="DataForm" asp-controller="Obstacle">Register Obstacle</a>
 </div>

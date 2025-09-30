@@ -10,10 +10,10 @@ bin/
 obj/
 Debug/
 Release/
+publish/
 
 # Node
 node_modules/
-package-lock.json
 
 # Publisering
 wwwroot/css/site.css
@@ -22,3 +22,4 @@ wwwroot/css/site.css
 *.log
 *.tmp
 *.cache
+

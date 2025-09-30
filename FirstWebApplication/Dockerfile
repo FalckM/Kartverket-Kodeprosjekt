@@ -14,6 +14,13 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["FirstWebApplication/FirstWebApplication.csproj", "FirstWebApplication/"]
 RUN dotnet restore "./FirstWebApplication/FirstWebApplication.csproj"
+# Installer Node.js og npm
+RUN apt-get update && \
+    apt-get install -y nodejs npm
+COPY ["FirstWebApplication/package.json", "FirstWebApplication/"]
+# Install npm dependencies
+RUN cd FirstWebApplication && npm install
+RUN cd FirstWebApplication && npm run dev
 COPY . .
 WORKDIR "/src/FirstWebApplication"
 RUN dotnet build "./FirstWebApplication.csproj" -c $BUILD_CONFIGURATION -o /app/build

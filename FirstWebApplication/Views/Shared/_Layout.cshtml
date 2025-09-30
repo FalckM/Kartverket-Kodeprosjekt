@@ -3,43 +3,48 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - FirstWebApplication</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <title>@ViewData["Title"] - Webapplikasjon for luftfartshindre</title>
+    <link rel="stylesheet" href="~/lib/leaflet/leaflet.css" />
+    <script src="~/lib/leaflet/leaflet.js"></script>
+    <link rel="stylesheet" href="~/lib/leaflet-draw/dist/leaflet.draw.css" />
+    <script src="~/lib/leaflet-draw/dist/leaflet.draw.js"></script>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/FirstWebApplication.styles.css" asp-append-version="true" />
 </head>
-<body>
+<body class="bg-gray-200 font-sans leading-relaxed text-gray-900">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FirstWebApplication</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+        <nav class="bg-white py-4 shadow-sm">
+            <div class="container mx-auto px-4 flex items-center justify-between">
+                <a class="text-xl font-bold text-gray-900 me-8" asp-area="" asp-controller="Home" asp-action="Index">Webapplikasjon for luftfartshindre</a>
+                <button class="lg:hidden" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                    <span class="block h-6 w-6">
+                        <svg class="fill-current text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M4 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 5h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 5h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z" />
+                        </svg>
+                    </span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                <div class="hidden lg:flex lg:flex-grow lg:items-center">
+                    <ul class="flex space-x-4">
+                        <li>
+                            <a class="text-gray-900 hover:text-blue-600 transition duration-150 ease-in-out" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <li>
+                            <a class="text-gray-900 hover:text-blue-600 transition duration-150 ease-in-out" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div class="container mx-auto px-4 py-8">
+        <main role="main">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - FirstWebApplication - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="border-t py-4 text-gray-600 text-sm">
+        <div class="container mx-auto px-4 text-center">
+            &copy; 2025 - Webapplikasjon for luftfartshindre - <a class="hover:underline" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -48,3 +53,5 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+
