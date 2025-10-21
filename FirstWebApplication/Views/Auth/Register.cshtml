@@ -1,0 +1,81 @@
+﻿@{
+    ViewData["Title"] = "Create account";
+    Layout = "_Layout";
+}
+
+<!-- Map behind -->
+<div id="map-home" class="map-full"></div>
+
+<!-- Gray overlay + centered card (NOTE: same id as login so your CSS overrides apply) -->
+<div id="gate-overlay" class="gate-overlay" style="opacity:1;">
+    <div class="login-card" role="dialog" aria-modal="true" aria-labelledby="regTitle">
+        <h1 id="regTitle" class="login-title">Create account</h1>
+
+        <form asp-controller="Auth" asp-action="Register" method="post" class="login-form">
+            @Html.AntiForgeryToken()
+
+            <div class="form-grid-two">
+                <div>
+                    <label class="login-label" for="firstName">First name</label>
+                    <input id="firstName" class="login-input" type="text" placeholder="Amelia" autocomplete="given-name" />
+                </div>
+
+                <div>
+                    <label class="login-label" for="lastName">Last name</label>
+                    <input id="lastName" class="login-input" type="text" placeholder="Earhart" autocomplete="family-name" />
+                </div>
+            </div>
+
+            <label class="login-label" for="regEmail">Email</label>
+            <input id="regEmail" class="login-input" type="email" inputmode="email" placeholder="pilot@example.com" autocomplete="email" />
+
+            <label class="login-label" for="regPassword">Password</label>
+            <input id="regPassword" class="login-input" type="password" placeholder="••••••••" autocomplete="new-password" />
+
+            <label class="login-label" for="regPassword2">Confirm password</label>
+            <input id="regPassword2" class="login-input" type="password" placeholder="••••••••" autocomplete="new-password" />
+
+            <div class="login-links">
+                <a asp-controller="Home" asp-action="Index" class="link">Already have an account? Log in</a>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create account</button>
+        </form>
+
+        <div class="login-footer">
+            <span>By creating an account you agree to </span>
+            <a asp-controller="Home" asp-action="Privacy" class="link">our privacy policy</a>.
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Minimal map init for the Register page (no drift/locking)
+        (function () {
+          if (!window.L) return;
+
+          const map = L.map('map-home', { zoomControl: true, attributionControl: true });
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap'
+          }).addTo(map);
+
+          // Fallback: Norway-ish
+          map.setView([63.4305, 10.3951], 6);
+
+          // Best-effort geolocation (doesn't block UI)
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              (pos) => {
+                const { latitude, longitude } = pos.coords;
+                map.setView([latitude, longitude], 14);
+                L.circleMarker([latitude, longitude], { radius: 6 }).addTo(map);
+              },
+              () => {},
+              { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+            );
+          }
+        })();
+    </script>
+}

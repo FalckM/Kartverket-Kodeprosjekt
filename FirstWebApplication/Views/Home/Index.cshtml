@@ -1,12 +1,41 @@
-﻿@model string
-
-@{
-    ViewData["Title"] = "Home";
+﻿@{
+    ViewData["Title"] = "Login";
+    Layout = "_Layout";
 }
 
-<div class="text-center py-10">
-    <h1 class="text-4xl font-extrabold text-gray-900 sm:text-5xl lg:text-6xl">Welcome!</h1>
+<!-- Kart i bakgrunnen -->
+<div id="map-home" class="map-full"></div>
+
+<!-- Grå overlay med login-kort i midten -->
+<div id="gate-overlay" class="gate-overlay">
+    <div class="login-card" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+        <h1 id="loginTitle" class="login-title">Login</h1>
+
+        <form class="login-form" onsubmit="return false;">
+            <label class="login-label" for="loginEmail">Email:</label>
+            <input id="loginEmail" class="login-input" type="email" inputmode="email" placeholder="email@example.com" autocomplete="username" />
+
+            <label class="login-label" for="loginPassword">Password</label>
+            <input id="loginPassword" class="login-input" type="password" placeholder="••••••••" autocomplete="current-password" />
+
+            <div class="login-links">
+                <a href="#" class="link">Forgot password?</a>
+            </div>
+
+            <button id="btnFakeLogin" type="button" class="btn btn-primary">Login</button>
+        </form>
+
+        <div class="login-footer">
+            <span>New user? </span>
+            <a asp-controller="Auth" asp-action="Register" class="link">Create account here</a>
+        </div>
+    </div>
 </div>
-<div class="flex justify-center mt-8">
-    <a class="py-4 px-8 bg-indigo-600 hover:bg-indigo-700 text-lg text-white font-semibold rounded-lg shadow-md transition duration-150 ease-in-out" asp-action="DataForm" asp-controller="Obstacle">Register Obstacle</a>
-</div>
+
+@section Scripts {
+    <script>
+        if (window.initHomeGate) {
+          window.initHomeGate();
+        }
+    </script>
+}

@@ -1477,48 +1477,170 @@
   inherits: false;
 }
 @layer properties {
-  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
-    *, ::before, ::after, ::backdrop {
-      --tw-rotate-x: initial;
-      --tw-rotate-y: initial;
-      --tw-rotate-z: initial;
-      --tw-skew-x: initial;
-      --tw-skew-y: initial;
-      --tw-space-y-reverse: 0;
-      --tw-space-x-reverse: 0;
-      --tw-border-style: solid;
-      --tw-leading: initial;
-      --tw-font-weight: initial;
-      --tw-shadow: 0 0 #0000;
-      --tw-shadow-color: initial;
-      --tw-shadow-alpha: 100%;
-      --tw-inset-shadow: 0 0 #0000;
-      --tw-inset-shadow-color: initial;
-      --tw-inset-shadow-alpha: 100%;
-      --tw-ring-color: initial;
-      --tw-ring-shadow: 0 0 #0000;
-      --tw-inset-ring-color: initial;
-      --tw-inset-ring-shadow: 0 0 #0000;
-      --tw-ring-inset: initial;
-      --tw-ring-offset-width: 0px;
-      --tw-ring-offset-color: #fff;
-      --tw-ring-offset-shadow: 0 0 #0000;
-      --tw-outline-style: solid;
-      --tw-blur: initial;
-      --tw-brightness: initial;
-      --tw-contrast: initial;
-      --tw-grayscale: initial;
-      --tw-hue-rotate: initial;
-      --tw-invert: initial;
-      --tw-opacity: initial;
-      --tw-saturate: initial;
-      --tw-sepia: initial;
-      --tw-drop-shadow: initial;
-      --tw-drop-shadow-color: initial;
-      --tw-drop-shadow-alpha: 100%;
-      --tw-drop-shadow-size: initial;
-      --tw-duration: initial;
-      --tw-ease: initial;
+    @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+        *, ::before, ::after, ::backdrop {
+            --tw-rotate-x: initial;
+            --tw-rotate-y: initial;
+            --tw-rotate-z: initial;
+            --tw-skew-x: initial;
+            --tw-skew-y: initial;
+            --tw-space-y-reverse: 0;
+            --tw-space-x-reverse: 0;
+            --tw-border-style: solid;
+            --tw-leading: initial;
+            --tw-font-weight: initial;
+            --tw-shadow: 0 0 #0000;
+            --tw-shadow-color: initial;
+            --tw-shadow-alpha: 100%;
+            --tw-inset-shadow: 0 0 #0000;
+            --tw-inset-shadow-color: initial;
+            --tw-inset-shadow-alpha: 100%;
+            --tw-ring-color: initial;
+            --tw-ring-shadow: 0 0 #0000;
+            --tw-inset-ring-color: initial;
+            --tw-inset-ring-shadow: 0 0 #0000;
+            --tw-ring-inset: initial;
+            --tw-ring-offset-width: 0px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-offset-shadow: 0 0 #0000;
+            --tw-outline-style: solid;
+            --tw-blur: initial;
+            --tw-brightness: initial;
+            --tw-contrast: initial;
+            --tw-grayscale: initial;
+            --tw-hue-rotate: initial;
+            --tw-invert: initial;
+            --tw-opacity: initial;
+            --tw-saturate: initial;
+            --tw-sepia: initial;
+            --tw-drop-shadow: initial;
+            --tw-drop-shadow-color: initial;
+            --tw-drop-shadow-alpha: 100%;
+            --tw-drop-shadow-size: initial;
+            --tw-duration: initial;
+            --tw-ease: initial;
+        }
     }
-  }
+
+    /* === Overlay som dekker kartet === */
+    .gate-overlay {
+        position: fixed !important;
+        inset: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 16px !important;
+        background: rgba(17,24,39,0.50) !important; /* halvtransparent grå */
+        backdrop-filter: blur(3px) !important;
+        z-index: 9999 !important;
+    }
+
+        /* === Kortet midt på skjermen (login/register) === */
+        .gate-overlay .login-card {
+            width: min(92vw, 520px) !important;
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            border-radius: 12px !important;
+            box-shadow: 0 10px 24px rgba(0,0,0,.08) !important;
+            padding: 28px !important;
+            text-align: left !important;
+        }
+
+    /* === Tittel === */
+    .login-title {
+        font-size: 1.75rem !important;
+        font-weight: 700 !important;
+        margin: 0 0 18px 0 !important;
+        color: #111827 !important;
+    }
+
+    /* === Formular layout === */
+    .login-form {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+        margin-bottom: 12px !important;
+    }
+
+    /* === Label og input === */
+    .login-label {
+        font-size: 0.95rem !important;
+        color: #111827 !important;
+        margin-bottom: 2px !important;
+    }
+
+    .login-input {
+        width: 100% !important;
+        border: 1px solid #d1d5db !important;
+        border-radius: 8px !important;
+        padding: 10px 12px !important;
+        background: #f9fafb !important;
+        color: #111827 !important;
+        font-size: 1rem !important;
+        outline: none !important;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+    }
+
+        .login-input:focus {
+            border-color: #0d6efd !important;
+            box-shadow: 0 0 0 2px rgba(13,110,253,0.25) !important;
+        }
+
+    /* === Knapper === */
+    .btn-primary {
+        background: #0d6efd !important;
+        color: #fff !important;
+        border: 2px solid #0a58ca !important;
+        height: 42px !important;
+        padding: 0 16px !important;
+        font-size: 1rem !important;
+        font-weight: 500 !important;
+        border-radius: 9999px !important;
+        cursor: pointer !important;
+        transition: background-color 0.2s ease, border-color 0.2s ease !important;
+    }
+
+        .btn-primary:hover {
+            background: #0b5ed7 !important;
+            border-color: #084298 !important;
+        }
+
+    /* === Lenker === */
+    .link {
+        color: #0d6efd !important;
+        text-decoration: none !important;
+    }
+
+        .link:hover {
+            text-decoration: underline !important;
+        }
+
+    /* === Footer-tekst under kortet === */
+    .login-footer {
+        margin-top: 16px !important;
+        font-size: 0.9rem !important;
+        color: #6b7280 !important;
+        text-align: center !important;
+    }
+
+    /* === To-kolonne grid (fornavn/etternavn på register-siden) === */
+    .form-grid-two {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+        margin-bottom: 6px !important;
+    }
+
+    @media (min-width: 640px) {
+        .form-grid-two {
+            grid-template-columns: 1fr 1fr !important;
+        }
+    }
+
+    /* === Kartbakgrunn === */
+    .map-full {
+        position: fixed !important;
+        inset: 0 !important;
+        z-index: 0 !important;
+    }
 }
