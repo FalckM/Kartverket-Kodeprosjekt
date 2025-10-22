@@ -4,6 +4,8 @@ namespace FirstWebApplication.Models
 {
     public class ObstacleData
     {
+        public int ObstacleId { get; set; }
+
         [Required(ErrorMessage = "Field is required")]
         [MaxLength(100)]
         public string ObstacleName { get; set; }

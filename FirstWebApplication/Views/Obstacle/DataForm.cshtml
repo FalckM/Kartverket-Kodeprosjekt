@@ -98,7 +98,7 @@
                     const lat = pos.coords.latitude;
                     const lon = pos.coords.longitude;
                     map.setView([lat, lon], 13);
-                    L.marker([lat, lon]).addTo(map).bindPopup("You are here.").openPopup();
+                    L.marker([lat, lon]).addTo(map).bindPopup("Du er her").openPopup();
                 },
                 (err) => alert("Unable to get your location."),
                 { enableHighAccuracy: true }
