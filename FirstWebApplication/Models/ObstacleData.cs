@@ -4,7 +4,7 @@ namespace FirstWebApplication.Models
 {
     public class ObstacleData
     {
-        public int ObstacleId { get; set; }
+        public int Id { get; set; }
 
         [Required(ErrorMessage = "Field is required")]
         [MaxLength(100)]
@@ -21,7 +21,7 @@ namespace FirstWebApplication.Models
         // Felt for å lagre GeoJSON (geografisk geometri) fra kartet.
         // Dette feltet lagrer koordinatene for det tegnede punktet eller linjen.
         [Required(ErrorMessage = "Field is required")]
-        public string ObstacleGeometry { get; set; }
+        public string? ObstacleGeometry { get; set; }
     }
 }
 

@@ -1,5 +1,6 @@
 using MySqlConnector;
 using FirstWebApplication.Data;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +14,11 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddSingleton(new MySqlConnection(connectionString));
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("Defaultconnection"),
+        new MySqlServerVersion(new Version(10, 6, 0))
+        ));
+
 
 
 var app = builder.Build();
