@@ -1,15 +1,20 @@
-using MySqlConnector;
+using FirstWebApplication.Data;
+using FirstWebApplication.Models;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Get connection string directly from configuration in appsettings.json
+// Henter connection string fra appsettings.json eller User Secrets
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-// Register your service that uses the connection
-builder.Services.AddSingleton(new MySqlConnection(connectionString));
 
+// Registrerer DbContext som en tjeneste
+// MariaDbServerVersion bruker en hardkodet versjon (10.11) i stedet for AutoDetect
+// Dette lar oss lage migrations uten å ha databasen kjørende
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseMySql(connectionString, new MariaDbServerVersion(new Version(10, 11, 0))));
 
 var app = builder.Build();
 
@@ -17,13 +22,11 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseRouting();
-
 app.UseAuthorization();
 
 app.MapStaticAssets();
@@ -32,6 +35,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
-
 
 app.Run();
