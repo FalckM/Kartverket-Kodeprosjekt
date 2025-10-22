@@ -91,6 +91,22 @@
 
                 // Lagrer GeoJSON-strengen i det skjulte inputfeltet for sending til serveren
                 document.getElementById('ObstacleGeometry').value = JSON.stringify(geoJson);
+
+                    if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    const lat = pos.coords.latitude;
+                    const lon = pos.coords.longitude;
+                    map.setView([lat, lon], 13);
+                    L.marker([lat, lon]).addTo(map).bindPopup("You are here.").openPopup();
+                },
+                (err) => alert("Unable to get your location."),
+                { enableHighAccuracy: true }
+            );
+        } else {
+            alert("Geolocation not supported.");
+        }
+
             });
         });
     </script>
