@@ -15,10 +15,10 @@ builder.Services.AddSingleton(new MySqlConnection(connectionString));
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(
-        builder.Configuration.GetConnectionString("Defaultconnection"),
-        new MySqlServerVersion(new Version(10, 6, 0))
-        ));
-
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
+    )
+);
 
 
 var app = builder.Build();

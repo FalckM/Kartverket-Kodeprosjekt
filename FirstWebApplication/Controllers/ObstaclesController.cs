@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,14 +7,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FirstWebApplication.Data;
 using FirstWebApplication.Models;
-
+/*
 namespace FirstWebApplication.Controllers
 {
-    public class ObstacleController : Controller
+    public class ObstaclesController : Controller
     {
         private readonly AppDbContext _context;
 
-        public ObstacleController(AppDbContext context)
+        public ObstaclesController(AppDbContext context)
         {
             _context = context;
         }
@@ -43,4 +43,4 @@ namespace FirstWebApplication.Controllers
             return View(obstacle);
         }
     }
-}
+}*/
