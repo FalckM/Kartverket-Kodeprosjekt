@@ -1,17 +1,52 @@
+version: '3.8'
+
 services:
+  # MariaDB Database
+  mariadb:
+    image: mariadb:10.11
+    container_name: mariadbcontainer
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: ObstacleDB
+      MYSQL_USER: obstacleuser
+      MYSQL_PASSWORD: 1234
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - appnet
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Web Application
   firstwebapplication:
     image: ${DOCKER_REGISTRY-}firstwebapplication
     build:
       context: .
       dockerfile: FirstWebApplication/Dockerfile
+    container_name: webapp
     ports:
-    - "5000:8080"
+      - "5000:8080"
     environment:
-    - ASPNETCORE_ENVIRONMENT=Development
-    - ConnectionStrings__DefaultConnection=server=mariadbcontainer;port=3306;database=mysql;user=root;password=1234;
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=mariadbcontainer;Port=3306;Database=ObstacleDB;User=obstacleuser;Password=1234;
+    depends_on:
+      mariadb:
+        condition: service_healthy
     networks:
-    - appnet
+      - appnet
+
+# Volumes for persistent data storage
+volumes:
+  mariadb_data:
+    driver: local
+
+# Networks
 networks:
   appnet:
-    external: true
-    name: appnet
+    driver: bridge
