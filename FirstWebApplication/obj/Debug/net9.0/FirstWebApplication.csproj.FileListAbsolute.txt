@@ -661,8 +661,6 @@ C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstW
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\scopedcss\bundle\FirstWebApplication.styles.css
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\scopedcss\projectbundle\FirstWebApplication.bundle.scp.css
-C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\ushg1jb417-tbo5amful4.gz
-C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\o6z6in6edj-g279kx9hrv.gz
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\fko6fk432i-61n19gt1b8.gz
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\9tv0ur8ixf-xtxxf3hu2r.gz
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\gn2lhuufy4-t1cqhe9u97.gz
@@ -749,3 +747,6 @@ C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstW
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\FirstWebApplication.pdb
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\FirstWebApplication.genruntimeconfig.cache
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\ref\FirstWebApplication.dll
+C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\ushg1jb417-br5wy4u4l6.gz
+C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\o6z6in6edj-paokgv14c5.gz
+C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

@@ -11,12 +11,31 @@ builder.Services.AddControllersWithViews();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 // Registrerer DbContext som en tjeneste
-// MariaDbServerVersion bruker en hardkodet versjon (10.11) i stedet for AutoDetect
-// Dette lar oss lage migrations uten å ha databasen kjørende
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(connectionString, new MariaDbServerVersion(new Version(10, 11, 0))));
 
 var app = builder.Build();
+
+// Debug dersom migration feiler
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var logger = services.GetRequiredService<ILogger<Program>>();
+
+    try
+    {
+        var db = services.GetRequiredService<ApplicationDbContext>();
+        db.Database.Migrate();
+        logger.LogInformation("Database migrations completed successfully");
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "An error occurred while migrating the database");
+        // Appen fortsetter å kjøre selv om migrations feiler
+    }
+}
+
+app.Run();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

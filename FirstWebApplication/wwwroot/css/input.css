@@ -1,32 +1,8 @@
-﻿@tailwind base;
-@tailwind components;
-@tailwind utilities;
-```
+﻿@import "tailwindcss";
 
----
+@source "../../Views/**/*.cshtml";
+@source "../../Pages/**/*.cshtml";
 
-## Steg 4: Opprett .dockerignore
-
-Opprett **FirstWebApplication/.dockerignore**:
-```
-# Node
-node_modules/
-npm-debug.log
-package-lock.json
-
-# .NET
-bin/
-obj/
-*.user
-*.suo
-*.cache
-
-# Build outputs
-wwwroot/css/site.css
-wwwroot/css/site.css.map
-
-# IDE
-.vs/
-.vscode/
-*.swp
-*.swo
+@theme {
+    /* Custom theme settings */
+}

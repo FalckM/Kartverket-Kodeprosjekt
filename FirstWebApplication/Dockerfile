@@ -27,13 +27,13 @@ COPY ["FirstWebApplication/package.json", "FirstWebApplication/"]
 WORKDIR "/src/FirstWebApplication"
 RUN npm install
 
-# Kopier resten av filene
+# Kopier resten av filene (inkludert Views for Tailwind scanning)
 WORKDIR /src
 COPY . .
 WORKDIR "/src/FirstWebApplication"
 
-# Bygg Tailwind CSS
-RUN npm run build:css
+# Bygg Tailwind CSS med eksplisitt content-scanning
+RUN npx tailwindcss --input ./wwwroot/css/input.css --output ./wwwroot/css/site.css --minify --content './Views/**/*.cshtml' --content './Pages/**/*.cshtml'
 
 # Bygg .NET-prosjektet
 RUN dotnet build "FirstWebApplication.csproj" -c $BUILD_CONFIGURATION -o /app/build
