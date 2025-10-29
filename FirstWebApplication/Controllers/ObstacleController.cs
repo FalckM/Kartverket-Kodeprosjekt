@@ -10,12 +10,20 @@ namespace FirstWebApplication.Controllers
         // Dependency Injection: Vi "injiserer" database-konteksten inn i kontrolleren
         // Dette gjør at vi kan bruke databasen i alle metodene våre
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<ObstacleController> _logger;
 
         // Constructor som tar imot ApplicationDbContext
         // ASP.NET Core gir oss automatisk riktig DbContext når kontrolleren lages
-        public ObstacleController(ApplicationDbContext context)
+        public ObstacleController(ApplicationDbContext context, ILogger<ObstacleController> logger)
         {
             _context = context;
+            _logger = logger; // ← OG DENNE!
+
+            // DEBUG: Log connection info
+            var connString = context.Database.GetConnectionString();
+            var provider = context.Database.ProviderName;
+            _logger.LogWarning("=== CONNECTION STRING: {ConnString} ===", connString);
+            _logger.LogWarning("=== DATABASE PROVIDER: {Provider} ===", provider);
         }
 
         // Viser skjemaet for registrering (GET)
@@ -24,6 +32,7 @@ namespace FirstWebApplication.Controllers
         {
             return View();
         }
+
 
         // Håndterer innsending av skjemaet (POST)
         [HttpPost]
@@ -85,5 +94,6 @@ namespace FirstWebApplication.Controllers
             var obstacles = await _context.Obstacles.ToListAsync();
             return View(obstacles);
         }
+
     }
 }
