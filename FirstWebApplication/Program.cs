@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Identity;
+using FirstWebApplication.Models;
 using MySqlConnector;
 using FirstWebApplication.Data;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
@@ -20,6 +22,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     )
 );
 
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders()
+    .AddDefaultUI();
 
 var app = builder.Build();
 
@@ -35,7 +41,7 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseAuthorization();
-
+app.UseAuthentication();
 app.MapStaticAssets();
 
 app.MapControllerRoute(
@@ -43,5 +49,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
+await IdentitySeeder.SeedAsync(app.Services);
 
 app.Run();
