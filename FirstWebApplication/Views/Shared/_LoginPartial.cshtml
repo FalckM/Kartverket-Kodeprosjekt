@@ -1,0 +1,29 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using FirstWebApplication.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home")" method="post" class="flex items-center space-x-4">
+        <span class="text-gray-800 dark:text-gray-200 font-medium">
+            Hei, @UserManager.GetUserName(User)!
+        </span>
+        <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md transition duration-150">
+            Logg ut
+        </button>
+    </form>
+}
+else
+{
+    <div class="flex items-center space-x-4">
+        <a asp-area="Identity" asp-page="/Account/Login"
+           class="text-gray-800 dark:text-gray-200 hover:text-blue-600 transition duration-150">
+            Logg inn
+        </a>
+        <a asp-area="Identity" asp-page="/Account/Register"
+           class="text-gray-800 dark:text-gray-200 hover:text-blue-600 transition duration-150">
+            Registrer
+        </a>
+    </div>
+}
