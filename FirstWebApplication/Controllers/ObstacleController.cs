@@ -1,32 +1,30 @@
 ﻿using FirstWebApplication.Models;
 using FirstWebApplication.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace FirstWebApplication.Controllers
 {
+    // [Authorize] means users MUST be logged in to access obstacle registration
+    // This ensures only authenticated users can report obstacles
+    [Authorize]
     public class ObstacleController : Controller
     {
-        // Dependency Injection: Vi "injiserer" database-konteksten inn i kontrolleren
-        // Dette gjør at vi kan bruke databasen i alle metodene våre
+        // Dependency Injection: We "inject" the database context into the controller
+        // This allows us to use the database in all our methods
         private readonly ApplicationDbContext _context;
         private readonly ILogger<ObstacleController> _logger;
 
-        // Constructor som tar imot ApplicationDbContext
-        // ASP.NET Core gir oss automatisk riktig DbContext når kontrolleren lages
+        // Constructor that receives ApplicationDbContext
+        // ASP.NET Core automatically gives us the correct DbContext when the controller is created
         public ObstacleController(ApplicationDbContext context, ILogger<ObstacleController> logger)
         {
             _context = context;
-            _logger = logger; // ← OG DENNE!
-
-            // DEBUG: Log connection info
-            var connString = context.Database.GetConnectionString();
-            var provider = context.Database.ProviderName;
-            _logger.LogWarning("=== CONNECTION STRING: {ConnString} ===", connString);
-            _logger.LogWarning("=== DATABASE PROVIDER: {Provider} ===", provider);
+            _logger = logger;
         }
 
-        // Viser skjemaet for registrering (GET)
+        // Shows the form for registration (GET)
         [HttpGet]
         public IActionResult DataForm()
         {
@@ -34,63 +32,67 @@ namespace FirstWebApplication.Controllers
         }
 
 
-        // Håndterer innsending av skjemaet (POST)
+        // Handles form submission (POST)
         [HttpPost]
         public async Task<IActionResult> DataForm(ObstacleData obstacleData)
         {
-            // Sjekker om datamodellen er gyldig (validering)
+            // Checks if the data model is valid (validation)
             if (!ModelState.IsValid)
             {
                 return View(obstacleData);
             }
 
-            // Legger til det nye hinderet i databasen
-            // _context.Obstacles.Add() legger objektet til i minnet
+            // ⭐ AUTOMATICALLY CAPTURE WHO REGISTERED THIS OBSTACLE! ⭐
+            // User.Identity.Name contains the logged-in user's email
+            obstacleData.RegisteredBy = User.Identity?.Name ?? "Unknown";
+
+            // Adds the new obstacle to the database
+            // _context.Obstacles.Add() adds the object to memory
             _context.Obstacles.Add(obstacleData);
 
-            // SaveChangesAsync() skriver endringene til databasen
-            // await betyr at vi venter på at operasjonen fullføres
+            // SaveChangesAsync() writes changes to the database
+            // await means we wait for the operation to complete
             await _context.SaveChangesAsync();
 
-            // TempData overlever en redirect (i motsetning til ViewBag)
+            // TempData survives a redirect (unlike ViewBag)
             TempData["IsNewRegistration"] = true;
 
-            // Sender brukeren videre til Overview-siden med det nye ID-et
+            // Redirects user to the Overview page with the new ID
             return RedirectToAction("Overview", new { id = obstacleData.Id });
         }
 
-        // NY METODE: Viser Overview (fungerer både for nye og eksisterende hindre)
+        // Shows Overview (works for both new and existing obstacles)
         [HttpGet]
         public async Task<IActionResult> Overview(int? id)
         {
-            // Sjekker om ID er null eller ugyldig
+            // Checks if ID is null or invalid
             if (id == null)
             {
                 return NotFound();
             }
 
-            // FindAsync() søker etter et hinder med det spesifikke ID-et
+            // FindAsync() searches for an obstacle with the specific ID
             var obstacle = await _context.Obstacles.FindAsync(id);
 
-            // Hvis hinderet ikke finnes, returner 404 Not Found
+            // If the obstacle doesn't exist, return 404 Not Found
             if (obstacle == null)
             {
                 return NotFound();
             }
 
-            // Setter ViewBag basert på om det er en ny registrering eller ikke
-            // TempData blir slettet etter at den er lest én gang
+            // Sets ViewBag based on whether it's a new registration or not
+            // TempData is deleted after being read once
             ViewBag.IsNewRegistration = TempData["IsNewRegistration"] as bool? ?? false;
 
-            // Sender hinderet til Overview-viewet
+            // Sends the obstacle to the Overview view
             return View(obstacle);
         }
 
-        // NY METODE: Viser liste over alle hindre
+        // Shows list of all obstacles
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            // ToListAsync() henter alle hindre fra databasen som en liste
+            // ToListAsync() fetches all obstacles from the database as a list
             var obstacles = await _context.Obstacles.ToListAsync();
             return View(obstacles);
         }

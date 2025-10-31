@@ -1,11 +1,13 @@
-using System.Diagnostics;
 using FirstWebApplication.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace FirstWebApplication.Controllers
 {
-    // OBS: Denne kontrolleren håndterer kun standard navigasjon (Home og Privacy).
-    // All applikasjonslogikk (skjema/kart) ligger i ObstacleController.
+    // [Authorize] means users MUST be logged in to access this controller
+    // If not logged in, they will be redirected to the AuthPage
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -15,16 +17,22 @@ namespace FirstWebApplication.Controllers
             _logger = logger;
         }
 
+        // GET: /Home/Index
+        // Home page - only accessible to logged-in users
         public IActionResult Index()
         {
             return View();
         }
 
+        // GET: /Home/Privacy
+        // Privacy page - only accessible to logged-in users
         public IActionResult Privacy()
         {
             return View();
         }
 
+        // Error page - accessible without login
+        [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
@@ -32,5 +40,3 @@ namespace FirstWebApplication.Controllers
         }
     }
 }
-
-

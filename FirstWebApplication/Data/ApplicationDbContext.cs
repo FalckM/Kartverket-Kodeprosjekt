@@ -1,43 +1,41 @@
 ﻿using FirstWebApplication.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace FirstWebApplication.Data
 {
 
-    // DbContext er "broen" melllom C#-koden og databasen.
-    // Den håndterer alle database-operasjoner (CRUD - Create, Read, Update, Delete).
-    public class ApplicationDbContext : DbContext
+    // ApplicationDbContext now inherits from IdentityDbContext instead of DbContext.
+    // This gives us automatic support for users (Users), roles (Roles), login, etc.
+    // IdentityDbContext creates tables like: AspNetUsers, AspNetRoles, AspNetUserRoles, etc.
+    public class ApplicationDbContext : IdentityDbContext
     {
 
-        // Constructor som tar imot konfigurasjonsinnstillinger fra Program.cs
-        // DbContextOptions inneholder connection string og andre innstillinger
+        // Constructor that receives configuration settings from Program.cs
+        // DbContextOptions contains connection string and other settings
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
 
-        // DbSet representerer en tabell i databasen.
-        // DbSet<ObstacleData> = en tabell som inneholder ObstacleData-objekter.
-        // Entity Framework lager en tabell kalt "Obstacles" basert på denne DbSet-en.
+        // DbSet represents a table in the database.
+        // DbSet<ObstacleData> = a table containing ObstacleData objects.
+        // Entity Framework creates a table called "Obstacles" based on this DbSet.
         public DbSet<ObstacleData> Obstacles { get; set; } = null!;
 
-        // OnModelCreating kjøres når databasen bygges for første gang.
-        // Her kan vi konfigurere tabeller, relasjoner, indesker, osv. 
+        // OnModelCreating is called when the database is built for the first time.
+        // Here we can configure tables, relationships, indexes, etc. 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // IMPORTANT: Must call base.OnModelCreating when using IdentityDbContext
+            // This sets up all Identity tables (AspNetUsers, AspNetRoles, etc.)
             base.OnModelCreating(modelBuilder);
 
-            // Setter eksplisitt tabellnavn til "Obstacles" (Valgfritt, men god praksis)
+            // Explicitly set table name to "Obstacles" (Optional, but good practice)
             modelBuilder.Entity<ObstacleData>()
                 .ToTable("Obstacles");
 
-            // Sikrer at ObstacleName er unikt i databasen og unngår duplikater.
-            // Dette lager en uniqe index i databasen.
-            modelBuilder.Entity<ObstacleData>()
-                .HasIndex(o => o.ObstacleName)
-                .IsUnique();
-
-            // Setter standardverdi hvis den ikke er satt. 
+            // Sets default value if not set. 
             modelBuilder.Entity<ObstacleData>()
                 .Property(o => o.RegisteredDate)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");

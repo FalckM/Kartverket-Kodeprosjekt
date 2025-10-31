@@ -658,9 +658,7 @@ C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstW
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\rjimswa.dswa.cache.json
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
-C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\scopedcss\bundle\FirstWebApplication.styles.css
-C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\scopedcss\projectbundle\FirstWebApplication.bundle.scp.css
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\fko6fk432i-61n19gt1b8.gz
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\9tv0ur8ixf-xtxxf3hu2r.gz
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\gn2lhuufy4-t1cqhe9u97.gz
@@ -735,8 +733,6 @@ C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstW
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\dfz4orwhoo-7888sfn8yc.gz
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\kxqlq3t94p-05nq1rlf98.gz
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\7gxfk2vghi-w4n1b1xhjx.gz
-C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\fumaquqaz5-6no7zwimhn.gz
-C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\compressed\7ndsovqjdh-6no7zwimhn.gz
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\staticwebassets.build.json
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\staticwebassets.build.json.cache
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\staticwebassets.development.json

@@ -41,7 +41,7 @@ namespace FirstWebApplication.Models
         // Automatisk felt for å lagre hvem som registrerte hindringen.
         // Kan være null hvis ikke oppgitt.
         [MaxLength(100)]
-        [Display(Name = "Registered By")]
+        [Display(Name = "Registered By (Email)")]
         public string? RegisteredBy { get; set; }
 
         // Type hinder (valgfritt felt)

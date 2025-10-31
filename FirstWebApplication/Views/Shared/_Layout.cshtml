@@ -1,20 +1,25 @@
-﻿<!DOCTYPE html>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Webapplikasjon for luftfartshindre</title>
+    <title>@ViewData["Title"] - Aviation Obstacle Registration</title>
     <link rel="stylesheet" href="~/lib/leaflet/leaflet.css" />
     <script src="~/lib/leaflet/leaflet.js"></script>
     <link rel="stylesheet" href="~/lib/leaflet-draw/dist/leaflet.draw.css" />
     <script src="~/lib/leaflet-draw/dist/leaflet.draw.js"></script>
+    <!-- Tailwind 4.0 CSS -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body class="bg-gray-200 font-sans leading-relaxed text-gray-900">
     <header>
         <nav class="bg-white py-4 shadow-sm">
             <div class="container mx-auto px-4 flex items-center justify-between">
-                <a class="text-xl font-bold text-gray-900 me-8" asp-area="" asp-controller="Home" asp-action="Index">Webapplikasjon for luftfartshindre</a>
+                <a class="text-xl font-bold text-gray-900 me-8" asp-area="" asp-controller="Home" asp-action="Index">Aviation Obstacle Registration</a>
                 <button class="lg:hidden" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="block h-6 w-6">
@@ -29,9 +34,27 @@
                             <a class="text-gray-900 hover:text-blue-600 transition duration-150 ease-in-out" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li>
-                            <a class="text-gray-900 hover:text-blue-600 transition duration-150 ease-in-out" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="text-gray-900 hover:text-blue-600 transition duration-150 ease-in-out" asp-area="" asp-controller="Obstacle" asp-action="Index">All Obstacles</a>
+                        </li>
+                        <li>
+                            <a class="text-gray-900 hover:text-blue-600 transition duration-150 ease-in-out" asp-area="" asp-controller="Obstacle" asp-action="DataForm">Register Obstacle</a>
                         </li>
                     </ul>
+                    
+                    <!-- User info and logout - shown on the right corner -->
+                    <div class="flex items-center gap-4 ms-auto">
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <!-- If user is logged in -->
+                            <span class="text-gray-700 font-medium">Welcome, @User.Identity!.Name!</span>
+                            
+                            <form asp-controller="Account" asp-action="Logout" method="post">
+                                <button type="submit" style="background-color: #dc2626; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer; border: none;">
+                                    LOGOUT
+                                </button>
+                            </form>
+                        }
+                    </div>
                 </div>
             </div>
         </nav>
@@ -44,7 +67,7 @@
 
     <footer class="border-t py-4 text-gray-600 text-sm">
         <div class="container mx-auto px-4 text-center">
-            &copy; 2025 - Webapplikasjon for luftfartshindre - <a class="hover:underline" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - Aviation Obstacle Registration System - <a class="hover:underline" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -53,5 +76,3 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
-
-
