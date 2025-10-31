@@ -4,7 +4,9 @@
   "description": "Important notes and step by step guide to use the MVC Web Application.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tailwindcss --input ./wwwroot/css/input.css --output ./wwwroot/css/site.css --watch",
+    "build:css": "tailwindcss --input ./wwwroot/css/input.css --output ./wwwroot/css/site.css --minify"
   },
   "repository": {
     "type": "git",

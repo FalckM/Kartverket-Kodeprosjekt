@@ -24,15 +24,57 @@ namespace FirstWebApplication.Controllers
             _logger = logger;
         }
 
-        // Shows the form for registration (GET)
+        // GET: /Obstacle/Workspace
+        // This is the main workspace where users can register obstacles
+        // Shows an interactive map with a sidebar form
+        [HttpGet]
+        public IActionResult Workspace()
+        {
+            // Create a new empty ObstacleData model for the form
+            return View(new ObstacleData());
+        }
+
+        // POST: /Obstacle/SaveObstacle
+        // This handles the form submission from the Workspace
+        [HttpPost]
+        public async Task<IActionResult> SaveObstacle(ObstacleData obstacleData)
+        {
+            // Check if the data model is valid (validation)
+            if (!ModelState.IsValid)
+            {
+                // If validation fails, show the workspace again with error messages
+                return View("Workspace", obstacleData);
+            }
+
+            // AUTOMATICALLY CAPTURE WHO REGISTERED THIS OBSTACLE! 
+            // User.Identity.Name contains the logged-in user's email
+            obstacleData.RegisteredBy = User.Identity?.Name ?? "Unknown";
+
+            // Set the registration date to now
+            obstacleData.RegisteredDate = DateTime.Now;
+
+            // Add the new obstacle to the database
+            _context.Obstacles.Add(obstacleData);
+
+            // Save changes to the database
+            await _context.SaveChangesAsync();
+
+            // After successful save, redirect to the Overview page
+            // This shows the user what they just registered
+            TempData["IsNewRegistration"] = true;
+            return RedirectToAction("Overview", new { id = obstacleData.Id });
+        }
+
+        // OLD METHOD: Shows the form for registration (GET)
+        // This is kept for backward compatibility with existing links
         [HttpGet]
         public IActionResult DataForm()
         {
             return View();
         }
 
-
-        // Handles form submission (POST)
+        // OLD METHOD: Handles form submission (POST)
+        // This is kept for backward compatibility
         [HttpPost]
         public async Task<IActionResult> DataForm(ObstacleData obstacleData)
         {
@@ -42,16 +84,13 @@ namespace FirstWebApplication.Controllers
                 return View(obstacleData);
             }
 
-            // ⭐ AUTOMATICALLY CAPTURE WHO REGISTERED THIS OBSTACLE! ⭐
-            // User.Identity.Name contains the logged-in user's email
+            //  AUTOMATICALLY CAPTURE WHO REGISTERED THIS OBSTACLE! 
             obstacleData.RegisteredBy = User.Identity?.Name ?? "Unknown";
 
             // Adds the new obstacle to the database
-            // _context.Obstacles.Add() adds the object to memory
             _context.Obstacles.Add(obstacleData);
 
             // SaveChangesAsync() writes changes to the database
-            // await means we wait for the operation to complete
             await _context.SaveChangesAsync();
 
             // TempData survives a redirect (unlike ViewBag)
@@ -96,6 +135,5 @@ namespace FirstWebApplication.Controllers
             var obstacles = await _context.Obstacles.ToListAsync();
             return View(obstacles);
         }
-
     }
 }

@@ -1,4 +1,4 @@
-using FirstWebApplication.Models.User;
+﻿using FirstWebApplication.Models.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,7 +8,7 @@ namespace FirstWebApplication.Controllers
     {
         // UserManager handles user operations (create, find, update user)
         private readonly UserManager<IdentityUser> _userManager;
-        
+
         // SignInManager handles sign in and sign out operations
         private readonly SignInManager<IdentityUser> _signInManager;
 
@@ -21,16 +21,16 @@ namespace FirstWebApplication.Controllers
         }
 
         // GET: /Account/AuthPage
-        // Shows the combined login/register page (the first page users see)
+        // Shows the combined login/register page (for users who want to create account)
         [HttpGet]
         public IActionResult AuthPage()
         {
-            // If user is already logged in, redirect to home
+            // If user is already logged in, redirect to workspace
             if (_signInManager.IsSignedIn(User))
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Workspace", "Obstacle");
             }
-            
+
             return View();
         }
 
@@ -44,10 +44,10 @@ namespace FirstWebApplication.Controllers
             {
                 // Creates a new IdentityUser with the email from the form
                 // UserName is set to the same as Email (common practice)
-                var user = new IdentityUser 
-                { 
-                    UserName = model.Email, 
-                    Email = model.Email 
+                var user = new IdentityUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email
                 };
 
                 // CreateAsync attempts to create the user in the database
@@ -60,8 +60,8 @@ namespace FirstWebApplication.Controllers
                     // Automatically log in the user after registration
                     await _signInManager.SignInAsync(user, isPersistent: false);
 
-                    // Redirect user to home page (now they can access the application)
-                    return RedirectToAction("Index", "Home");
+                    //  NEW: Redirect user directly to the workspace! 
+                    return RedirectToAction("Workspace", "Obstacle");
                 }
 
                 // If something went wrong, add error messages to ModelState
@@ -79,7 +79,7 @@ namespace FirstWebApplication.Controllers
         }
 
         // POST: /Account/Login
-        // Handles login when user submits the form
+        // Handles login when user submits the form from the landing page
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
@@ -89,23 +89,28 @@ namespace FirstWebApplication.Controllers
                 // - model.Email: the username (in our case email)
                 // - model.Password: the password (checked against hashed password in database)
                 // - model.RememberMe: whether the user should stay logged in
-                // - lockoutOnFailure: false = don't lock account on wrong password (can be set to true later)
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+                // - lockoutOnFailure: false = don't lock account on wrong password
+                var result = await _signInManager.PasswordSignInAsync(
+                    model.Email,
+                    model.Password,
+                    model.RememberMe,
+                    lockoutOnFailure: false
+                );
 
                 if (result.Succeeded)
                 {
-                    // Login succeeded! Redirect user to home page
-                    return RedirectToAction("Index", "Home");
+                    //  NEW: Login succeeded! Redirect to workspace instead of home ⭐
+                    return RedirectToAction("Workspace", "Obstacle");
                 }
 
-                    // If login failed, show a general error message
-                    // We don't say whether it's email or password that's wrong (security)
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt");
-                    return View("AuthPage");
+                // If login failed, show a general error message
+                // We don't say whether it's email or password that's wrong (security)
+                ModelState.AddModelError(string.Empty, "Invalid login attempt");
             }
 
-            // Show the form again with error messages
-            return View("AuthPage");
+            // Show the landing page again with error messages
+            // The landing page (Home/Index) will display the login form again
+            return RedirectToAction("Index", "Home");
         }
 
         // POST: /Account/Logout
@@ -116,8 +121,8 @@ namespace FirstWebApplication.Controllers
             // SignOutAsync removes login information
             await _signInManager.SignOutAsync();
 
-            // Redirect user to the auth page
-            return RedirectToAction("AuthPage");
+            //  NEW: Redirect user back to the landing page (Home/Index) ⭐
+            return RedirectToAction("Index", "Home");
         }
     }
 }

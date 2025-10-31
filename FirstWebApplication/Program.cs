@@ -1,5 +1,4 @@
 using FirstWebApplication.Data;
-using FirstWebApplication.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,39 +7,36 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Henter connection string fra appsettings.json eller User Secrets
+// Configure database connection
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-// Registrerer DbContext som en tjeneste
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(connectionString, new MariaDbServerVersion(new Version(10, 11, 0))));
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
-// AddIdentity registrerer alle nødvendige tjenester for brukerautentisering
+// Configure ASP.NET Identity
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
-    // Passordkrav - gjør det enkelt for testing (kan strenges til senere!)
-    options.Password.RequireDigit = false;           
-    options.Password.RequireLowercase = false;        
-    options.Password.RequireUppercase = false;        
-    options.Password.RequireNonAlphanumeric = false;  
-    options.Password.RequiredLength = 6;              
-
-    // Brukerinnstillinger
-    options.User.RequireUniqueEmail = true;           
+    // Password settings (you can adjust these)
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 6;
 })
-.AddEntityFrameworkStores<ApplicationDbContext>()    
+.AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
 
+// Configure cookie authentication
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    // Redirect to login page when user is not authenticated
-    options.LoginPath = "/Account/AuthPage";
-    options.LogoutPath = "/Account/Logout";
-    options.AccessDeniedPath = "/Account/AuthPage";
+    // IMPORTANT: Redirect to Home/Index (landing page) instead of Account/AuthPage
+    options.LoginPath = "/Home/Index";           // Where to go when not logged in
+    options.LogoutPath = "/Account/Logout";      // Where to go when logging out
+    options.AccessDeniedPath = "/Home/Index";    // Where to go when access is denied
+    options.ExpireTimeSpan = TimeSpan.FromHours(24); // How long the login lasts
+    options.SlidingExpiration = true;            // Extend session on activity
 });
 
 var app = builder.Build();
-
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -50,14 +46,16 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseRouting();
-app.UseAuthorization();
+app.UseStaticFiles();
 
-app.MapStaticAssets();
+app.UseRouting();
+
+// IMPORTANT: Authentication must come before Authorization
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Account}/{action=AuthPage}/{id?}")
-    .WithStaticAssets();
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

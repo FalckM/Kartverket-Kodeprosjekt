@@ -1,8 +1,8 @@
-name: dockercompose13266277041832568217
+name: dockercompose11258753134575746774
 services:
   firstwebapplication:
     build:
-      context: C:\Users\matsf\source\repos\FirstWebApplication
+      context: C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt
       dockerfile: FirstWebApplication/Dockerfile
       args:
         BUILD_CONFIGURATION: Debug
@@ -11,6 +11,11 @@ services:
         com.microsoft.created-by: visual-studio
         com.microsoft.visual-studio.project-name: FirstWebApplication
       target: base
+    container_name: webapp
+    depends_on:
+      mariadb:
+        condition: service_healthy
+        required: true
     entrypoint:
       - dotnet
       - --roll-forward
@@ -22,6 +27,7 @@ services:
       ASPNETCORE_HTTP_PORTS: "8080"
       ASPNETCORE_HTTPS_PORTS: "8081"
       ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS: "true"
+      ConnectionStrings__DefaultConnection: Server=mariadb;Port=3306;Database=ObstacleDB;User=obstacleuser;Password=1234;
       DOTNET_USE_POLLING_FILE_WATCHER: "1"
       NUGET_FALLBACK_PACKAGES: /.nuget/fallbackpackages
     image: firstwebapplication:dev
@@ -31,8 +37,12 @@ services:
       com.microsoft.visualstudio.debuggee.program: dotnet
       com.microsoft.visualstudio.debuggee.workingdirectory: /app
     networks:
-      default: null
+      appnet: null
     ports:
+      - mode: ingress
+        target: 8080
+        published: "5000"
+        protocol: tcp
       - mode: ingress
         target: 8080
         protocol: tcp
@@ -66,12 +76,12 @@ services:
         bind:
           create_host_path: true
       - type: bind
-        source: C:\Users\matsf\source\repos\FirstWebApplication\FirstWebApplication
+        source: C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication
         target: /app
         bind:
           create_host_path: true
       - type: bind
-        source: C:\Users\matsf\source\repos\FirstWebApplication
+        source: C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt
         target: /src
         bind:
           create_host_path: true
@@ -104,6 +114,41 @@ services:
         read_only: true
         bind:
           create_host_path: true
+  mariadb:
+    container_name: mariadbcontainer
+    environment:
+      MYSQL_DATABASE: ObstacleDB
+      MYSQL_PASSWORD: "1234"
+      MYSQL_ROOT_PASSWORD: "1234"
+      MYSQL_USER: obstacleuser
+    healthcheck:
+      test:
+        - CMD
+        - healthcheck.sh
+        - --connect
+        - --innodb_initialized
+      timeout: 5s
+      interval: 10s
+      retries: 5
+    image: mariadb:10.11
+    networks:
+      appnet: null
+    ports:
+      - mode: ingress
+        target: 3306
+        published: "3306"
+        protocol: tcp
+    restart: always
+    volumes:
+      - type: volume
+        source: mariadb_data
+        target: /var/lib/mysql
+        volume: {}
 networks:
-  default:
-    name: dockercompose13266277041832568217_default
+  appnet:
+    name: dockercompose11258753134575746774_appnet
+    driver: bridge
+volumes:
+  mariadb_data:
+    name: dockercompose11258753134575746774_mariadb_data
+    driver: local
