@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using FirstWebApplication.Data.Identity;
 
 namespace FirstWebApplication.Models
 {

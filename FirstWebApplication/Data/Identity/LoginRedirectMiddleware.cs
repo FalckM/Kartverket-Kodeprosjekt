@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
-using FirstWebApplication.Data;
+using FirstWebApplication.Data.Identity;
 
 namespace FirstWebApplication.Data
 {

@@ -1,4 +1,5 @@
 using FirstWebApplication.Data;
+using FirstWebApplication.Data.Identity.Extensions;
 using FirstWebApplication.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -22,12 +23,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     )
 );
 
-//builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<AppDbContext>();
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<AppDbContext>()
-    .AddDefaultTokenProviders()
-    .AddDefaultUI();
+//Kaller IdentityServiceExtensions (Holder Program ryddig)
+builder.Services.AddAppIdentity();
+
 
 var app = builder.Build();
 
