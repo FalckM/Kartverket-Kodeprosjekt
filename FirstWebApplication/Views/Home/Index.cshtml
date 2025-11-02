@@ -54,8 +54,8 @@
             align-items: center;
         }
 
-        /* The login modal box */
-        .login-modal {
+        /* The auth modal box - used for both login and register */
+        .auth-modal {
             background: white;
             border-radius: 15px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
@@ -63,10 +63,11 @@
             width: 90%;
             max-width: 420px;
             z-index: 3; /* Above everything */
+            transition: all 0.3s ease;
         }
 
-        /* Style for the login form */
-        .login-modal h1 {
+        /* Style for the auth forms */
+        .auth-modal h1 {
             font-size: 28px;
             font-weight: bold;
             color: #1f2937;
@@ -74,14 +75,14 @@
             text-align: center;
         }
 
-        .login-modal p {
+        .auth-modal p {
             color: #6b7280;
             text-align: center;
             margin-bottom: 30px;
             font-size: 14px;
         }
 
-        .login-modal input {
+        .auth-modal input {
             width: 100%;
             padding: 12px 15px;
             margin-bottom: 15px;
@@ -91,13 +92,13 @@
             transition: border-color 0.3s ease;
         }
 
-        .login-modal input:focus {
+        .auth-modal input:focus {
             outline: none;
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
-        .login-modal button {
+        .auth-modal button {
             width: 100%;
             padding: 12px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -110,12 +111,12 @@
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .login-modal button:hover {
+        .auth-modal button:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
 
-        .login-modal button:active {
+        .auth-modal button:active {
             transform: translateY(0);
         }
 
@@ -134,21 +135,22 @@
             margin-bottom: 0;
         }
 
-        /* Link to register page */
-        .register-link {
+        /* Link to toggle between login and register */
+        .toggle-link {
             text-align: center;
             margin-top: 20px;
             font-size: 14px;
             color: #6b7280;
         }
 
-        .register-link a {
+        .toggle-link a {
             color: #667eea;
             text-decoration: none;
             font-weight: 600;
+            cursor: pointer;
         }
 
-        .register-link a:hover {
+        .toggle-link a:hover {
             text-decoration: underline;
         }
 
@@ -173,64 +175,122 @@
             font-size: 48px;
             margin-bottom: 10px;
         }
+
+        /* Hide/show forms based on mode */
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <!-- Full-screen map in the background -->
     <div id="landing-map"></div>
 
-    <!-- Dark overlay with login modal -->
+    <!-- Dark overlay with auth modal -->
     <div class="map-overlay">
-        <div class="login-modal">
+        <div class="auth-modal">
             <!-- Branding/Icon -->
             <div class="branding">
                 <div class="icon">✈️</div>
             </div>
 
-            <h1>Welcome</h1>
-            <p>Sign in to access the Aviation Obstacle Registration System</p>
+            <!-- LOGIN FORM -->
+            <div id="login-form" class="auth-form">
+                <h1>Welcome</h1>
+                <p>Sign in to access the Aviation Obstacle Registration System</p>
 
-            <!-- Show error messages if login fails -->
-            @if (ViewData.ModelState.ErrorCount > 0)
-            {
-                <div class="error-message">
-                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                    {
-                        <div>@error.ErrorMessage</div>
-                    }
+                <!-- Show error messages if login fails -->
+                @if (ViewData.ModelState.ErrorCount > 0 && ViewBag.ShowRegister != true)
+                {
+                    <div class="error-message">
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <div>@error.ErrorMessage</div>
+                        }
+                    </div>
+                }
+
+                <!-- Login Form -->
+                <form asp-controller="Account" asp-action="Login" method="post">
+                    <!-- Email input -->
+                    <input type="email" 
+                           name="Email" 
+                           placeholder="Email address" 
+                           required 
+                           autocomplete="email" />
+
+                    <!-- Password input -->
+                    <input type="password" 
+                           name="Password" 
+                           placeholder="Password" 
+                           required 
+                           autocomplete="current-password" />
+
+                    <!-- Remember Me checkbox -->
+                    <label class="remember-me">
+                        <input type="checkbox" name="RememberMe" />
+                        <span>Remember me</span>
+                    </label>
+
+                    <!-- Login button -->
+                    <button type="submit">Sign In</button>
+                </form>
+
+                <!-- Link to toggle to registration -->
+                <div class="toggle-link">
+                    Don't have an account? 
+                    <a onclick="toggleForms()">Create one here</a>
                 </div>
-            }
+            </div>
 
-            <!-- Login Form -->
-            <form asp-controller="Account" asp-action="Login" method="post">
-                <!-- Email input -->
-                <input type="email" 
-                       name="Email" 
-                       placeholder="Email address" 
-                       required 
-                       autocomplete="email" />
+            <!-- REGISTER FORM -->
+            <div id="register-form" class="auth-form hidden">
+                <h1>Create Account</h1>
+                <p>Register to start reporting aviation obstacles</p>
 
-                <!-- Password input -->
-                <input type="password" 
-                       name="Password" 
-                       placeholder="Password" 
-                       required 
-                       autocomplete="current-password" />
+                <!-- Show error messages if registration fails -->
+                @if (ViewData.ModelState.ErrorCount > 0 && ViewBag.ShowRegister == true)
+                {
+                    <div class="error-message">
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <div>@error.ErrorMessage</div>
+                        }
+                    </div>
+                }
 
-                <!-- Remember Me checkbox -->
-                <label class="remember-me">
-                    <input type="checkbox" name="RememberMe" />
-                    <span>Remember me</span>
-                </label>
+                <!-- Register Form -->
+                <form asp-controller="Account" asp-action="Register" method="post">
+                    <!-- Email input -->
+                    <input type="email" 
+                           name="Email" 
+                           placeholder="Email address" 
+                           required 
+                           autocomplete="email" />
 
-                <!-- Login button -->
-                <button type="submit">Sign In</button>
-            </form>
+                    <!-- Password input -->
+                    <input type="password" 
+                           name="Password" 
+                           placeholder="Password (min 6 characters)" 
+                           required 
+                           autocomplete="new-password" />
 
-            <!-- Link to registration page -->
-            <div class="register-link">
-                Don't have an account? 
-                <a asp-controller="Account" asp-action="AuthPage">Create one here</a>
+                    <!-- Confirm Password input -->
+                    <input type="password" 
+                           name="ConfirmPassword" 
+                           placeholder="Confirm Password" 
+                           required 
+                           autocomplete="new-password" />
+
+                    <!-- Register button -->
+                    <button type="submit">Create Account</button>
+                </form>
+
+                <!-- Link to toggle back to login -->
+                <div class="toggle-link">
+                    Already have an account? 
+                    <a onclick="toggleForms()">Sign in here</a>
+                </div>
             </div>
         </div>
     </div>
@@ -242,7 +302,7 @@
         // Initialize the map when the page loads
         document.addEventListener('DOMContentLoaded', function () {
             
-            // Create the map centered on Norway (adjust coordinates as needed)
+            // Create the map centered on Norway
             // The map is set to not be interactive (dragging: false, etc.)
             var map = L.map('landing-map', {
                 center: [60.4720, 8.4689], // Center of Norway
@@ -261,9 +321,24 @@
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
 
-            // The map is now visible but not interactive
-            // User must log in to access the full system
+            // Check if we should show the register form (after failed registration)
+            @if (ViewBag.ShowRegister == true)
+            {
+                <text>
+                toggleForms();
+                </text>
+            }
         });
+
+        // Function to toggle between login and register forms
+        function toggleForms() {
+            var loginForm = document.getElementById('login-form');
+            var registerForm = document.getElementById('register-form');
+            
+            // Toggle visibility
+            loginForm.classList.toggle('hidden');
+            registerForm.classList.toggle('hidden');
+        }
     </script>
 </body>
 </html>

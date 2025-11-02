@@ -1,0 +1,298 @@
+@{
+    ViewData["Title"] = "Quick Register";
+    Layout = "_Layout";
+}
+
+<style>
+    /* Full-screen map background */
+    .quick-register-container {
+        position: fixed;
+        top: 64px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+    }
+
+    #quick-register-map {
+        width: 100%;
+        height: 100%;
+    }
+
+    /* Status overlay */
+    .status-overlay {
+        position: fixed;
+        top: 64px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(3px);
+        z-index: 2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    /* Status box */
+    .status-box {
+        background: white;
+        border-radius: 20px;
+        padding: 50px 40px;
+        max-width: 500px;
+        width: 100%;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        text-align: center;
+    }
+
+    .status-box .icon {
+        font-size: 80px;
+        margin-bottom: 20px;
+    }
+
+    .status-box h2 {
+        font-size: 28px;
+        font-weight: bold;
+        color: #1f2937;
+        margin-bottom: 15px;
+    }
+
+    .status-box p {
+        font-size: 16px;
+        color: #6b7280;
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+
+    /* Loading spinner */
+    .spinner {
+        border: 4px solid #f3f4f6;
+        border-top: 4px solid #667eea;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 1s linear infinite;
+        margin: 20px auto;
+    }
+
+    @@keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Error state */
+    .error-icon {
+        color: #ef4444;
+    }
+
+    .error-text {
+        color: #ef4444;
+    }
+
+    /* Success state */
+    .success-icon {
+        color: #10b981;
+    }
+
+    /* Hidden by default */
+    .hidden {
+        display: none;
+    }
+
+    /* Button styling */
+    .action-btn {
+        display: inline-block;
+        padding: 14px 40px;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        text-decoration: none;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 5px;
+    }
+
+    .action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .action-btn.secondary {
+        background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+    }
+
+    @@media (max-width: 768px) {
+        .quick-register-container {
+            top: 56px;
+        }
+
+        .status-overlay {
+            top: 56px;
+        }
+    }
+</style>
+
+<!-- Map background -->
+<div class="quick-register-container">
+    <div id="quick-register-map"></div>
+</div>
+
+<!-- Status overlay -->
+<div class="status-overlay">
+    <div class="status-box">
+        <!-- Loading state -->
+        <div id="loading-state">
+            <div class="icon">📍</div>
+            <h2>Getting Your Location</h2>
+            <p>Please allow location access to quickly register this obstacle.</p>
+            <div class="spinner"></div>
+            <p style="font-size: 14px; color: #9ca3af;">This may take a few seconds...</p>
+        </div>
+
+        <!-- Success state -->
+        <div id="success-state" class="hidden">
+            <div class="icon success-icon">✓</div>
+            <h2>Location Registered Successfully!</h2>
+            <p>Your obstacle location has been saved. You can add more details later from the Quick Registered Items page.</p>
+            <div style="margin-top: 30px;">
+                <a href="@Url.Action("RegisterType", "Obstacle")" class="action-btn">Register Another</a>
+                <a href="@Url.Action("QuickRegisteredItems", "Obstacle")" class="action-btn secondary">View Quick Items</a>
+            </div>
+        </div>
+
+        <!-- Error state -->
+        <div id="error-state" class="hidden">
+            <div class="icon error-icon">✗</div>
+            <h2 class="error-text">Location Access Denied</h2>
+            <p>We couldn't get your location. Please enable location services in your browser or use Full Register instead.</p>
+            <div style="margin-top: 30px;">
+                <button onclick="retryLocation()" class="action-btn">Try Again</button>
+                <a href="@Url.Action("FullRegister", "Obstacle")" class="action-btn secondary">Use Full Register</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var map;
+        var userMarker;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize the map
+            map = L.map('quick-register-map', {
+                center: [60.4720, 8.4689],
+                zoom: 6,
+                zoomControl: false
+            });
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            // Start getting user location
+            getUserLocation();
+        });
+
+        function getUserLocation() {
+            // Check if browser supports geolocation
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    handleLocationSuccess,
+                    handleLocationError,
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 0
+                    }
+                );
+            } else {
+                handleLocationError({ code: 0, message: "Geolocation not supported" });
+            }
+        }
+
+        function handleLocationSuccess(position) {
+            var lat = position.coords.latitude;
+            var lng = position.coords.longitude;
+
+            console.log('Location captured:', lat, lng);
+
+            // Center map on user location
+            map.setView([lat, lng], 15);
+
+            // Add marker at user location
+            userMarker = L.marker([lat, lng], {
+                icon: L.icon({
+                    iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                })
+            }).addTo(map);
+
+            // Create GeoJSON for the point
+            var geoJson = {
+                type: "Feature",
+                geometry: {
+                    type: "Point",
+                    coordinates: [lng, lat]
+                },
+                properties: {}
+            };
+
+            // Send to server
+            saveQuickRegistration(geoJson);
+        }
+
+        function handleLocationError(error) {
+            console.error('Location error:', error);
+            
+            // Hide loading, show error
+            document.getElementById('loading-state').classList.add('hidden');
+            document.getElementById('error-state').classList.remove('hidden');
+        }
+
+        function saveQuickRegistration(geoJson) {
+            // Send the location data to the server
+            fetch('@Url.Action("SaveQuickRegister", "Obstacle")', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                },
+                body: JSON.stringify({
+                    obstacleGeometry: JSON.stringify(geoJson)
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Hide loading, show success
+                    document.getElementById('loading-state').classList.add('hidden');
+                    document.getElementById('success-state').classList.remove('hidden');
+                } else {
+                    handleLocationError({ message: data.message || 'Failed to save location' });
+                }
+            })
+            .catch(error => {
+                console.error('Save error:', error);
+                handleLocationError({ message: 'Failed to save location' });
+            });
+        }
+
+        function retryLocation() {
+            // Hide error, show loading
+            document.getElementById('error-state').classList.add('hidden');
+            document.getElementById('loading-state').classList.remove('hidden');
+            
+            // Try again
+            getUserLocation();
+        }
+    </script>
+}

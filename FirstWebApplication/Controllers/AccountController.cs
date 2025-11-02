@@ -20,22 +20,8 @@ namespace FirstWebApplication.Controllers
             _signInManager = signInManager;
         }
 
-        // GET: /Account/AuthPage
-        // Shows the combined login/register page (for users who want to create account)
-        [HttpGet]
-        public IActionResult AuthPage()
-        {
-            // If user is already logged in, redirect to workspace
-            if (_signInManager.IsSignedIn(User))
-            {
-                return RedirectToAction("Workspace", "Obstacle");
-            }
-
-            return View();
-        }
-
         // POST: /Account/Register
-        // Handles registration when user submits the form
+        // Handles registration when user submits the form from Home/Index
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
@@ -60,8 +46,8 @@ namespace FirstWebApplication.Controllers
                     // Automatically log in the user after registration
                     await _signInManager.SignInAsync(user, isPersistent: false);
 
-                    //  NEW: Redirect user directly to the workspace! 
-                    return RedirectToAction("Workspace", "Obstacle");
+                    // Redirect user to the registration type selection page
+                    return RedirectToAction("RegisterType", "Obstacle");
                 }
 
                 // If something went wrong, add error messages to ModelState
@@ -73,9 +59,15 @@ namespace FirstWebApplication.Controllers
             }
 
             // If we get here, validation failed
-            // Show the form again with error messages and keep register panel active
-            ViewBag.ShowRegister = true;
-            return View("AuthPage");
+            // Redirect back to Home/Index with ShowRegister flag to show register form
+            TempData["ShowRegister"] = true;
+
+            // Copy ModelState errors to TempData so they survive the redirect
+            TempData["RegisterErrors"] = string.Join("|", ModelState.Values
+                .SelectMany(v => v.Errors)
+                .Select(e => e.ErrorMessage));
+
+            return RedirectToAction("Index", "Home");
         }
 
         // POST: /Account/Login
@@ -99,8 +91,8 @@ namespace FirstWebApplication.Controllers
 
                 if (result.Succeeded)
                 {
-                    //  NEW: Login succeeded! Redirect to workspace instead of home ⭐
-                    return RedirectToAction("Workspace", "Obstacle");
+                    // Login succeeded! Redirect to registration type selection
+                    return RedirectToAction("RegisterType", "Obstacle");
                 }
 
                 // If login failed, show a general error message
@@ -108,8 +100,12 @@ namespace FirstWebApplication.Controllers
                 ModelState.AddModelError(string.Empty, "Invalid login attempt");
             }
 
+            // Copy ModelState errors to TempData so they survive the redirect
+            TempData["LoginErrors"] = string.Join("|", ModelState.Values
+                .SelectMany(v => v.Errors)
+                .Select(e => e.ErrorMessage));
+
             // Show the landing page again with error messages
-            // The landing page (Home/Index) will display the login form again
             return RedirectToAction("Index", "Home");
         }
 
@@ -121,7 +117,7 @@ namespace FirstWebApplication.Controllers
             // SignOutAsync removes login information
             await _signInManager.SignOutAsync();
 
-            //  NEW: Redirect user back to the landing page (Home/Index) ⭐
+            // Redirect user back to the landing page (Home/Index)
             return RedirectToAction("Index", "Home");
         }
     }

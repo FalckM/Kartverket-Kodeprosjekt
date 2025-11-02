@@ -1,0 +1,107 @@
+@model FirstWebApplication.Models.ObstacleData
+
+@{
+    ViewData["Title"] = "Complete Quick Registration";
+}
+
+<div class="max-w-4xl mx-auto px-4 py-8 bg-white rounded-lg shadow-lg">
+    <h1 class="text-3xl font-bold mb-2 text-center text-gray-800">Complete Your Registration</h1>
+    <p class="text-gray-600 mb-6 text-center">Add details to your quick-registered obstacle</p>
+
+    <div class="bg-blue-50 border-l-4 border-blue-600 p-4 mb-6">
+        <p class="text-sm text-blue-800">
+            <strong>Quick Registration #@Model.Id</strong><br>
+            Registered on: @Model.RegisteredDate.ToString("dd.MM.yyyy HH:mm")<br>
+            Location has been saved. Please fill in the remaining details below.
+        </p>
+    </div>
+
+    <form asp-action="SaveCompleteQuickRegister" asp-controller="Obstacle" method="post" class="space-y-6">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="ObstacleGeometry" />
+        <input type="hidden" asp-for="RegisteredDate" />
+        <input type="hidden" asp-for="RegisteredBy" />
+
+        <div>
+            <label asp-for="ObstacleName" class="block text-sm font-medium mb-1 text-gray-700">Obstacle Name *</label>
+            <input asp-for="ObstacleName" placeholder="e.g., Radio Tower, Flagpole"
+                   class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition duration-150 ease-in-out" />
+            <span asp-validation-for="ObstacleName" class="text-base text-red-600 font-mono"></span>
+        </div>
+
+        <div>
+            <label asp-for="ObstacleHeight" class="block text-sm font-medium mb-1 text-gray-700">Height in meters *</label>
+            <input asp-for="ObstacleHeight" type="number" step="0.1" placeholder="e.g., 15.5"
+                   class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition duration-150 ease-in-out" />
+            <span asp-validation-for="ObstacleHeight" class="text-base text-red-600 font-mono"></span>
+        </div>
+
+        <div>
+            <label asp-for="ObstacleDescription" class="block text-sm font-medium mb-1 text-gray-700">Description *</label>
+            <textarea asp-for="ObstacleDescription" rows="4" placeholder="Provide detailed information about the obstacle..."
+                      class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition duration-150 ease-in-out"></textarea>
+            <span asp-validation-for="ObstacleDescription" class="text-base text-red-600 font-mono"></span>
+        </div>
+
+        <div>
+            <label class="block text-sm font-medium mb-1 text-gray-700">Location Preview</label>
+            <div id="location-preview-map" class="w-full h-80 rounded-md border border-gray-300"></div>
+        </div>
+
+        <div class="flex gap-4">
+            <button type="submit"
+                    class="flex-1 inline-flex justify-center items-center rounded-md bg-blue-600 px-4 py-2 text-white font-medium hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition duration-150 ease-in-out">
+                Save Complete Details
+            </button>
+            <a asp-action="QuickRegisteredItems" 
+               class="flex-1 inline-flex justify-center items-center rounded-md bg-gray-600 px-4 py-2 text-white font-medium hover:bg-gray-700 transition duration-150 ease-in-out">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get the geometry from the hidden field
+            var geoJsonString = '@Html.Raw(Model.ObstacleGeometry)';
+            
+            if (geoJsonString) {
+                try {
+                    var geoJsonData = JSON.parse(geoJsonString);
+                    
+                    // Initialize map
+                    var map = L.map('location-preview-map').setView([0, 0], 2);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    }).addTo(map);
+                    
+                    // Add the geometry to the map
+                    var obstacleLayer = L.geoJSON(geoJsonData, {
+                        pointToLayer: function (feature, latlng) {
+                            return L.marker(latlng, {
+                                icon: L.icon({
+                                    iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+                                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                                    iconSize: [25, 41],
+                                    iconAnchor: [12, 41],
+                                    popupAnchor: [1, -34],
+                                    shadowSize: [41, 41]
+                                })
+                            });
+                        }
+                    }).addTo(map);
+                    
+                    // Fit map to obstacle bounds
+                    map.fitBounds(obstacleLayer.getBounds());
+                    
+                } catch (e) {
+                    console.error("Failed to parse GeoJSON:", e);
+                }
+            }
+        });
+    </script>
+}

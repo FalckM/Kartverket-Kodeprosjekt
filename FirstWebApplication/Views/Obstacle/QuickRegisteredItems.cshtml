@@ -1,0 +1,104 @@
+@model IEnumerable<FirstWebApplication.Models.ObstacleData>
+
+@{
+    ViewData["Title"] = "Quick Registered Items";
+}
+
+<div class="container mx-auto p-6">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">Quick Registered Items</h1>
+                <p class="text-gray-600 mt-2">Complete the details for your quick-registered obstacles</p>
+            </div>
+            <a asp-action="RegisterType" class="py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition duration-150 ease-in-out">
+                + Register New Obstacle
+            </a>
+        </div>
+
+        @if (Model.Any())
+        {
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Registered Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Registered By</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        @foreach (var item in Model)
+                        {
+                            <tr class="hover:bg-gray-50 transition duration-150">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#@item.Id</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                    @if (string.IsNullOrEmpty(item.ObstacleName))
+                                    {
+                                        <span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-semibold">Incomplete</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">Complete</span>
+                                    }
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">@item.RegisteredDate.ToString("dd.MM.yyyy HH:mm")</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                    @if (!string.IsNullOrEmpty(item.RegisteredBy))
+                                    {
+                                        @item.RegisteredBy
+                                    }
+                                    else
+                                    {
+                                        <span class="text-gray-400 italic">Unknown</span>
+                                    }
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    @if (string.IsNullOrEmpty(item.ObstacleName))
+                                    {
+                                        <a asp-action="CompleteQuickRegister" asp-route-id="@item.Id" class="text-blue-600 hover:text-blue-900 font-semibold mr-4">Complete Details</a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="Overview" asp-route-id="@item.Id" class="text-blue-600 hover:text-blue-900 font-semibold mr-4">View Details</a>
+                                    }
+                                    <a asp-action="DeleteQuickRegister" asp-route-id="@item.Id" 
+                                       onclick="return confirm('Are you sure you want to delete this item?');"
+                                       class="text-red-600 hover:text-red-900 font-semibold">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-4 text-sm text-gray-600">
+                <p>Total quick registered items: <strong>@Model.Count()</strong></p>
+                <p class="mt-1">Incomplete items: <strong>@Model.Count(x => string.IsNullOrEmpty(x.ObstacleName))</strong></p>
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-12">
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                </svg>
+                <h3 class="mt-2 text-lg font-medium text-gray-900">No quick registered items yet</h3>
+                <p class="mt-1 text-sm text-gray-500">Get started by quick registering your first obstacle location.</p>
+                <div class="mt-6">
+                    <a asp-action="QuickRegister" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+                        Quick Register Now
+                    </a>
+                </div>
+            </div>
+        }
+
+        <div class="mt-6">
+            <a asp-controller="Home" asp-action="Index" class="text-gray-600 hover:text-gray-900 font-medium">
+                ← Back to Home
+            </a>
+        </div>
+    </div>
+</div>

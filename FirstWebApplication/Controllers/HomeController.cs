@@ -15,18 +15,49 @@ namespace FirstWebApplication.Controllers
         }
 
         // GET: /Home/Index
-        // This is the landing page - shows the map with login overlay
+        // This is the landing page - shows the map with login/register forms
         // Anyone can access this page (no [Authorize] attribute)
         [AllowAnonymous]
         public IActionResult Index()
         {
-            // If user is already logged in, redirect them directly to the workspace
+            // If user is already logged in, redirect them to the registration type selection
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Workspace", "Obstacle");
+                return RedirectToAction("RegisterType", "Obstacle");
             }
 
-            // User is not logged in, show the landing page with login modal
+            // Check if we should show the register form (from failed registration)
+            if (TempData["ShowRegister"] != null)
+            {
+                ViewBag.ShowRegister = true;
+
+                // Get registration errors from TempData and add them to ModelState
+                if (TempData["RegisterErrors"] != null)
+                {
+                    var errors = TempData["RegisterErrors"].ToString().Split('|');
+                    foreach (var error in errors)
+                    {
+                        if (!string.IsNullOrEmpty(error))
+                        {
+                            ModelState.AddModelError(string.Empty, error);
+                        }
+                    }
+                }
+            }
+            // Check if we have login errors
+            else if (TempData["LoginErrors"] != null)
+            {
+                var errors = TempData["LoginErrors"].ToString().Split('|');
+                foreach (var error in errors)
+                {
+                    if (!string.IsNullOrEmpty(error))
+                    {
+                        ModelState.AddModelError(string.Empty, error);
+                    }
+                }
+            }
+
+            // User is not logged in, show the landing page with login/register modal
             return View();
         }
 

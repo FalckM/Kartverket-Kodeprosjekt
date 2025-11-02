@@ -1,0 +1,188 @@
+@{
+    ViewData["Title"] = "Choose Registration Type";
+    Layout = "_Layout";
+}
+
+<style>
+    /* Full-screen map background */
+    .register-type-container {
+        position: fixed;
+        top: 64px; /* Below navbar */
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+    }
+
+    #register-type-map {
+        width: 100%;
+        height: 100%;
+    }
+
+    /* Dark overlay */
+    .register-overlay {
+        position: fixed;
+        top: 64px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(2px);
+        z-index: 2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    /* Container for the two option boxes */
+    .options-container {
+        display: flex;
+        gap: 40px;
+        max-width: 1000px;
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    /* Individual option box */
+    .option-box {
+        background: white;
+        border-radius: 20px;
+        padding: 50px 40px;
+        width: 100%;
+        max-width: 420px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+
+    .option-box:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+    }
+
+    .option-box .icon {
+        font-size: 80px;
+        margin-bottom: 20px;
+    }
+
+    .option-box h2 {
+        font-size: 28px;
+        font-weight: bold;
+        color: #1f2937;
+        margin-bottom: 15px;
+    }
+
+    .option-box p {
+        font-size: 16px;
+        color: #6b7280;
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+
+    .option-box .btn {
+        display: inline-block;
+        padding: 14px 40px;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .option-box.quick .btn {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+    }
+
+    .option-box.quick:hover .btn {
+        box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+    }
+
+    .option-box.full .btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .option-box.full:hover .btn {
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    /* Responsive design */
+    @@media (max-width: 768px) {
+        .options-container {
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .option-box {
+            max-width: 100%;
+        }
+
+        .register-type-container {
+            top: 56px; /* Smaller navbar on mobile */
+        }
+
+        .register-overlay {
+            top: 56px;
+        }
+    }
+</style>
+
+<!-- Map background -->
+<div class="register-type-container">
+    <div id="register-type-map"></div>
+</div>
+
+<!-- Overlay with registration options -->
+<div class="register-overlay">
+    <div class="options-container">
+        <!-- Quick Register Option -->
+        <a href="@Url.Action("QuickRegister", "Obstacle")" class="option-box quick">
+            <div class="icon">⚡</div>
+            <h2>Quick Register</h2>
+            <p>Register your current location instantly. Perfect when you're on the go and need to report an obstacle quickly.</p>
+            <span class="btn">Quick Register</span>
+        </a>
+
+        <!-- Full Register Option -->
+        <a href="@Url.Action("FullRegister", "Obstacle")" class="option-box full">
+            <div class="icon">📝</div>
+            <h2>Full Register</h2>
+            <p>Complete detailed registration with all obstacle information. Choose your location on the map and fill in all details.</p>
+            <span class="btn">Full Register</span>
+        </a>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Initialize the map when the page loads
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            // Create the map centered on Norway
+            // The map is set to not be interactive
+            var map = L.map('register-type-map', {
+                center: [60.4720, 8.4689],
+                zoom: 5,
+                zoomControl: false,
+                dragging: false,
+                touchZoom: false,
+                scrollWheelZoom: false,
+                doubleClickZoom: false,
+                boxZoom: false,
+                keyboard: false
+            });
+
+            // Add the OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+        });
+    </script>
+}
