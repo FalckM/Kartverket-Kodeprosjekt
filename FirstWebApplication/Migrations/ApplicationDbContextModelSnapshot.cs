@@ -22,7 +22,7 @@ namespace FirstWebApplication.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("FirstWebApplication.Models.ObstacleData", b =>
+            modelBuilder.Entity("FirstWebApplication.Entities.ObstacleData", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

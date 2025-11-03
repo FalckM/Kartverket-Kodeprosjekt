@@ -1,4 +1,5 @@
 using FirstWebApplication.Data;
+using FirstWebApplication.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,6 +26,10 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
 
+// Register services
+builder.Services.AddScoped<UserRoleService>();
+builder.Services.AddScoped<RoleInitializerService>();
+
 // Configure cookie settings
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -36,6 +41,13 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 var app = builder.Build();
+
+// Initialize roles (Pilot, Registerfører, Admin) at application startup
+using (var scope = app.Services.CreateScope())
+{
+    var roleInitializer = scope.ServiceProvider.GetRequiredService<RoleInitializerService>();
+    await roleInitializer.InitializeRolesAsync();
+}
 
 // Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())

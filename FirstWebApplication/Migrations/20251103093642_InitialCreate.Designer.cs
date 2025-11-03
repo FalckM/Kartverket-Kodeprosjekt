@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FirstWebApplication.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251030124828_AddIdentityTables")]
-    partial class AddIdentityTables
+    [Migration("20251103093642_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace FirstWebApplication.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("FirstWebApplication.Models.ObstacleData", b =>
+            modelBuilder.Entity("FirstWebApplication.Entities.ObstacleData", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -64,9 +64,6 @@ namespace FirstWebApplication.Migrations
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ObstacleName")
-                        .IsUnique();
 
                     b.ToTable("Obstacles", (string)null);
                 });
