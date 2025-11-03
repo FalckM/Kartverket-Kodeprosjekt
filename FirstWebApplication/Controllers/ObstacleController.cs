@@ -1,8 +1,8 @@
-﻿using FirstWebApplication.Models;
-using FirstWebApplication.Data;
+﻿using FirstWebApplication.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using FirstWebApplication.Entities;
 
 namespace FirstWebApplication.Controllers
 {

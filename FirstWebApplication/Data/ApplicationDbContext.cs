@@ -1,4 +1,4 @@
-﻿using FirstWebApplication.Models;
+﻿using FirstWebApplication.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
