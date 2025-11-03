@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add services to the container
 builder.Services.AddControllersWithViews();
 
 // Configure database connection
@@ -12,10 +12,10 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
-// Configure ASP.NET Identity
+// Configure ASP.NET Identity with roles
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
-    // Password settings (you can adjust these)
+    // Password settings
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
     options.Password.RequireUppercase = false;
@@ -25,20 +25,19 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
 
-// Configure cookie authentication
+// Configure cookie settings
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    // IMPORTANT: Redirect to Home/Index (landing page) instead of Account/AuthPage
-    options.LoginPath = "/Home/Index";           // Where to go when not logged in
-    options.LogoutPath = "/Account/Logout";      // Where to go when logging out
-    options.AccessDeniedPath = "/Home/Index";    // Where to go when access is denied
-    options.ExpireTimeSpan = TimeSpan.FromHours(24); // How long the login lasts
-    options.SlidingExpiration = true;            // Extend session on activity
+    options.LoginPath = "/Home/Index";
+    options.LogoutPath = "/Account/Logout";
+    options.AccessDeniedPath = "/Home/Index";
+    options.ExpireTimeSpan = TimeSpan.FromHours(24);
+    options.SlidingExpiration = true;
 });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -50,7 +49,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// IMPORTANT: Authentication must come before Authorization
+// Authentication must come before Authorization
 app.UseAuthentication();
 app.UseAuthorization();
 

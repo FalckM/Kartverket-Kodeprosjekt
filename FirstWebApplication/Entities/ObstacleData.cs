@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FirstWebApplication.Models
+namespace FirstWebApplication.Entities
 {
     public class ObstacleData
     {
