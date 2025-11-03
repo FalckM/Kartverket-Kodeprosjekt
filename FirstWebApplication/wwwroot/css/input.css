@@ -1,6 +1,0 @@
-﻿@import "tailwindcss";
-
-/* (optional) tell Tailwind where your markup lives */
-@source "./Views/**/*.{cshtml,razor}";
-@source "./Pages/**/*.{cshtml,razor}";
-@source "./Shared/**/*.{cshtml,razor}";
