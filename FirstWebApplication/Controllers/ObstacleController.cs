@@ -46,12 +46,24 @@ namespace FirstWebApplication.Controllers
         }
 
         [HttpGet]
-        public IActionResult Oversikt()
+        public IActionResult Oversikt(string? sortOrder)
         {
-            var obstacles = _context.Obstacles.ToList();
-            return View(obstacles);
+            var obstacles = _context.Obstacles.AsQueryable();
+
+            // Sortér basert på parameter
+            if (sortOrder == "eldst")
+            {
+                obstacles = obstacles.OrderBy(o => o.RegisteredDate);
+            }
+            else // standard = nyest først
+            {
+                obstacles = obstacles.OrderByDescending(o => o.RegisteredDate);
+            }
+
+            return View(obstacles.ToList());
         }
 
-        
+
+
     }
 }

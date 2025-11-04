@@ -1,61 +1,67 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@using Microsoft.AspNetCore.Identity
+@using FirstWebApplication.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
+<html lang="no">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Webapplikasjon for luftfartshindre</title>
+
+    <!-- Tailwind + AlpineJS + Material Icons -->
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js" defer></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="~/lib/leaflet/leaflet.css" />
     <script src="~/lib/leaflet/leaflet.js"></script>
     <link rel="stylesheet" href="~/lib/leaflet-draw/dist/leaflet.draw.css" />
     <script src="~/lib/leaflet-draw/dist/leaflet.draw.js"></script>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
-<partial name="_LoginPartial" />
-<body class="bg-gray-200 font-sans leading-relaxed text-gray-900">
-    <header>
-        <nav class="bg-white py-4 shadow-sm">
-            <div class="container mx-auto px-4 flex items-center justify-between">
-                <a class="text-xl font-bold text-gray-900 me-8" asp-area="" asp-controller="Home" asp-action="Index">Webapplikasjon for luftfartshindre</a>
-                <button class="lg:hidden" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="block h-6 w-6">
-                        <svg class="fill-current text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M4 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 5h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 5h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z" />
-                        </svg>
-                    </span>
-                </button>
-                <div class="hidden lg:flex lg:flex-grow lg:items-center">
-                    <ul class="flex space-x-4">
-                        <li>
-                            <a class="text-gray-900 hover:text-blue-600 transition duration-150 ease-in-out" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li>
-                            <a class="text-gray-900 hover:text-blue-600 transition duration-150 ease-in-out" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li>
-                            <a class="text-gray-900 hover:text-blue-600 transition duration-150 ease-in-out" asp-area="" asp-controller="Obstacle" asp-action="Oversikt">Oversikt</a>
-                        </li>
-                    </ul>
-                </div>
+
+<!-- 🔹 bruker ViewData for å tillate hvit eller transparent bakgrunn på login/register -->
+<body class="text-black @(ViewData["BodyClass"] ?? "bg-[#f8fafc]")">
+
+    <!-- NAVBAR -->
+    <nav class="fixed top-0 left-0 w-full bg-[#f1f5f9] shadow-md border-b border-gray-300 z-50">
+        <div class="max-w-screen-xl mx-auto flex items-center justify-between px-6 py-3">
+
+            <!-- Venstre del -->
+            <div class="flex items-center space-x-2">
+                <a asp-controller="Home" asp-action="Index" class="flex items-center space-x-2 no-underline hover:no-underline">
+                    <span class="mdi mdi-airplane text-2xl text-blue-600"></span>
+                    <span class="text-xl font-bold text-blue-700">Webapplikasjon for luftfartshindre</span>
+                </a>
             </div>
-        </nav>
-    </header>
-    <div class="container mx-auto px-4 py-8">
-        <main role="main">
+
+            <!-- Midtre meny -->
+            <ul class="flex items-center space-x-6 font-semibold">
+                <li><a asp-controller="Home" asp-action="Index" class="hover:text-blue-600 transition">Home</a></li>
+                <li><a asp-controller="Obstacle" asp-action="Oversikt" class="hover:text-blue-600 transition">Oversikt</a></li>
+                <li><a asp-controller="Home" asp-action="Privacy" class="hover:text-blue-600 transition">Privacy</a></li>
+            </ul>
+
+            <!-- Høyre del -->
+            <div>
+                <partial name="_LoginPartial" />
+            </div>
+        </div>
+    </nav>
+
+    <!-- SIDEINNHOLD -->
+    <div class="min-h-screen pt-20 px-6">
+        <main role="main" class="pb-4">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-t py-4 text-gray-600 text-sm">
-        <div class="container mx-auto px-4 text-center">
-            &copy; 2025 - Webapplikasjon for luftfartshindre - <a class="hover:underline" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
+    <!-- FOOTER -->
+    <footer class="bg-[#f1f5f9] text-center py-3 text-sm text-gray-700 border-t border-gray-300">
+        &copy; @DateTime.Now.Year - Webapplikasjon for luftfartshindre
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+
+    @RenderSection("Scripts", required: false)
 </body>
 </html>
-
-
