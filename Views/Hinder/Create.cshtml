@@ -1,0 +1,110 @@
+﻿@model NRLWebApp.Models.Entities.Hinder
+@{
+    ViewData["Title"] = "Registrer Hinder";
+}
+
+<h2>@ViewData["Title"]</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create" method="post">
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Navn" class="control-label"></label>
+                <input asp-for="Navn" class="form-control" />
+                <span asp-validation-for="Navn" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Hoyde" class="control-label">Høyde (meter)</label>
+                <input asp-for="Hoyde" class="form-control" />
+                <span asp-validation-for="Hoyde" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Beskrivelse" class="control-label"></label>
+                <textarea asp-for="Beskrivelse" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Beskrivelse" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="control-label">Lokasjon (klikk eller tegn på kartet)</label>
+
+                <div id="map" style="height: 400px; width: 100%;"></div>
+
+                <input asp-for="Lokasjon" type="hidden" id="LokasjonData" />
+                <span asp-validation-for="Lokasjon" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-4">
+                <input type="submit" value="Registrer Hinder" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin="" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+
+    <script>
+        var map = L.map('map').setView([60.47, 8.46], 7);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        var drawnItems = new L.FeatureGroup();
+        map.addLayer(drawnItems);
+
+        var drawControl = new L.Control.Draw({
+            edit: {
+                featureGroup: drawnItems, 
+                remove: true 
+            },
+            draw: {
+                polygon: false,
+                rectangle: false,
+                circle: false,
+                circlemarker: false,
+                marker: true, 
+                polyline: true 
+            }
+        });
+        map.addControl(drawControl);
+
+        map.on(L.Draw.Event.CREATED, function (event) {
+            var layer = event.layer;
+
+            drawnItems.clearLayers();
+            drawnItems.addLayer(layer);
+
+            var geoJsonData = layer.toGeoJSON();
+
+            var geoJsonString = JSON.stringify(geoJsonData);
+
+            document.getElementById('LokasjonData').value = geoJsonString;
+        });
+
+        map.on('draw:deleted', function (event) {
+            document.getElementById('LokasjonData').value = '';
+        });
+    </script>
+}
