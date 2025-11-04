@@ -29,7 +29,7 @@ namespace FirstWebApplication.Data
         }
     }
 
-    // Extension method for cleaner setup in Program.cs
+    // Extension metode for senere setup i program
     public static class LoginRedirectMiddlewareExtensions
     {
         public static IApplicationBuilder UseLoginRedirect(this IApplicationBuilder builder)

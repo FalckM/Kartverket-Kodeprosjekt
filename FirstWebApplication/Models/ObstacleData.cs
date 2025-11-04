@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace FirstWebApplication.Models
 {
@@ -22,6 +23,16 @@ namespace FirstWebApplication.Models
         // Dette feltet lagrer koordinatene for det tegnede punktet eller linjen.
         [Required(ErrorMessage = "Field is required")]
         public string? ObstacleGeometry { get; set; }
+
+        // tar tid og dato for registrering
+        public DateTime RegisteredDate { get; set; } = DateTime.Now;
+
+        // automatisk fanger hvem som sendte inn skjemaet
+
+        [MaxLength(100)]
+        [Display(Name = "Registered by (Email)")]
+        public string? RegisteredBy { get; set; }
     }
+
 }
 

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FirstWebApplication.Data;
 using FirstWebApplication.Models;
+using FirstWebApplication.Migrations;
 
 namespace FirstWebApplication.Controllers
 {
@@ -29,18 +30,28 @@ namespace FirstWebApplication.Controllers
         // POST: /Obstacles/DataForm
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DataForm(ObstacleData obstacle)
+        public IActionResult DataForm(ObstacleData obstacleData)
         {
             if (ModelState.IsValid)
             {
-                _context.Obstacles.Add(obstacle);
+                obstacleData.RegisteredBy = User.Identity?.Name;
+                _context.Obstacles.Add(obstacleData);
                 _context.SaveChanges();
                 TempData["SuccessMessage"] = "Obstacle registered successfully!";
-                return RedirectToAction("DataForm"); // or redirect to a list page
+                return View("Overview", obstacleData);
             }
 
             // If validation fails, return to the form with validation messages
-            return View(obstacle);
+            return View(obstacleData);
         }
+
+        [HttpGet]
+        public IActionResult Oversikt()
+        {
+            var obstacles = _context.Obstacles.ToList();
+            return View(obstacles);
+        }
+
+        
     }
 }

@@ -1,0 +1,103 @@
+﻿@model IEnumerable<FirstWebApplication.Models.ObstacleData>
+
+@{
+    ViewData["Title"] = "Oversikt over hindringer";
+}
+
+<div class="min-h-screen bg-gray-100 flex flex-col items-center py-10">
+    <div class="w-full max-w-7xl bg-white rounded-xl shadow-lg p-6 overflow-x-auto">
+        <div class="flex items-center justify-between mb-6">
+            <h1 class="text-3xl font-bold text-gray-800">Oversikt over registrerte hindringer</h1>
+            <div>
+                <label for="sortDate" class="mr-2 font-medium text-gray-700">Sorter etter dato:</label>
+                <select id="sortDate" class="border border-gray-300 rounded-lg px-2 py-1 focus:ring focus:ring-blue-300">
+                    <option value="desc">Nyeste først</option>
+                    <option value="asc">Eldste først</option>
+                </select>
+            </div>
+        </div>
+
+        ```
+        <div class="overflow-y-auto max-h-[70vh] border border-gray-200 rounded-lg">
+            <table id="obstacleTable" class="min-w-full text-left border-collapse">
+                <thead class="bg-gradient-to-r from-blue-500 to-purple-600 text-black sticky top-0">
+                    <tr>
+                        <th class="py-3 px-4 font-semibold">Navn</th>
+                        <th class="py-3 px-4 font-semibold">Høyde (m)</th>
+                        <th class="py-3 px-4 font-semibold">Beskrivelse</th>
+                        <th class="py-3 px-4 font-semibold">Koordinater</th>
+                        <th class="py-3 px-4 font-semibold">Registrert av</th>
+                        <th class="py-3 px-4 font-semibold">Registrert dato</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    @foreach (var obstacle in Model)
+                    {
+                        var coords = "Ukjent";
+                        try
+                        {
+                            var geo = System.Text.Json.JsonDocument.Parse(obstacle.ObstacleGeometry);
+                            var geometry = geo.RootElement.GetProperty("geometry");
+                            if (geometry.GetProperty("type").GetString() == "Point")
+                            {
+                                var coordArray = geometry.GetProperty("coordinates");
+                                coords = $"Lat: {coordArray[1].GetDouble():0.0000}, Lng: {coordArray[0].GetDouble():0.0000}";
+                            }
+                            else if (geometry.GetProperty("type").GetString() == "LineString")
+                            {
+                                var coordArray = geometry.GetProperty("coordinates");
+                                var start = coordArray[0];
+                                var end = coordArray[coordArray.GetArrayLength() - 1];
+                                coords = $"Start: ({start[1].GetDouble():0.0000}, {start[0].GetDouble():0.0000}) → Slutt: ({end[1].GetDouble():0.0000}, {end[0].GetDouble():0.0000})";
+                            }
+                        }
+                        catch { coords = "Feil ved lesing av GeoJSON"; }
+
+                        <tr class="hover:bg-gray-50 transition">
+                            <td class="py-3 px-4 font-medium text-gray-900">@obstacle.ObstacleName</td>
+                            <td class="py-3 px-4 text-gray-700">@obstacle.ObstacleHeight</td>
+                            <td class="py-3 px-4 text-gray-600 truncate max-w-xs">@obstacle.ObstacleDescription</td>
+                            <td class="py-3 px-4 text-gray-700 text-sm">@coords</td>
+                            <td class="py-3 px-4 text-gray-700">@obstacle.RegisteredBy</td>
+                            <td class="py-3 px-4 text-gray-500">@obstacle.RegisteredDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="flex justify-end mt-6 space-x-4">
+            <a asp-controller="Obstacle" asp-action="DataForm"
+               class="px-5 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition">
+                Registrer nytt hinder
+            </a>
+            <a asp-controller="Home" asp-action="Index"
+               class="px-5 py-2 bg-gray-300 text-gray-800 font-semibold rounded-lg shadow hover:bg-gray-400 transition">
+                Tilbake til hjem
+            </a>
+        </div>
+    </div>
+    ```
+
+</div>
+
+@section Scripts {
+    <script>
+                           document.getElementById("sortDate").addEventListener("change", function () {
+                           const table = document.getElementById("obstacleTable").getElementsByTagName("tbody")[0];
+                           const rows = Array.from(table.querySelectorAll("tr"));
+                           const order = this.value;
+
+                           ```
+                                   rows.sort((a, b) => {
+                                       const dateA = new Date(a.cells[5].innerText);
+                                       const dateB = new Date(b.cells[5].innerText);
+                                       return order === "asc" ? dateA - dateB : dateB - dateA;
+                                   });
+
+                                   rows.forEach(r => table.appendChild(r));
+                               });
+    </script>
+    ```
+
+}
