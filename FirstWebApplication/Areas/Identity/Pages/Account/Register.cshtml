@@ -5,14 +5,15 @@
     ViewData["Title"] = "Registrer";
 }
 
-<div class="fixed inset-0 flex items-center justify-center"
-     style="background-image: url('/images/norge-kart.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;">
-    <div class="absolute inset-0 bg-black opacity-40"></div>
+<!-- Kartet -->
+<div id="landing-map"></div>
 
-    <div class="relative z-10 w-full max-w-md bg-white/95 rounded-2xl shadow-xl p-8">
+<!-- Mørk overlay -->
+<div class="absolute inset-0 bg-black opacity-40 z-10"></div>
+
+<!-- Registreringsboks -->
+<div class="relative z-20 flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-md bg-white/95 rounded-2xl shadow-xl p-8">
         <h1 class="text-3xl font-extrabold text-center text-blue-700 mb-6">Opprett konto</h1>
 
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
@@ -51,5 +52,45 @@
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var map = L.map('landing-map', {
+                center: [60.4720, 8.4689],
+                zoom: 5,
+                zoomControl: false,
+                dragging: false,
+                touchZoom: false,
+                scrollWheelZoom: false,
+                doubleClickZoom: false,
+                boxZoom: false,
+                keyboard: false
+            });
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+        });
+    </script>
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background: none !important;
+        }
+
+        #landing-map {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+    </style>
 }

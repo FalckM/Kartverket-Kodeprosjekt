@@ -4,7 +4,21 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Webapplikasjon for luftfartshindre</title>
+
+    <!-- Tailwind + Leaflet -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="~/lib/leaflet/leaflet.css" />
+    <script src="~/lib/leaflet/leaflet.js"></script>
+
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            background: none;
+        }
+    </style>
 </head>
 <body>
     @RenderBody()
