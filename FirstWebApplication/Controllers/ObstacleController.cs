@@ -46,23 +46,68 @@ namespace FirstWebApplication.Controllers
         }
 
         [HttpGet]
-        public IActionResult Oversikt(string? sortOrder)
+        public IActionResult Oversikt()
         {
-            var obstacles = _context.Obstacles.AsQueryable();
+            var userEmail = User.Identity?.Name;
+            var isAdmin = User.IsInRole("Admin");
 
-            // Sortér basert på parameter
-            if (sortOrder == "eldst")
-            {
-                obstacles = obstacles.OrderBy(o => o.RegisteredDate);
-            }
-            else // standard = nyest først
-            {
-                obstacles = obstacles.OrderByDescending(o => o.RegisteredDate);
-            }
+            List<ObstacleData> obstacles;
 
-            return View(obstacles.ToList());
+            if (isAdmin)
+            {
+                obstacles = _context.Obstacles.ToList();
+            }
+            else {
+                // piloter ser bare sitt eget registeredby
+                obstacles = _context.Obstacles
+                    .Where(o => o.RegisteredBy == userEmail)
+                    .ToList();
+                }
+
+            //var obstacles = _context.Obstacles.AsQueryable();
+
+
+
+            return View(obstacles);
         }
 
+        [HttpPost]
+        public IActionResult Edit(ObstacleData updatedObstacle)
+        {
+            var existing = _context.Obstacles.FirstOrDefault(o => o.Id == updatedObstacle.Id);
+            if (existing == null)
+                return NotFound();
+
+            var userEmail = User.Identity?.Name;
+            var isAdmin = User.IsInRole("Admin");
+            if (existing.RegisteredBy != userEmail && !isAdmin)
+                return Forbid();
+
+            existing.ObstacleName = updatedObstacle.ObstacleName;
+            existing.ObstacleHeight = updatedObstacle.ObstacleHeight;
+            existing.ObstacleDescription = updatedObstacle.ObstacleDescription;
+            existing.ObstacleGeometry = updatedObstacle.ObstacleGeometry;
+            existing.RegisteredDate = updatedObstacle.RegisteredDate;
+            existing.RegisteredBy = updatedObstacle.RegisteredBy;
+            _context.SaveChanges();
+
+            return Ok();
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int id) 
+        { 
+            var obstacle = _context.Obstacles.FirstOrDefault(o=> o.Id == id);
+            if (obstacle == null) return NotFound();
+
+            if (!User.IsInRole("Admin"))
+                return Forbid();
+
+            _context.Obstacles.Remove(obstacle);
+            _context.SaveChanges();
+
+            return Ok();
+        }
 
 
     }
