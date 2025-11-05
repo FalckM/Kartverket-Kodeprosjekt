@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using NRLWebApp.Data;
 using NRLWebApp.Models.Entities;
-using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace NRLWebApp.Controllers
 {
@@ -19,9 +20,136 @@ namespace NRLWebApp.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
+        [Authorize(Roles = "Registerfører, Admin")]
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var hindre = await _context.Hindre
+                .Include(h => h.Status) 
+                .Include(h => h.ApplicationUser) 
+                    .ThenInclude(u => u.Organisasjon) 
+                .ToListAsync();
+
+            return View(hindre);
+        }
+
+        [Authorize(Roles = "Pilot")]
+        public async Task<IActionResult> MineHindre()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Challenge(); 
+            }
+
+            var mineHindre = await _context.Hindre
+                .Where(h => h.ApplicationUserId == user.Id) 
+                .Include(h => h.Status) 
+                .OrderByDescending(h => h.Tidsstempel) 
+                .ToListAsync();
+
+            return View(mineHindre);
+        }
+
+        [Authorize(Roles = "Registerfører, Admin")]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound(); 
+            }
+
+            var hinder = await _context.Hindre
+                .Include(h => h.Status)
+                .Include(h => h.ApplicationUser)
+                    .ThenInclude(u => u.Organisasjon)
+                .FirstOrDefaultAsync(m => m.HinderID == id);
+
+            if (hinder == null)
+            {
+                return NotFound(); 
+            }
+
+            ViewData["StatusID"] = new SelectList(_context.Statuser, "StatusID", "Navn", hinder.StatusID);
+
+            return View(hinder);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Registerfører, Admin")]
+        public async Task<IActionResult> Edit(int id, [Bind("HinderID,StatusID")] Hinder hinder, string kommentar)
+        {
+            if (id != hinder.HinderID)
+            {
+                return NotFound();
+            }
+
+            ModelState.Remove("Navn");
+            ModelState.Remove("Hoyde");
+            ModelState.Remove("Beskrivelse");
+            ModelState.Remove("Lokasjon");
+            ModelState.Remove("ApplicationUserId");
+            ModelState.Remove("ApplicationUser");
+            ModelState.Remove("Behandlinger");
+            ModelState.Remove("Tidsstempel");
+            ModelState.Remove("Status");
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var hinderToUpdate = await _context.Hindre.FirstOrDefaultAsync(h => h.HinderID == id);
+                    if (hinderToUpdate == null)
+                    {
+                        return NotFound();
+                    }
+
+                    hinderToUpdate.StatusID = hinder.StatusID;
+
+                    var user = await _userManager.GetUserAsync(User); 
+
+                    var nyBehandling = new Behandling
+                    {
+                        HinderID = hinderToUpdate.HinderID,
+                        ApplicationUserId = user.Id, 
+                        Tidsstempel = DateTime.Now,
+                        Kommentar = kommentar 
+                    };
+
+                    _context.Add(nyBehandling); 
+
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_context.Hindre.Any(e => e.HinderID == hinder.HinderID))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+
+            ViewData["StatusID"] = new SelectList(_context.Statuser, "StatusID", "Navn", hinder.StatusID);
+
+            var hinderFull = await _context.Hindre
+                .Include(h => h.Status)
+                .Include(h => h.ApplicationUser)
+                    .ThenInclude(u => u.Organisasjon)
+                .FirstOrDefaultAsync(m => m.HinderID == id);
+
+            if (hinderFull == null)
+            {
+                return NotFound();
+            }
+
+            hinderFull.StatusID = hinder.StatusID;
+
+            return View(hinderFull); 
         }
 
         [Authorize(Roles = "Pilot")] 
@@ -30,17 +158,14 @@ namespace NRLWebApp.Controllers
             return View();
         }
 
-        // POST: /Hinder/Create
-        // Denne metoden kjører når brukeren sender inn skjemaet
         [HttpPost]
-        [ValidateAntiForgeryToken] // Sikkerhetstiltak mot angrep
+        [ValidateAntiForgeryToken] 
         [Authorize(Roles = "Pilot")]
         public async Task<IActionResult> Create([Bind("Navn,Hoyde,Beskrivelse,Lokasjon")] Hinder hinder)
         {
             try
             {
-                // Vi fjerner feilmeldinger for felter vi vet vi skal sette manuelt.
-                // Dette er nødvendig fordi [Bind] kun er for sikkerhet, ikke validering.
+
                 ModelState.Remove("ApplicationUserId");
                 ModelState.Remove("StatusID");
                 ModelState.Remove("ApplicationUser");
@@ -49,48 +174,37 @@ namespace NRLWebApp.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    // 1. Finne piloten som er logget inn
                     var user = await _userManager.GetUserAsync(User);
                     if (user == null)
                     {
-                        // Burde ikke skje pga. [Authorize], men god sikkerhet
                         return Challenge();
                     }
 
-                    // 2. Finne StatusID for "Ny" (vi antar at den finnes)
                     var nyStatus = await _context.Statuser.FirstOrDefaultAsync(s => s.Navn == "Ny");
                     if (nyStatus == null)
                     {
-                        // Hvis "Ny" status mangler i databasen, er noe galt
                         ModelState.AddModelError("", "Nødvendig status-data mangler i databasen.");
-                        return View(hinder); // Send tilbake til skjema med feilmelding
+                        return View(hinder); 
                     }
 
-                    // 3. Sette Tidsstempel (til nå)
                     hinder.Tidsstempel = DateTime.Now;
 
-                    // 4. Sette ApplicationUserId (kobler hinderet til piloten)
                     hinder.ApplicationUserId = user.Id;
 
-                    // 5. Sette StatusID (kobler hinderet til "Ny"-statusen)
                     hinder.StatusID = nyStatus.StatusID;
 
-                    // 6. Lagre det nye hinderet i databasen
-                    _context.Add(hinder); // Legger hinderet i "ventesonen"
-                    await _context.SaveChangesAsync(); // Lagrer alle endringer fra ventesonen til databasen
+                    _context.Add(hinder); 
+                    await _context.SaveChangesAsync(); 
 
-                    // 7. Sende brukeren til Hjem-siden
                     return RedirectToAction("Index", "Home");
                 }
             }
             catch (Exception ex)
             {
-                // Logg feilen (vi kan legge til logging senere)
                 ModelState.AddModelError("", "En feil oppstod under lagring av hinderet.");
             }
 
-            // Hvis vi kommer hit, er ModelState IKKE gyldig (f.eks. "Navn" mangler)
-            // eller en feil oppstod. Send brukeren tilbake til skjemaet.
+
             return View(hinder);
         }
     }

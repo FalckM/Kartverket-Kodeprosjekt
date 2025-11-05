@@ -1,0 +1,88 @@
+﻿@model NRLWebApp.Models.Entities.Hinder
+@{
+    ViewData["Title"] = "Behandle Hinder";
+}
+
+<h2>@ViewData["Title"] (ID: @Model.HinderID)</h2>
+<hr />
+
+<div class="row">
+
+    <div class="col-md-4">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="HinderID" />
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="StatusID" class="control-label">Endre Status</label>
+                <select asp-for="StatusID" class="form-select" asp-items="ViewBag.StatusID"></select>
+                <span asp-validation-for="StatusID" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="kommentar" class="control-label">Kommentar (for behandling)</label>
+                <textarea name="kommentar" class="form-control" rows="4" placeholder="Skriv inn en kommentar for denne behandlingen..."></textarea>
+            </div>
+
+            <div class="form-group mt-4">
+                <input type="submit" value="Lagre endringer" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Avbryt</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-8">
+        <h4>Opprinnelig rapport</h4>
+
+        <dl class="row">
+            <dt class="col-sm-4">Rapportert av:</dt>
+            <dd class="col-sm-8">@Model.ApplicationUser.Fornavn @Model.ApplicationUser.Etternavn</dd>
+
+            <dt class="col-sm-4">Organisasjon:</dt>
+            <dd class="col-sm-8">@Model.ApplicationUser.Organisasjon.Navn</dd>
+
+            <dt class="col-sm-4">Rapportert dato:</dt>
+            <dd class="col-sm-8">@Model.Tidsstempel.ToString("g")</dd>
+
+            <dt class="col-sm-4">Navn:</dt>
+            <dd class="col-sm-8">@Model.Navn</dd>
+
+            <dt class="col-sm-4">Høyde (m):</dt>
+            <dd class="col-sm-8">@Model.Hoyde</dd>
+
+            <dt class="col-sm-4">Beskrivelse:</dt>
+            <dd class="col-sm-8">@Model.Beskrivelse</dd>
+        </dl>
+
+        <h4>Lokasjon</h4>
+        <div id="map" style="height: 400px; width: 100%;"></div>
+
+        <div id="lokasjonDataSkjult" data-lokasjon="@Model.Lokasjon" style="display: none;"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        var lokasjonDataElement = document.getElementById('lokasjonDataSkjult');
+        var lokasjonGeoJsonString = lokasjonDataElement.getAttribute('data-lokasjon');
+
+        var map = L.map('map').setView([60.47, 8.46], 7);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        if (lokasjonGeoJsonString) {
+            var geoJsonData = JSON.parse(lokasjonGeoJsonString);
+
+            var geoJsonLayer = L.geoJSON(geoJsonData).addTo(map);
+
+            map.fitBounds(geoJsonLayer.getBounds());
+        } else {
+            map.setView([60.47, 8.46], 7);
+        }
+    </script>
+}
