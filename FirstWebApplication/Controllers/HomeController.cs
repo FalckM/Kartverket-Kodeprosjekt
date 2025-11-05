@@ -23,7 +23,7 @@ namespace FirstWebApplication.Controllers
             // If user is already logged in, redirect them to the registration type selection
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("RegisterType", "Obstacle");
+                return RedirectToAction("RegisterType", "Pilot");
             }
 
             // Check if we should show the register form (from failed registration)

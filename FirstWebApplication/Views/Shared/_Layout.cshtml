@@ -1,81 +1,127 @@
-@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Aviation Obstacle Registration</title>
-    <link rel="stylesheet" href="~/lib/leaflet/leaflet.css" />
-    <script src="~/lib/leaflet/leaflet.js"></script>
-    <link rel="stylesheet" href="~/lib/leaflet-draw/dist/leaflet.draw.css" />
-    <script src="~/lib/leaflet-draw/dist/leaflet.draw.js"></script>
-    <!-- Tailwind 4.0 CSS -->
+    <title>@ViewData["Title"] - Obstacle Registration System</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Leaflet CSS for maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
-<body class="bg-gray-200 font-sans leading-relaxed text-gray-900">
+<body class="bg-gray-50">
     <header>
-        <nav class="bg-white py-4 shadow-sm">
-            <div class="container mx-auto px-4 flex items-center justify-between">
-                <a class="text-xl font-bold text-gray-900 me-8" asp-area="" asp-controller="Obstacle" asp-action="RegisterType">Aviation Obstacle Registration</a>
-                <button class="lg:hidden" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="block h-6 w-6">
-                        <svg class="fill-current text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M4 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 5h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 5h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z" />
+        <nav class="bg-gray-200 shadow shadow-gray-300 w-100 px-8 md:px-auto">
+            <div class="h-16 mx-auto container flex items-center justify-between">
+                <!-- Logo - Left -->
+                <div class="text-indigo-500 flex items-center">
+                    <a asp-controller="Home" asp-action="Index" class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
                         </svg>
-                    </span>
-                </button>
-                <div class="hidden lg:flex lg:flex-grow lg:items-center">
-                    <ul class="flex space-x-4">
-                        <li>
-                            <a class="text-gray-900 hover:text-blue-600 transition duration-150 ease-in-out" asp-area="" asp-controller="Obstacle" asp-action="RegisterType">Home</a>
-                        </li>
-                        <li>
-                            <a class="text-gray-900 hover:text-blue-600 transition duration-150 ease-in-out" asp-area="" asp-controller="Obstacle" asp-action="Index">All Obstacles</a>
-                        </li>
-                        <li>
-                            <a class="text-gray-900 hover:text-blue-600 transition duration-150 ease-in-out" asp-area="" asp-controller="Obstacle" asp-action="QuickRegisteredItems">Quick Items</a>
-                        </li>
-                        <li>
-                            <a class="text-gray-900 hover:text-blue-600 transition duration-150 ease-in-out" asp-area="" asp-controller="Obstacle" asp-action="FullRegister">Register Obstacle</a>
-                        </li>
-                    </ul>
-                    
-                    <!-- User info and logout - shown on the right corner -->
-                    <div class="flex items-center gap-4 ms-auto">
-                        @if (SignInManager.IsSignedIn(User))
-                        {
-                            <!-- If user is logged in -->
-                            <span class="text-gray-700 font-medium">Welcome, @User.Identity!.Name!</span>
-                            
-                            <form asp-controller="Account" asp-action="Logout" method="post">
-                                <button type="submit" style="background-color: #dc2626; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer; border: none;">
-                                    LOGOUT
-                                </button>
-                            </form>
-                        }
-                    </div>
+                        <span class="font-bold text-lg">Obstacle Registration</span>
+                    </a>
+                </div>
+
+                <!-- Right Side: Navigation + User Info + Logout -->
+                <div class="flex items-center gap-6">
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <!-- Navigation Links -->
+                        <ul class="flex font-semibold text-gray-600">
+                            @if (User.IsInRole("Pilot"))
+                            {
+                                <li class="px-4 py-2 hover:text-indigo-500">
+                                    <a asp-controller="Pilot" asp-action="RegisterType">Register Obstacle</a>
+                                </li>
+                                <li class="px-4 py-2 hover:text-indigo-500">
+                                    <a asp-controller="Pilot" asp-action="MyRegistrations">My Registrations</a>
+                                </li>
+                                <li class="px-4 py-2 hover:text-indigo-500">
+                                    <a asp-controller="Pilot" asp-action="Dashboard">Dashboard</a>
+                                </li>
+                            }
+
+                            @if (User.IsInRole("Registerfører"))
+                            {
+                                <li class="px-4 py-2 hover:text-indigo-500">
+                                    <a asp-controller="Registerforer" asp-action="RegisterforerDashboard">Dashboard</a>
+                                </li>
+                                <li class="px-4 py-2 hover:text-indigo-500">
+                                    <a asp-controller="Registerforer" asp-action="PendingObstacles">Pending</a>
+                                </li>
+                                <li class="px-4 py-2 hover:text-indigo-500">
+                                    <a asp-controller="Registerforer" asp-action="ApprovedObstacles">Approved</a>
+                                </li>
+                                <li class="px-4 py-2 hover:text-indigo-500">
+                                    <a asp-controller="Registerforer" asp-action="RejectedObstacles">Rejected</a>
+                                </li>
+                            }
+
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="px-4 py-2 hover:text-indigo-500">
+                                    <a asp-controller="Admin" asp-action="AdminDashboard">Dashboard</a>
+                                </li>
+                                <li class="px-4 py-2 hover:text-indigo-500">
+                                    <a asp-controller="Admin" asp-action="AdminUsers">Users</a>
+                                </li>
+                                <li class="px-4 py-2 hover:text-indigo-500">
+                                    <a asp-controller="Admin" asp-action="AdminStatistics">Statistics</a>
+                                </li>
+                            }
+                        </ul>
+
+                        <!-- User Email -->
+                        <span class="text-gray-600 text-sm font-medium">
+                            @User.Identity?.Name
+                        </span>
+                        
+                        <!-- Logout Button -->
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="inline">
+                            <button type="submit" class="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-gray-50 rounded-xl flex items-center gap-2 transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" />
+                                </svg>
+                                <span>Logout</span>
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a asp-controller="Home" asp-action="Index">
+                            <button class="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-gray-50 rounded-xl flex items-center gap-2 transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                </svg>
+                                <span>Login</span>
+                            </button>
+                        </a>
+                    }
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container mx-auto px-4 py-8">
-        <main role="main">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-t py-4 text-gray-600 text-sm">
+    <main role="main" class="min-h-screen">
+        @RenderBody()
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6 mt-auto">
         <div class="container mx-auto px-4 text-center">
-            &copy; 2025 - Aviation Obstacle Registration System - <a class="hover:underline" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <p>&copy; 2024 - Obstacle Registration System - <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-indigo-400 hover:text-indigo-300">Privacy</a></p>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    
+    <!-- Leaflet JS for maps -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

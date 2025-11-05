@@ -159,8 +159,8 @@
             <h2>Location Registered Successfully!</h2>
             <p>Your obstacle location has been saved. You can add more details later from the Quick Registered Items page.</p>
             <div style="margin-top: 30px;">
-                <a href="@Url.Action("RegisterType", "Obstacle")" class="action-btn">Register Another</a>
-                <a href="@Url.Action("QuickRegisteredItems", "Obstacle")" class="action-btn secondary">View Quick Items</a>
+                <a href="@Url.Action("RegisterType", "Pilot")" class="action-btn">Register Another</a>
+                <a href="@Url.Action("MyRegistrations", "Pilot")" class="action-btn secondary">View Quick Items</a>
             </div>
         </div>
 
@@ -171,7 +171,7 @@
             <p>We couldn't get your location. Please enable location services in your browser or use Full Register instead.</p>
             <div style="margin-top: 30px;">
                 <button onclick="retryLocation()" class="action-btn">Try Again</button>
-                <a href="@Url.Action("FullRegister", "Obstacle")" class="action-btn secondary">Use Full Register</a>
+                <a href="@Url.Action("FullRegister", "Pilot")" class="action-btn secondary">Use Full Register</a>
             </div>
         </div>
     </div>
@@ -260,7 +260,7 @@
 
         function saveQuickRegistration(geoJson) {
             // Send the location data to the server
-            fetch('@Url.Action("SaveQuickRegister", "Obstacle")', {
+            fetch('@Url.Action("SaveQuickRegister", "Pilot")', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

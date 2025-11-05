@@ -1,0 +1,122 @@
+@{
+    ViewData["Title"] = "Statistics";
+}
+
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900">System Statistics</h1>
+            <p class="text-gray-600 mt-2">Detailed analytics and metrics</p>
+        </div>
+        <a asp-action="Dashboard" class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition">
+            ← Back to Dashboard
+        </a>
+    </div>
+
+    <!-- Obstacle Statistics -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h2 class="text-xl font-bold text-gray-900 mb-6">Obstacle Statistics</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div class="text-center p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <p class="text-3xl font-bold text-blue-600">@ViewBag.ObstacleStats.Total</p>
+                <p class="text-gray-700 font-medium mt-2 text-sm">Total</p>
+            </div>
+            <div class="text-center p-4 bg-green-50 rounded-lg border border-green-200">
+                <p class="text-3xl font-bold text-green-600">@ViewBag.ObstacleStats.Approved</p>
+                <p class="text-gray-700 font-medium mt-2 text-sm">Approved</p>
+            </div>
+            <div class="text-center p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                <p class="text-3xl font-bold text-yellow-600">@ViewBag.ObstacleStats.Pending</p>
+                <p class="text-gray-700 font-medium mt-2 text-sm">Pending</p>
+            </div>
+            <div class="text-center p-4 bg-red-50 rounded-lg border border-red-200">
+                <p class="text-3xl font-bold text-red-600">@ViewBag.ObstacleStats.Rejected</p>
+                <p class="text-gray-700 font-medium mt-2 text-sm">Rejected</p>
+            </div>
+            <div class="text-center p-4 bg-purple-50 rounded-lg border border-purple-200">
+                <p class="text-3xl font-bold text-purple-600">@ViewBag.ObstacleStats.ThisWeek</p>
+                <p class="text-gray-700 font-medium mt-2 text-sm">This Week</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Statistics -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h2 class="text-xl font-bold text-gray-900 mb-6">User Statistics</h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="text-center p-4 bg-indigo-50 rounded-lg border border-indigo-200">
+                <p class="text-3xl font-bold text-indigo-600">@ViewBag.TotalUsers</p>
+                <p class="text-gray-700 font-medium mt-2">Total Users</p>
+            </div>
+            <div class="text-center p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <p class="text-3xl font-bold text-blue-600">@ViewBag.PilotCount</p>
+                <p class="text-gray-700 font-medium mt-2">Pilots</p>
+            </div>
+            <div class="text-center p-4 bg-green-50 rounded-lg border border-green-200">
+                <p class="text-3xl font-bold text-green-600">@ViewBag.RegisterforerCount</p>
+                <p class="text-gray-700 font-medium mt-2">Registerfører</p>
+            </div>
+            <div class="text-center p-4 bg-purple-50 rounded-lg border border-purple-200">
+                <p class="text-3xl font-bold text-purple-600">@ViewBag.AdminCount</p>
+                <p class="text-gray-700 font-medium mt-2">Admins</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity Timeline -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h2 class="text-xl font-bold text-gray-900 mb-6">Recent Activity</h2>
+        <div class="space-y-4">
+            <div class="flex items-center p-4 bg-gray-50 rounded-lg border">
+                <div class="bg-blue-100 rounded-full p-2 mr-4">
+                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                </div>
+                <div>
+                    <p class="font-medium text-gray-900">Obstacles Registered This Week</p>
+                    <p class="text-sm text-gray-600">@ViewBag.ObstacleStats.ThisWeek new obstacles</p>
+                </div>
+            </div>
+
+            <div class="flex items-center p-4 bg-gray-50 rounded-lg border">
+                <div class="bg-green-100 rounded-full p-2 mr-4">
+                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <p class="font-medium text-gray-900">Approved Obstacles</p>
+                    <p class="text-sm text-gray-600">@ViewBag.ObstacleStats.Approved total approved</p>
+                </div>
+            </div>
+
+            <div class="flex items-center p-4 bg-gray-50 rounded-lg border">
+                <div class="bg-yellow-100 rounded-full p-2 mr-4">
+                    <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <p class="font-medium text-gray-900">Pending Approval</p>
+                    <p class="text-sm text-gray-600">@ViewBag.ObstacleStats.Pending waiting for review</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Health -->
+    <div class="bg-green-50 border border-green-200 rounded-lg p-6">
+        <div class="flex items-center">
+            <div class="bg-green-100 rounded-full p-3 mr-4">
+                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            <div>
+                <h3 class="font-bold text-green-900">System Status: Operational</h3>
+                <p class="text-sm text-green-800">All systems running normally</p>
+            </div>
+        </div>
+    </div>
+</div>

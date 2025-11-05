@@ -1,0 +1,74 @@
+@model IEnumerable<FirstWebApplication.Entities.ObstacleData>
+
+@{
+    ViewData["Title"] = "Rejected Obstacles";
+}
+
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900">Rejected Obstacles</h1>
+            <p class="text-gray-600 mt-2">View all rejected obstacle registrations</p>
+        </div>
+        <a asp-action="Dashboard" class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition">
+            ← Back to Dashboard
+        </a>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">ID</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Rejected By</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Reason</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Rejected Date</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @foreach (var obstacle in Model)
+                    {
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#@obstacle.Id</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">@obstacle.ObstacleName</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">@obstacle.RejectedBy</td>
+                            <td class="px-6 py-4 text-sm text-gray-700">
+                                @if (!string.IsNullOrEmpty(obstacle.RejectionReason))
+                                {
+                                    <span class="line-clamp-2">@obstacle.RejectionReason</span>
+                                }
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                @obstacle.RejectedDate?.ToString("dd.MM.yyyy HH:mm")
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                <a asp-action="ViewObstacle" asp-route-id="@obstacle.Id" 
+                                   class="text-indigo-600 hover:text-indigo-800 font-medium">
+                                    View Details
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-4 text-gray-600 text-sm">
+            Total rejected: <strong>@Model.Count()</strong> obstacles
+        </div>
+    }
+    else
+    {
+        <div class="bg-white rounded-lg shadow-md p-12 text-center">
+            <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <h3 class="text-xl font-medium text-gray-900 mb-2">No Rejected Obstacles</h3>
+            <p class="text-gray-600">No obstacles have been rejected.</p>
+        </div>
+    }
+</div>

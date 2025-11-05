@@ -18,7 +18,6 @@ namespace FirstWebApplication.Controllers
         }
 
         // POST: /Account/Register
-        // Handles registration when user submits the form from Home/Index
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
@@ -35,13 +34,13 @@ namespace FirstWebApplication.Controllers
                 if (result.Succeeded)
                 {
                     // Automatically assign "Pilot" role to all new users
-                    // The role already exists because it was created at startup
                     await _userManager.AddToRoleAsync(user, "Pilot");
 
-                    // Automatically log in the user after registration
+                    // Log in the user
                     await _signInManager.SignInAsync(user, isPersistent: false);
 
-                    return RedirectToAction("RegisterType", "Obstacle");
+                    // Redirect to RegisterType (first thing they see)
+                    return RedirectToAction("RegisterType", "Pilot");
                 }
 
                 foreach (var error in result.Errors)
@@ -73,7 +72,27 @@ namespace FirstWebApplication.Controllers
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("RegisterType", "Obstacle");
+                    // Get the user
+                    var user = await _userManager.FindByEmailAsync(model.Email);
+                    if (user != null)
+                    {
+                        // Get user's roles
+                        var roles = await _userManager.GetRolesAsync(user);
+
+                        // Redirect based on role (highest role takes priority)
+                        if (roles.Contains("Admin"))
+                        {
+                            return RedirectToAction("AdminDashboard", "Admin");
+                        }
+                        else if (roles.Contains("Registerfører"))
+                        {
+                            return RedirectToAction("RegisterforerDashboard", "Registerforer");
+                        }
+                        else // Pilot or no role
+                        {
+                            return RedirectToAction("RegisterType", "Pilot");
+                        }
+                    }
                 }
 
                 ModelState.AddModelError(string.Empty, "Invalid login attempt");

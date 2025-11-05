@@ -1,4 +1,4 @@
-@{
+﻿@{
     ViewData["Title"] = "Welcome";
     Layout = null; // No layout - this is a standalone landing page
 }
@@ -9,13 +9,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Aviation Obstacle Registration</title>
-    
+
     <!-- Leaflet CSS for the map -->
     <link rel="stylesheet" href="~/lib/leaflet/leaflet.css" />
-    
+
     <!-- Tailwind CSS -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    
+
     <style>
         /* Remove all margins and make the page full height */
         * {
@@ -66,59 +66,59 @@
             transition: all 0.3s ease;
         }
 
-        /* Style for the auth forms */
-        .auth-modal h1 {
-            font-size: 28px;
-            font-weight: bold;
-            color: #1f2937;
-            margin-bottom: 10px;
-            text-align: center;
-        }
+            /* Style for the auth forms */
+            .auth-modal h1 {
+                font-size: 28px;
+                font-weight: bold;
+                color: #1f2937;
+                margin-bottom: 10px;
+                text-align: center;
+            }
 
-        .auth-modal p {
-            color: #6b7280;
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 14px;
-        }
+            .auth-modal p {
+                color: #6b7280;
+                text-align: center;
+                margin-bottom: 30px;
+                font-size: 14px;
+            }
 
-        .auth-modal input {
-            width: 100%;
-            padding: 12px 15px;
-            margin-bottom: 15px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: border-color 0.3s ease;
-        }
+            .auth-modal input {
+                width: 100%;
+                padding: 12px 15px;
+                margin-bottom: 15px;
+                border: 1px solid #d1d5db;
+                border-radius: 8px;
+                font-size: 14px;
+                transition: border-color 0.3s ease;
+            }
 
-        .auth-modal input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
+                .auth-modal input:focus {
+                    outline: none;
+                    border-color: #667eea;
+                    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+                }
 
-        .auth-modal button {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
+            .auth-modal button {
+                width: 100%;
+                padding: 12px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border: none;
+                border-radius: 8px;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+            }
 
-        .auth-modal button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
+                .auth-modal button:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+                }
 
-        .auth-modal button:active {
-            transform: translateY(0);
-        }
+                .auth-modal button:active {
+                    transform: translateY(0);
+                }
 
         /* Checkbox styling */
         .remember-me {
@@ -129,11 +129,11 @@
             color: #4b5563;
         }
 
-        .remember-me input {
-            width: auto;
-            margin-right: 8px;
-            margin-bottom: 0;
-        }
+            .remember-me input {
+                width: auto;
+                margin-right: 8px;
+                margin-bottom: 0;
+            }
 
         /* Link to toggle between login and register */
         .toggle-link {
@@ -143,16 +143,16 @@
             color: #6b7280;
         }
 
-        .toggle-link a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-            cursor: pointer;
-        }
+            .toggle-link a {
+                color: #667eea;
+                text-decoration: none;
+                font-weight: 600;
+                cursor: pointer;
+            }
 
-        .toggle-link a:hover {
-            text-decoration: underline;
-        }
+                .toggle-link a:hover {
+                    text-decoration: underline;
+                }
 
         /* Error message styling */
         .error-message {
@@ -171,10 +171,10 @@
             margin-bottom: 30px;
         }
 
-        .branding .icon {
-            font-size: 48px;
-            margin-bottom: 10px;
-        }
+            .branding .icon {
+                font-size: 48px;
+                margin-bottom: 10px;
+            }
 
         /* Hide/show forms based on mode */
         .hidden {
@@ -213,17 +213,17 @@
                 <!-- Login Form -->
                 <form asp-controller="Account" asp-action="Login" method="post">
                     <!-- Email input -->
-                    <input type="email" 
-                           name="Email" 
-                           placeholder="Email address" 
-                           required 
+                    <input type="email"
+                           name="Email"
+                           placeholder="Email address"
+                           required
                            autocomplete="email" />
 
                     <!-- Password input -->
-                    <input type="password" 
-                           name="Password" 
-                           placeholder="Password" 
-                           required 
+                    <input type="password"
+                           name="Password"
+                           placeholder="Password"
+                           required
                            autocomplete="current-password" />
 
                     <!-- Remember Me checkbox -->
@@ -238,7 +238,7 @@
 
                 <!-- Link to toggle to registration -->
                 <div class="toggle-link">
-                    Don't have an account? 
+                    Don't have an account?
                     <a onclick="toggleForms()">Create one here</a>
                 </div>
             </div>
@@ -262,24 +262,24 @@
                 <!-- Register Form -->
                 <form asp-controller="Account" asp-action="Register" method="post">
                     <!-- Email input -->
-                    <input type="email" 
-                           name="Email" 
-                           placeholder="Email address" 
-                           required 
+                    <input type="email"
+                           name="Email"
+                           placeholder="Email address"
+                           required
                            autocomplete="email" />
 
                     <!-- Password input -->
-                    <input type="password" 
-                           name="Password" 
-                           placeholder="Password (min 6 characters)" 
-                           required 
+                    <input type="password"
+                           name="Password"
+                           placeholder="Password (min 6 characters)"
+                           required
                            autocomplete="new-password" />
 
                     <!-- Confirm Password input -->
-                    <input type="password" 
-                           name="ConfirmPassword" 
-                           placeholder="Confirm Password" 
-                           required 
+                    <input type="password"
+                           name="ConfirmPassword"
+                           placeholder="Confirm Password"
+                           required
                            autocomplete="new-password" />
 
                     <!-- Register button -->
@@ -288,7 +288,7 @@
 
                 <!-- Link to toggle back to login -->
                 <div class="toggle-link">
-                    Already have an account? 
+                    Already have an account?
                     <a onclick="toggleForms()">Sign in here</a>
                 </div>
             </div>
@@ -297,11 +297,11 @@
 
     <!-- Leaflet JavaScript for the map -->
     <script src="~/lib/leaflet/leaflet.js"></script>
-    
+
     <script>
         // Initialize the map when the page loads
         document.addEventListener('DOMContentLoaded', function () {
-            
+
             // Create the map centered on Norway
             // The map is set to not be interactive (dragging: false, etc.)
             var map = L.map('landing-map', {
@@ -324,9 +324,9 @@
             // Check if we should show the register form (after failed registration)
             @if (ViewBag.ShowRegister == true)
             {
-                <text>
-                toggleForms();
-                </text>
+                    <text>
+                    toggleForms();
+                    </text>
             }
         });
 
@@ -334,7 +334,7 @@
         function toggleForms() {
             var loginForm = document.getElementById('login-form');
             var registerForm = document.getElementById('register-form');
-            
+
             // Toggle visibility
             loginForm.classList.toggle('hidden');
             registerForm.classList.toggle('hidden');

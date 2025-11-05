@@ -4,51 +4,54 @@ namespace FirstWebApplication.Entities
 {
     public class ObstacleData
     {
-
-
-        // Bruker Key for å fortelle Entity Framework at dette er primærnøkkelen.
-        // Denne vil automatisk få verdier ved innsending og bruk av AUTO_INCREMENT i databasen.
+        // Primary key
         [Key]
         public int Id { get; set; }
 
-
-        [Required(ErrorMessage = "Field is required")]
-        [MaxLength(100)]
-        [Display(Name = "Obstacle Name")]
+        // Obstacle information
+        [Required(ErrorMessage = "Obstacle name is required")]
+        [StringLength(100, ErrorMessage = "Name cannot exceed 100 characters")]
         public string ObstacleName { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Field is required")]
-        [Range(0, 200)]
-        [Display(Name = "Obstacle Height (meters)")]
+        [Required(ErrorMessage = "Height is required")]
+        [Range(0.1, 10000, ErrorMessage = "Height must be between 0.1 and 10000 meters")]
         public double ObstacleHeight { get; set; }
 
-        [Required(ErrorMessage = "Field is required")]
-        [MaxLength(1000)]
-        [Display(Name = "Obstacle Description")]
+        [Required(ErrorMessage = "Description is required")]
+        [StringLength(1000, ErrorMessage = "Description cannot exceed 1000 characters")]
         public string ObstacleDescription { get; set; } = string.Empty;
 
-        // Felt for å lagre GeoJSON (geografisk geometri) fra kartet.
-        // Dette feltet lagrer koordinatene for det tegnede punktet eller linjen.
-        [Required(ErrorMessage = "Field is required")]
-        [Display(Name = "Obstacle Geometry (GeoJSON)")]
+        [Required(ErrorMessage = "Location is required")]
         public string ObstacleGeometry { get; set; } = string.Empty;
 
-        // Automatisk tidspunkt for når hindringen ble registrert.
-        // Date.Time setter dagens dato og klokkeslett som standardverdi.
-        [Display(Name = "Registration Time")]
-        public DateTime RegisteredDate { get; set; } = DateTime.Now;
-
-        // Automatisk felt for å lagre hvem som registrerte hindringen.
-        // Kan være null hvis ikke oppgitt.
-        [MaxLength(100)]
-        [Display(Name = "Registered By (Email)")]
-        public string? RegisteredBy { get; set; }
-
-        // Type hinder (valgfritt felt)
-        [MaxLength(50)]
+        [StringLength(50)]
         public string? ObstacleType { get; set; }
 
+        // Registration information
+        public DateTime RegisteredDate { get; set; } = DateTime.Now;
 
+        [StringLength(100)]
+        public string? RegisteredBy { get; set; }
+
+        // Approval/Rejection fields
+        public bool IsApproved { get; set; } = false;
+
+        public bool IsRejected { get; set; } = false;
+
+        [StringLength(100)]
+        public string? ApprovedBy { get; set; }
+
+        public DateTime? ApprovedDate { get; set; }
+
+        [StringLength(500)]
+        public string? ApprovalComments { get; set; }
+
+        [StringLength(100)]
+        public string? RejectedBy { get; set; }
+
+        public DateTime? RejectedDate { get; set; }
+
+        [StringLength(500)]
+        public string? RejectionReason { get; set; }
     }
 }
-

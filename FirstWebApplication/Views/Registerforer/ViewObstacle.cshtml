@@ -1,0 +1,190 @@
+@model FirstWebApplication.Entities.ObstacleData
+
+@{
+    ViewData["Title"] = "View Obstacle";
+}
+
+<style>
+    #map {
+        height: 500px;
+        width: 100%;
+        border-radius: 8px;
+    }
+</style>
+
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900">Obstacle Details #@Model.Id</h1>
+            <p class="text-gray-600 mt-2">View obstacle information</p>
+        </div>
+        <a asp-action="RegisterforerDashboard" class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition">
+            ← Back to Dashboard
+        </a>
+    </div>
+
+    <!-- Status Alert -->
+    @if (Model.IsApproved)
+    {
+        <div class="bg-green-100 border border-green-400 text-green-800 px-4 py-3 rounded mb-6">
+            <strong>✓ Approved</strong> by @Model.ApprovedBy on @Model.ApprovedDate?.ToString("dd.MM.yyyy HH:mm")
+            @if (!string.IsNullOrEmpty(Model.ApprovalComments))
+            {
+                <p class="mt-2"><strong>Comments:</strong> @Model.ApprovalComments</p>
+            }
+        </div>
+    }
+    else if (Model.IsRejected)
+    {
+        <div class="bg-red-100 border border-red-400 text-red-800 px-4 py-3 rounded mb-6">
+            <strong>✗ Rejected</strong> by @Model.RejectedBy on @Model.RejectedDate?.ToString("dd.MM.yyyy HH:mm")
+            <p class="mt-2"><strong>Reason:</strong> @Model.RejectionReason</p>
+        </div>
+    }
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Obstacle Details -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">Obstacle Information</h2>
+            
+            <div class="space-y-4">
+                <div class="flex border-b pb-3">
+                    <span class="font-semibold text-gray-700 w-40">ID:</span>
+                    <span class="text-gray-900">#@Model.Id</span>
+                </div>
+                <div class="flex border-b pb-3">
+                    <span class="font-semibold text-gray-700 w-40">Status:</span>
+                    <span class="text-gray-900">
+                        @if (Model.IsApproved)
+                        {
+                            <span class="px-2 py-1 bg-green-100 text-green-800 rounded text-sm font-semibold">Approved</span>
+                        }
+                        else if (Model.IsRejected)
+                        {
+                            <span class="px-2 py-1 bg-red-100 text-red-800 rounded text-sm font-semibold">Rejected</span>
+                        }
+                        else
+                        {
+                            <span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-sm font-semibold">Pending</span>
+                        }
+                    </span>
+                </div>
+                <div class="flex border-b pb-3">
+                    <span class="font-semibold text-gray-700 w-40">Name:</span>
+                    <span class="text-gray-900">@Model.ObstacleName</span>
+                </div>
+                <div class="flex border-b pb-3">
+                    <span class="font-semibold text-gray-700 w-40">Height:</span>
+                    <span class="text-gray-900">@Model.ObstacleHeight m</span>
+                </div>
+                <div class="flex border-b pb-3">
+                    <span class="font-semibold text-gray-700 w-40">Description:</span>
+                    <span class="text-gray-900">@Model.ObstacleDescription</span>
+                </div>
+                <div class="flex border-b pb-3">
+                    <span class="font-semibold text-gray-700 w-40">Registered By:</span>
+                    <span class="text-gray-900">@Model.RegisteredBy</span>
+                </div>
+                <div class="flex">
+                    <span class="font-semibold text-gray-700 w-40">Registered Date:</span>
+                    <span class="text-gray-900">@Model.RegisteredDate.ToString("dd.MM.yyyy HH:mm")</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Map -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">Location</h2>
+            <div id="map"></div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex gap-4 mt-6">
+        @if (Model.IsApproved)
+        {
+            <a asp-action="ApprovedObstacles" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition">
+                ← Back to Approved
+            </a>
+        }
+        else if (Model.IsRejected)
+        {
+            <a asp-action="RejectedObstacles" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition">
+                ← Back to Rejected
+            </a>
+        }
+        else
+        {
+            <a asp-action="PendingObstacles" class="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition">
+                ← Back to Pending
+            </a>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Initialize map
+        const map = L.map('map').setView([58.5, 8.5], 6);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 19
+        }).addTo(map);
+
+        const wkt = '@Html.Raw(Model.ObstacleGeometry)';
+
+        if (wkt) {
+            const geometry = parseWKT(wkt);
+            
+            if (geometry) {
+                let layer;
+
+                if (geometry.type === 'Point') {
+                    layer = L.marker([geometry.coordinates[1], geometry.coordinates[0]]);
+                } else if (geometry.type === 'LineString') {
+                    const coords = geometry.coordinates.map(c => [c[1], c[0]]);
+                    layer = L.polyline(coords, { color: '#3498db' });
+                } else if (geometry.type === 'Polygon') {
+                    const coords = geometry.coordinates[0].map(c => [c[1], c[0]]);
+                    layer = L.polygon(coords, { color: '#e74c3c' });
+                }
+
+                if (layer) {
+                    layer.addTo(map);
+                    layer.bindPopup(`
+                        <strong>@Model.ObstacleName</strong><br>
+                        Height: @Model.ObstacleHeight m<br>
+                        Status: ${@Model.IsApproved.ToString().ToLower() ? 'Approved' : (@Model.IsRejected.ToString().ToLower() ? 'Rejected' : 'Pending')}
+                    `).openPopup();
+
+                    map.fitBounds(layer.getBounds ? layer.getBounds() : L.latLngBounds([layer.getLatLng()]));
+                }
+            }
+        }
+
+        function parseWKT(wkt) {
+            if (wkt.startsWith('POINT')) {
+                const coords = wkt.match(/POINT\(([-\d.]+) ([-\d.]+)\)/);
+                if (coords) {
+                    return { type: 'Point', coordinates: [parseFloat(coords[1]), parseFloat(coords[2])] };
+                }
+            } else if (wkt.startsWith('LINESTRING')) {
+                const coordsStr = wkt.match(/LINESTRING\(([^)]+)\)/)[1];
+                const coordinates = coordsStr.split(',').map(pair => {
+                    const [lon, lat] = pair.trim().split(' ');
+                    return [parseFloat(lon), parseFloat(lat)];
+                });
+                return { type: 'LineString', coordinates: coordinates };
+            } else if (wkt.startsWith('POLYGON')) {
+                const coordsStr = wkt.match(/POLYGON\(\(([^)]+)\)\)/)[1];
+                const coordinates = coordsStr.split(',').map(pair => {
+                    const [lon, lat] = pair.trim().split(' ');
+                    return [parseFloat(lon), parseFloat(lat)];
+                });
+                return { type: 'Polygon', coordinates: [coordinates] };
+            }
+            return null;
+        }
+    </script>
+}

@@ -1,0 +1,135 @@
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+        <p class="text-gray-600 mt-2">Welcome, @User.Identity?.Name</p>
+    </div>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
+            @TempData["Message"]
+        </div>
+    }
+
+    <!-- Statistics Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Total Users -->
+        <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-indigo-500">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600 text-sm font-medium">Total Users</p>
+                    <p class="text-3xl font-bold text-gray-900 mt-2">@ViewBag.TotalUsers</p>
+                </div>
+                <div class="bg-indigo-100 rounded-full p-3">
+                    <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Obstacles -->
+        <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600 text-sm font-medium">Total Obstacles</p>
+                    <p class="text-3xl font-bold text-gray-900 mt-2">@ViewBag.TotalObstacles</p>
+                </div>
+                <div class="bg-blue-100 rounded-full p-3">
+                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Approved -->
+        <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600 text-sm font-medium">Approved</p>
+                    <p class="text-3xl font-bold text-gray-900 mt-2">@ViewBag.ApprovedObstacles</p>
+                </div>
+                <div class="bg-green-100 rounded-full p-3">
+                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending -->
+        <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-yellow-500">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600 text-sm font-medium">Pending</p>
+                    <p class="text-3xl font-bold text-gray-900 mt-2">@ViewBag.PendingObstacles</p>
+                </div>
+                <div class="bg-yellow-100 rounded-full p-3">
+                    <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Role Distribution -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h2 class="text-xl font-bold text-gray-900 mb-6">User Roles Distribution</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="text-center p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <p class="text-4xl font-bold text-blue-600">@ViewBag.PilotCount</p>
+                <p class="text-gray-700 font-medium mt-2">Pilots</p>
+            </div>
+            <div class="text-center p-4 bg-green-50 rounded-lg border border-green-200">
+                <p class="text-4xl font-bold text-green-600">@ViewBag.RegisterforerCount</p>
+                <p class="text-gray-700 font-medium mt-2">Registerfører</p>
+            </div>
+            <div class="text-center p-4 bg-purple-50 rounded-lg border border-purple-200">
+                <p class="text-4xl font-bold text-purple-600">@ViewBag.AdminCount</p>
+                <p class="text-gray-700 font-medium mt-2">Admins</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <a asp-action="Users" class="flex items-center p-4 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition border border-indigo-200">
+                <svg class="w-8 h-8 text-indigo-600 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                </svg>
+                <div>
+                    <p class="font-semibold text-gray-900">Manage Users</p>
+                    <p class="text-sm text-gray-600">View and edit user accounts</p>
+                </div>
+            </a>
+
+            <a asp-action="Statistics" class="flex items-center p-4 bg-green-50 hover:bg-green-100 rounded-lg transition border border-green-200">
+                <svg class="w-8 h-8 text-green-600 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+                <div>
+                    <p class="font-semibold text-gray-900">View Statistics</p>
+                    <p class="text-sm text-gray-600">Detailed system analytics</p>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- System Info -->
+    <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-6">
+        <h3 class="font-semibold text-indigo-900 mb-2">Administrator Role</h3>
+        <p class="text-indigo-800 text-sm">
+            As an administrator, you have full control over user management and can view system statistics. 
+            You cannot register or approve obstacles - that's handled by Pilots and Registerfører respectively.
+        </p>
+    </div>
+</div>

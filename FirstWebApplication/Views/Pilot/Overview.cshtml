@@ -1,0 +1,324 @@
+@model FirstWebApplication.Entities.ObstacleData
+
+@{
+    ViewData["Title"] = "Registration Overview";
+}
+
+<style>
+    #map {
+        height: 500px;
+        width: 100%;
+        border-radius: 8px;
+        margin-top: 20px;
+    }
+
+    .details-card {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .detail-row {
+        display: flex;
+        padding: 12px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+    .detail-label {
+        font-weight: 600;
+        color: #4B5563;
+        width: 150px;
+        flex-shrink: 0;
+    }
+
+    .detail-value {
+        color: #1F2937;
+        flex: 1;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .status-pending {
+        background: #DBEAFE;
+        color: #1E40AF;
+    }
+
+    .status-approved {
+        background: #D1FAE5;
+        color: #065F46;
+    }
+
+    .status-rejected {
+        background: #FEE2E2;
+        color: #991B1B;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.15s;
+    }
+
+    .btn-primary {
+        background: #2563EB;
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background: #1D4ED8;
+        }
+
+    .btn-success {
+        background: #059669;
+        color: white;
+    }
+
+        .btn-success:hover {
+            background: #047857;
+        }
+
+    .btn-secondary {
+        background: #6B7280;
+        color: white;
+    }
+
+        .btn-secondary:hover {
+            background: #4B5563;
+        }
+
+    .alert {
+        padding: 16px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+    }
+
+    .alert-success {
+        background: #D1FAE5;
+        color: #065F46;
+        border: 1px solid #6EE7B7;
+    }
+
+    .alert-warning {
+        background: #FEF3C7;
+        color: #92400E;
+        border: 1px solid #FCD34D;
+    }
+
+    .alert-danger {
+        background: #FEE2E2;
+        color: #991B1B;
+        border: 1px solid #FECACA;
+    }
+</style>
+
+<div class="container mx-auto px-4 py-6">
+    <!-- Page Header -->
+    <div class="mb-6">
+        <h1 class="text-3xl font-bold text-gray-900">Obstacle Details</h1>
+        <p class="text-gray-600 mt-2">Registered on @Model.RegisteredDate.ToString("dd.MM.yyyy HH:mm")</p>
+    </div>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Message"]
+        </div>
+    }
+
+    <!-- Status Alert -->
+    @if (Model.IsApproved)
+    {
+        <div class="alert alert-success">
+            <strong>✓ Approved</strong> - This obstacle has been approved by @Model.ApprovedBy on @Model.ApprovedDate?.ToString("dd.MM.yyyy HH:mm")
+            @if (!string.IsNullOrEmpty(Model.ApprovalComments))
+            {
+                <p class="mt-2"><strong>Comments:</strong> @Model.ApprovalComments</p>
+            }
+        </div>
+    }
+    else if (Model.IsRejected)
+    {
+        <div class="alert alert-danger">
+            <strong>✗ Rejected</strong> - This obstacle was rejected by @Model.RejectedBy on @Model.RejectedDate?.ToString("dd.MM.yyyy HH:mm")
+            <p class="mt-2"><strong>Reason:</strong> @Model.RejectionReason</p>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">
+            <strong>⏳ Pending Approval</strong> - This obstacle is waiting for verification by a Registerfører
+        </div>
+    }
+
+    <!-- Details Card -->
+    <div class="details-card">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Obstacle Information</h2>
+
+        <div class="detail-row">
+            <div class="detail-label">ID:</div>
+            <div class="detail-value">#@Model.Id</div>
+        </div>
+
+        <div class="detail-row">
+            <div class="detail-label">Status:</div>
+            <div class="detail-value">
+                @if (Model.IsApproved)
+                {
+                    <span class="status-badge status-approved">✓ Approved</span>
+                }
+                else if (Model.IsRejected)
+                {
+                    <span class="status-badge status-rejected">✗ Rejected</span>
+                }
+                else
+                {
+                    <span class="status-badge status-pending">⏳ Pending Approval</span>
+                }
+            </div>
+        </div>
+
+        <div class="detail-row">
+            <div class="detail-label">Name:</div>
+            <div class="detail-value">@Model.ObstacleName</div>
+        </div>
+
+        <div class="detail-row">
+            <div class="detail-label">Height:</div>
+            <div class="detail-value">@Model.ObstacleHeight m</div>
+        </div>
+
+        <div class="detail-row">
+            <div class="detail-label">Description:</div>
+            <div class="detail-value">@Model.ObstacleDescription</div>
+        </div>
+
+        <div class="detail-row">
+            <div class="detail-label">Registered By:</div>
+            <div class="detail-value">@Model.RegisteredBy</div>
+        </div>
+
+        <div class="detail-row">
+            <div class="detail-label">Registered Date:</div>
+            <div class="detail-value">@Model.RegisteredDate.ToString("dd.MM.yyyy HH:mm")</div>
+        </div>
+    </div>
+
+    <!-- Map -->
+    <div class="details-card">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Location</h2>
+        <div id="map"></div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex gap-4 mt-6">
+        <a asp-action="RegisterType" class="btn btn-primary">
+            Register New Obstacle
+        </a>
+        <a asp-action="MyRegistrations" class="btn btn-success">
+            View All My Registrations
+        </a>
+        <a asp-action="Dashboard" class="btn btn-secondary">
+            Back to Dashboard
+        </a>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Initialize map
+        const map = L.map('map').setView([58.5, 8.5], 6);
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 19
+        }).addTo(map);
+
+        // Get the obstacle geometry from the model
+        const wkt = '@Html.Raw(Model.ObstacleGeometry)';
+
+        if (wkt) {
+            // Parse WKT and display on map
+            const geometry = parseWKT(wkt);
+
+            if (geometry) {
+                let layer;
+
+                if (geometry.type === 'Point') {
+                    layer = L.marker([geometry.coordinates[1], geometry.coordinates[0]]);
+                } else if (geometry.type === 'LineString') {
+                    const coords = geometry.coordinates.map(c => [c[1], c[0]]);
+                    layer = L.polyline(coords, { color: '#3498db' });
+                } else if (geometry.type === 'Polygon') {
+                    const coords = geometry.coordinates[0].map(c => [c[1], c[0]]);
+                    layer = L.polygon(coords, { color: '#e74c3c' });
+                }
+
+                if (layer) {
+                    layer.addTo(map);
+
+                    // Add popup with obstacle name
+                    layer.bindPopup(`
+                        <strong>@Model.ObstacleName</strong><br>
+                        Height: @Model.ObstacleHeight m<br>
+                        Status: ${@Model.IsApproved.ToString().ToLower() ? 'Approved' : (@Model.IsRejected.ToString().ToLower() ? 'Rejected' : 'Pending')}
+                    `);
+
+                    // Zoom to the obstacle
+                    map.fitBounds(layer.getBounds ? layer.getBounds() : L.latLngBounds([layer.getLatLng()]));
+                }
+            }
+        }
+
+        // Parse WKT to GeoJSON-like structure
+        function parseWKT(wkt) {
+            if (wkt.startsWith('POINT')) {
+                const coords = wkt.match(/POINT\(([-\d.]+) ([-\d.]+)\)/);
+                if (coords) {
+                    return {
+                        type: 'Point',
+                        coordinates: [parseFloat(coords[1]), parseFloat(coords[2])]
+                    };
+                }
+            } else if (wkt.startsWith('LINESTRING')) {
+                const coordsStr = wkt.match(/LINESTRING\(([^)]+)\)/)[1];
+                const coordinates = coordsStr.split(',').map(pair => {
+                    const [lon, lat] = pair.trim().split(' ');
+                    return [parseFloat(lon), parseFloat(lat)];
+                });
+                return {
+                    type: 'LineString',
+                    coordinates: coordinates
+                };
+            } else if (wkt.startsWith('POLYGON')) {
+                const coordsStr = wkt.match(/POLYGON\(\(([^)]+)\)\)/)[1];
+                const coordinates = coordsStr.split(',').map(pair => {
+                    const [lon, lat] = pair.trim().split(' ');
+                    return [parseFloat(lon), parseFloat(lat)];
+                });
+                return {
+                    type: 'Polygon',
+                    coordinates: [coordinates]
+                };
+            }
+            return null;
+        }
+    </script>
+}

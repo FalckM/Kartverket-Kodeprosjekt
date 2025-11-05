@@ -1,0 +1,131 @@
+@model Microsoft.AspNetCore.Identity.IdentityUser
+
+@{
+    ViewData["Title"] = "Manage User";
+    var userRoles = ViewBag.UserRoles as IList<string>;
+    var allRoles = ViewBag.AllRoles as List<string>;
+}
+
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900">Manage User Roles</h1>
+            <p class="text-gray-600 mt-2">@Model.Email</p>
+        </div>
+        <a asp-action="Users" class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition">
+            ← Back to Users
+        </a>
+    </div>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
+            @TempData["Message"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+            @TempData["Error"]
+        </div>
+    }
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Current Roles -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">Current Roles</h2>
+            
+            @if (userRoles != null && userRoles.Any())
+            {
+                <div class="space-y-3">
+                    @foreach (var role in userRoles)
+                    {
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded border">
+                            <span class="font-medium text-gray-900">@role</span>
+                            <form asp-action="RemoveRole" method="post" class="inline">
+                                <input type="hidden" name="userId" value="@Model.Id" />
+                                <input type="hidden" name="roleName" value="@role" />
+                                <button type="submit" 
+                                        class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white text-sm rounded transition"
+                                        onclick="return confirm('Remove @role role from this user?');">
+                                    Remove
+                                </button>
+                            </form>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <p class="text-gray-500 italic">No roles assigned yet</p>
+            }
+        </div>
+
+        <!-- Available Roles -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">Assign New Role</h2>
+            
+            @if (allRoles != null && allRoles.Any())
+            {
+                <div class="space-y-3">
+                    @foreach (var role in allRoles)
+                    {
+                        var hasRole = userRoles != null && userRoles.Contains(role);
+                        
+                        <div class="flex items-center justify-between p-3 @(hasRole ? "bg-gray-100" : "bg-green-50") rounded border @(hasRole ? "border-gray-200" : "border-green-200")">
+                            <div>
+                                <span class="font-medium text-gray-900">@role</span>
+                                @if (hasRole)
+                                {
+                                    <span class="ml-2 text-xs text-gray-500">(Already assigned)</span>
+                                }
+                            </div>
+                            
+                            @if (!hasRole)
+                            {
+                                <form asp-action="AssignRole" method="post" class="inline">
+                                    <input type="hidden" name="userId" value="@Model.Id" />
+                                    <input type="hidden" name="roleName" value="@role" />
+                                    <button type="submit" 
+                                            class="px-3 py-1 bg-green-500 hover:bg-green-600 text-white text-sm rounded transition">
+                                        Assign
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <p class="text-gray-500">No roles available</p>
+            }
+        </div>
+    </div>
+
+    <!-- Role Descriptions -->
+    <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-6 mt-6">
+        <h3 class="font-semibold text-indigo-900 mb-3">Role Descriptions</h3>
+        <div class="space-y-2 text-sm">
+            <p><strong class="text-indigo-800">Pilot:</strong> Can register and manage their own obstacles</p>
+            <p><strong class="text-indigo-800">Registerfører:</strong> Can approve or reject obstacle registrations</p>
+            <p><strong class="text-indigo-800">Admin:</strong> Can manage users and view system statistics</p>
+        </div>
+    </div>
+
+    <!-- Danger Zone -->
+    @if (Model.Email != User.Identity?.Name)
+    {
+        <div class="bg-red-50 border border-red-200 rounded-lg p-6 mt-6">
+            <h3 class="font-semibold text-red-900 mb-3">Danger Zone</h3>
+            <p class="text-sm text-red-800 mb-4">Permanently delete this user account. This action cannot be undone.</p>
+            <form asp-action="DeleteUser" asp-route-userId="@Model.Id" method="post" 
+                  onsubmit="return confirm('Are you absolutely sure? This will permanently delete @Model.Email');">
+                <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition">
+                    Delete User Account
+                </button>
+            </form>
+        </div>
+    }
+</div>

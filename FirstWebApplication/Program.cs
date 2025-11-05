@@ -29,6 +29,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 // Register services
 builder.Services.AddScoped<UserRoleService>();
 builder.Services.AddScoped<RoleInitializerService>();
+builder.Services.AddScoped<UserSeederService>();
 
 // Configure cookie settings
 builder.Services.ConfigureApplicationCookie(options =>
@@ -38,15 +39,29 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Home/Index";
     options.ExpireTimeSpan = TimeSpan.FromHours(24);
     options.SlidingExpiration = true;
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+    options.Cookie.SameSite = SameSiteMode.Lax;
 });
 
 var app = builder.Build();
 
-// Initialize roles (Pilot, Registerfører, Admin) at application startup
+// Initialize roles and seed test users at startup
 using (var scope = app.Services.CreateScope())
 {
-    var roleInitializer = scope.ServiceProvider.GetRequiredService<RoleInitializerService>();
+    var services = scope.ServiceProvider;
+
+    // Create the three roles (Pilot, Registerfører, Admin)
+    var roleInitializer = services.GetRequiredService<RoleInitializerService>();
     await roleInitializer.InitializeRolesAsync();
+
+    // Seed test users (pilot@test.com, registerforer@test.com, admin@test.com)
+    // Only runs in Development environment
+    if (app.Environment.IsDevelopment())
+    {
+        var userSeeder = services.GetRequiredService<UserSeederService>();
+        await userSeeder.SeedTestUsersAsync();
+    }
 }
 
 // Configure the HTTP request pipeline
