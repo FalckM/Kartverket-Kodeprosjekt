@@ -20,23 +20,6 @@ Complete history: All data stays in one place
 
 This is a common pattern called "soft states" - instead of moving data between tables, you just set flags to indicate the current state.
 
-Obstacles Table
-┌─────────────────────────────────────────┐
-│ Basic Info                              │
-│  - Id, Name, Height, Description        │
-│  - Geometry, RegisteredBy, RegisteredDate│
-├─────────────────────────────────────────┤
-│ Status (Boolean Flags)                  │
-│  - IsApproved (true/false)              │
-│  - IsRejected (true/false)              │
-├─────────────────────────────────────────┤
-│ Approval Details                        │
-│  - ApprovedBy, ApprovedDate, Comments   │
-├─────────────────────────────────────────┤
-│ Rejection Details                       │
-│  - RejectedBy, RejectedDate, Reason     │
-└─────────────────────────────────────────┘
-
 State Detection:
 - Pending:   IsApproved=false AND IsRejected=false
 - Approved:  IsApproved=true
