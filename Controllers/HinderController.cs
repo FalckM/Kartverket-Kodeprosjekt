@@ -152,6 +152,30 @@ namespace NRLWebApp.Controllers
             return View(hinderFull); 
         }
 
+        [Authorize(Roles = "Registerfører, Admin, Pilot")] 
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var hinder = await _context.Hindre
+                .Include(h => h.Status) 
+                .Include(h => h.ApplicationUser) 
+                    .ThenInclude(u => u.Organisasjon) 
+                .Include(h => h.Behandlinger) 
+                    .ThenInclude(b => b.ApplicationUser) 
+                .FirstOrDefaultAsync(m => m.HinderID == id);
+
+            if (hinder == null)
+            {
+                return NotFound();
+            }
+
+            return View(hinder);
+        }
+
         [Authorize(Roles = "Pilot")] 
         public IActionResult Create()
         {

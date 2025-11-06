@@ -1,0 +1,97 @@
+﻿@model NRLWebApp.Models.Entities.Hinder
+@{
+    ViewData["Title"] = "Detaljer";
+}
+
+<h2>Detaljer for Hinder (ID: @Model.HinderID)</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-7">
+
+        <h4>Opprinnelig rapport</h4>
+        <dl class="row">
+            <dt class="col-sm-4">Rapportert av:</dt>
+            <dd class="col-sm-8">@Model.ApplicationUser.Fornavn @Model.ApplicationUser.Etternavn</dd>
+
+            <dt class="col-sm-4">Organisasjon:</dt>
+            <dd class="col-sm-8">@Model.ApplicationUser.Organisasjon.Navn</dd>
+
+            <dt class="col-sm-4">Rapportert dato:</dt>
+            <dd class="col-sm-8">@Model.Tidsstempel.ToString("g")</dd>
+
+            <dt class="col-sm-4">Navn:</dt>
+            <dd class="col-sm-8">@Model.Navn</dd>
+
+            <dt class="col-sm-4">Høyde (m):</dt>
+            <dd class="col-sm-8">@Model.Hoyde</dd>
+
+            <dt class="col-sm-4">Beskrivelse:</dt>
+            <dd class="col-sm-8">@Model.Beskrivelse</dd>
+
+            <dt class="col-sm-4">Nåværende Status:</dt>
+            <dd class="col-sm-8"><strong>@Model.Status.Navn</strong></dd>
+        </dl>
+
+        <hr />
+
+        <h4>Behandlingshistorikk</h4>
+
+        @if (Model.Behandlinger.Any())
+        {
+            @foreach (var behandling in Model.Behandlinger.OrderByDescending(b => b.Tidsstempel))
+            {
+                <div class="card mb-2">
+                    <div class="card-header bg-light">
+                        <strong>@behandling.ApplicationUser.Fornavn @behandling.ApplicationUser.Etternavn</strong> (Registerfører)
+                        <span class="float-end">@behandling.Tidsstempel.ToString("g")</span>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">@behandling.Kommentar</p>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p>Ingen behandlinger er loggført for dette hinderet ennå.</p>
+        }
+
+    </div>
+
+    <div class="col-md-5">
+        <h4>Lokasjon</h4>
+        <div id="map" style="height: 400px; width: 100%;"></div>
+
+        <div id="lokasjonDataSkjult" data-lokasjon="@Model.Lokasjon" style="display: none;"></div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a asp-action="Index" class="btn btn-secondary">Tilbake til Hovedlisten</a>
+    <a asp-action="MineHindre" class="btn btn-secondary">Tilbake til Mine Hindre</a>
+</div>
+
+
+@section Scripts {
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        var lokasjonDataElement = document.getElementById('lokasjonDataSkjult');
+        var lokasjonGeoJsonString = lokasjonDataElement.getAttribute('data-lokasjon');
+
+        var map = L.map('map').setView([60.47, 8.46], 7);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        if (lokasjonGeoJsonString) {
+            var geoJsonData = JSON.parse(lokasjonGeoJsonString);
+            var geoJsonLayer = L.geoJSON(geoJsonData).addTo(map);
+            map.fitBounds(geoJsonLayer.getBounds());
+        } else {
+            map.setView([60.47, 8.46], 7);
+        }
+    </script>
+}

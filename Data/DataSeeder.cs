@@ -9,15 +9,16 @@ namespace NRLWebApp.Data
 {
     public static class DataSeeder
     {
-        
         public static async Task Initialize(IServiceProvider serviceProvider)
         {
             var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>(); 
 
             await SeedRolesAsync(roleManager);
             await SeedStatuserAsync(context);
             await SeedOrganisasjonerAsync(context);
+            await SeedUsersAsync(context, userManager); 
         }
 
         private static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
@@ -58,6 +59,78 @@ namespace NRLWebApp.Data
                     new Organisasjon { Navn = "Kartverket" } 
                 );
                 await context.SaveChangesAsync();
+            }
+        }
+
+        private static async Task SeedUsersAsync(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        {
+            string pilotEmail = "pilot@test.no";
+            if (await userManager.FindByEmailAsync(pilotEmail) == null)
+            {
+                var org = await context.Organisasjoner.FirstOrDefaultAsync(o => o.Navn == "Norsk Luftambulanse");
+
+                var user = new ApplicationUser
+                {
+                    UserName = pilotEmail,
+                    Email = pilotEmail,
+                    Fornavn = "Pilot",
+                    Etternavn = "Testbruker",
+                    OrganisasjonID = (org != null) ? org.OrganisasjonID : 1, 
+                    EmailConfirmed = true 
+                };
+
+                var result = await userManager.CreateAsync(user, "Passord!23");
+
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(user, "Pilot");
+                }
+            }
+
+            string regEmail = "registerforer@test.no";
+            if (await userManager.FindByEmailAsync(regEmail) == null)
+            {
+                var org = await context.Organisasjoner.FirstOrDefaultAsync(o => o.Navn == "Kartverket");
+
+                var user = new ApplicationUser
+                {
+                    UserName = regEmail,
+                    Email = regEmail,
+                    Fornavn = "Registerfører",
+                    Etternavn = "Testbruker",
+                    OrganisasjonID = (org != null) ? org.OrganisasjonID : 1,
+                    EmailConfirmed = true
+                };
+
+                var result = await userManager.CreateAsync(user, "Passord!23");
+
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(user, "Registerfører");
+                }
+            }
+
+            string adminEmail = "admin@test.no";
+            if (await userManager.FindByEmailAsync(adminEmail) == null)
+            {
+                var org = await context.Organisasjoner.FirstOrDefaultAsync(o => o.Navn == "Kartverket");
+
+                var user = new ApplicationUser
+                {
+                    UserName = adminEmail,
+                    Email = adminEmail,
+                    Fornavn = "Admin",
+                    Etternavn = "Testbruker",
+                    OrganisasjonID = (org != null) ? org.OrganisasjonID : 1,
+                    EmailConfirmed = true
+                };
+
+                var result = await userManager.CreateAsync(user, "Passord!23");
+
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(user, "Admin");
+                }
             }
         }
     }
