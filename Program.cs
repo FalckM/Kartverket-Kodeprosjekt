@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -22,17 +22,37 @@ builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
+// ERSTATT DEN GAMLE 'using (var scope...)' BLOKKEN MED DENNE:
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+    var logger = services.GetRequiredService<ILogger<Program>>();
+
     try
     {
-        await DataSeeder.Initialize(services);
+        // Steg 1: Prøv å migrere databasen
+        logger.LogInformation("Attempting to migrate database...");
+        var dbContext = services.GetRequiredService<ApplicationDbContext>();
+        await dbContext.Database.MigrateAsync();
+        logger.LogInformation("Database migration successful.");
     }
     catch (Exception ex)
     {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred seeding the DB.");
+        // Logg KUN migreringsfeil
+        logger.LogError(ex, "An error occurred while migrating the database.");
+    }
+
+    try
+    {
+        // Steg 2: Prøv å seede data (kun hvis migrering var vellykket)
+        logger.LogInformation("Attempting to seed data...");
+        await DataSeeder.Initialize(services);
+        logger.LogInformation("Data seeding successful.");
+    }
+    catch (Exception ex)
+    {
+        // Logg KUN seeder-feil
+        logger.LogError(ex, "An error occurred while seeding the DB.");
     }
 }
 

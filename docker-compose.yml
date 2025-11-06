@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Server=db;Port=3306;Database=nrl_db;User=root;Password=Passord!23
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mariadb:10.11 
+    ports:
+      - "3307:3306" 
+    environment:
+      - MARIADB_ROOT_PASSWORD=Passord!23
+      - MARIADB_DATABASE=nrl_db 
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysql", "-h", "localhost", "-u", "root", "-pPassord!23", "-D", "nrl_db", "-e", "SELECT 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s 
+
+volumes:
+  mariadb_data:
