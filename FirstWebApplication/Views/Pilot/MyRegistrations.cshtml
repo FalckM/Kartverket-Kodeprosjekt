@@ -1,105 +1,391 @@
-@using FirstWebApplication.Entities
-@model IEnumerable<ObstacleData>
+@model IEnumerable<FirstWebApplication.Entities.ObstacleData>
 
 @{
-    ViewData["Title"] = "Quick Registered Items";
+    ViewData["Title"] = "My Registrations";
+    
+    // Separate obstacles into categories
+    var incomplete = Model.Where(o => 
+        string.IsNullOrEmpty(o.ObstacleName) || 
+        o.ObstacleHeight == 0 || 
+        string.IsNullOrEmpty(o.ObstacleDescription)).ToList();
+    
+    var pending = Model.Where(o => 
+        !string.IsNullOrEmpty(o.ObstacleName) && 
+        o.ObstacleHeight > 0 && 
+        !string.IsNullOrEmpty(o.ObstacleDescription) &&
+        !o.IsApproved && 
+        !o.IsRejected).ToList();
+    
+    var approved = Model.Where(o => o.IsApproved).ToList();
+    var rejected = Model.Where(o => o.IsRejected).ToList();
 }
 
-<div class="container mx-auto p-6">
-    <div class="bg-white rounded-lg shadow-md p-6">
-        <div class="flex justify-between items-center mb-6">
-            <div>
-                <h1 class="text-3xl font-bold text-gray-900">Quick Registered Items</h1>
-                <p class="text-gray-600 mt-2">Complete the details for your quick-registered obstacles</p>
-            </div>
-            <a asp-action="RegisterType" class="py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition duration-150 ease-in-out">
-                + Register New Obstacle
-            </a>
+<div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="mb-6">
+        <h1 class="text-3xl font-bold text-gray-900">My Registrations</h1>
+        <p class="text-gray-600 mt-2">Manage your obstacle registrations</p>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded">
+            <p class="text-yellow-800 font-semibold">Incomplete</p>
+            <p class="text-3xl font-bold text-yellow-900">@incomplete.Count()</p>
+        </div>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+            <p class="text-blue-800 font-semibold">Pending Review</p>
+            <p class="text-3xl font-bold text-blue-900">@pending.Count()</p>
+        </div>
+        <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded">
+            <p class="text-green-800 font-semibold">Approved</p>
+            <p class="text-3xl font-bold text-green-900">@approved.Count()</p>
+        </div>
+        <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded">
+            <p class="text-red-800 font-semibold">Rejected</p>
+            <p class="text-3xl font-bold text-red-900">@rejected.Count()</p>
+        </div>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div class="flex flex-wrap gap-4 items-center">
+            <span class="font-semibold text-gray-700">Filter by Status:</span>
+            <button onclick="filterStatus('all')" id="filter-all" 
+                class="filter-btn px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition">
+                All (@Model.Count())
+            </button>
+            <button onclick="filterStatus('incomplete')" id="filter-incomplete"
+                class="filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition">
+                Incomplete (@incomplete.Count())
+            </button>
+            <button onclick="filterStatus('pending')" id="filter-pending"
+                class="filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition">
+                Pending (@pending.Count())
+            </button>
+            <button onclick="filterStatus('approved')" id="filter-approved"
+                class="filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition">
+                Approved (@approved.Count())
+            </button>
+            <button onclick="filterStatus('rejected')" id="filter-rejected"
+                class="filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition">
+                Rejected (@rejected.Count())
+            </button>
         </div>
 
-        @if (Model.Any())
-        {
-            <div class="overflow-x-auto">
-                <table class="min-w-full bg-white border border-gray-200 rounded-lg">
-                    <thead class="bg-gray-100">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">ID</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Registered Date</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Registered By</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200">
-                        @foreach (var item in Model)
-                        {
-                            <tr class="hover:bg-gray-50 transition duration-150">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#@item.Id</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                    @if (string.IsNullOrEmpty(item.ObstacleName))
-                                    {
-                                        <span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-semibold">Incomplete</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">Complete</span>
-                                    }
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">@item.RegisteredDate.ToString("dd.MM.yyyy HH:mm")</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                    @if (!string.IsNullOrEmpty(item.RegisteredBy))
-                                    {
-                                        @item.RegisteredBy
-                                    }
-                                    else
-                                    {
-                                        <span class="text-gray-400 italic">Unknown</span>
-                                    }
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    @if (string.IsNullOrEmpty(item.ObstacleName))
-                                    {
-                                        <a asp-action="CompleteQuickRegister" asp-route-id="@item.Id" class="text-blue-600 hover:text-blue-900 font-semibold mr-4">Complete Details</a>
-                                    }
-                                    else
-                                    {
-                                        <a asp-action="Overview" asp-route-id="@item.Id" class="text-blue-600 hover:text-blue-900 font-semibold mr-4">View Details</a>
-                                    }
-                                    <a asp-action="DeleteRegistration" asp-route-id="@item.Id"
-                                       onclick="return confirm('Are you sure you want to delete this item?');"
-                                       class="text-red-600 hover:text-red-900 font-semibold">Delete</a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+        <div id="sort-section" class="flex flex-wrap gap-4 items-center mt-4 pt-4 border-t">
+            <span class="font-semibold text-gray-700">Sort by:</span>
+            <button onclick="sortBy('date-new')" id="sort-date-new"
+                class="sort-btn px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition">
+                Newest First
+            </button>
+            <button onclick="sortBy('date-old')" id="sort-date-old"
+                class="sort-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition">
+                Oldest First
+            </button>
+            <button onclick="sortBy('name-asc')" id="sort-name-asc"
+                class="sort-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition">
+                Name (A-Z)
+            </button>
+            <button onclick="sortBy('height-desc')" id="sort-height-desc"
+                class="sort-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition">
+                Height (High-Low)
+            </button>
+        </div>
+    </div>
+
+    <!-- Section 1: Incomplete Registrations -->
+    <div class="incomplete-section mb-8" data-status="incomplete">
+        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-6 rounded-lg shadow-md">
+            <div class="flex justify-between items-center mb-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-yellow-900">Incomplete Quick Registrations</h2>
+                    <p class="text-yellow-700 mt-1">These registrations need to be completed with name, height, and description</p>
+                </div>
+                <span class="text-3xl font-bold text-yellow-900">@incomplete.Count()</span>
             </div>
 
-            <div class="mt-4 text-sm text-gray-600">
-                <p>Total quick registered items: <strong>@Model.Count()</strong></p>
-                <p class="mt-1">Incomplete items: <strong>@Model.Count(x => string.IsNullOrEmpty(x.ObstacleName))</strong></p>
+            @if (incomplete.Any())
+            {
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 incomplete-cards-container">
+                    @foreach (var obstacle in incomplete.OrderByDescending(o => o.RegisteredDate))
+                    {
+                        <div class="obstacle-card incomplete-card bg-white rounded-lg p-4 border-2 border-yellow-200 hover:shadow-lg transition"
+                             data-status="incomplete"
+                             data-date="@obstacle.RegisteredDate.Ticks"
+                             data-name=""
+                             data-height="0">
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-semibold">
+                                    Incomplete
+                                </span>
+                                <span class="text-gray-500 text-sm">ID: #@obstacle.Id</span>
+                            </div>
+
+                            <div class="space-y-2 mb-4">
+                                <p class="text-gray-600 text-sm">
+                                    <strong>Registered:</strong> @obstacle.RegisteredDate.ToString("dd.MM.yyyy HH:mm")
+                                </p>
+                                <p class="text-yellow-700 text-sm font-medium">
+                                    ⚠️ Missing: Name, Height, Description
+                                </p>
+                            </div>
+
+                            <div class="flex gap-2">
+                                <a asp-action="CompleteQuickRegister" asp-route-id="@obstacle.Id"
+                                   class="flex-1 px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg text-center font-medium transition">
+                                    Complete Now
+                                </a>
+                                <form asp-action="DeleteRegistration" asp-route-id="@obstacle.Id" method="post" class="flex-1"
+                                      onsubmit="return confirm('Delete this incomplete registration?');">
+                                    <button type="submit" 
+                                            class="w-full px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition">
+                                        Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <p class="text-yellow-700 text-center py-8">No incomplete registrations</p>
+            }
+        </div>
+    </div>
+
+    <!-- Section 2: Fully Registered (Pending, Approved, Rejected) -->
+    <div class="fully-registered-section bg-white rounded-lg shadow-md p-6">
+        <div class="mb-6">
+            <h2 class="text-2xl font-bold text-gray-900">Fully Registered Obstacles</h2>
+            <p class="text-gray-600 mt-1">Complete registrations with name, height, and description</p>
+        </div>
+
+        @if (pending.Any() || approved.Any() || rejected.Any())
+        {
+            <div class="space-y-4">
+                @foreach (var obstacle in Model.Where(o => !string.IsNullOrEmpty(o.ObstacleName)).OrderByDescending(o => o.RegisteredDate))
+                {
+                    var statusClass = obstacle.IsApproved ? "border-green-500 bg-green-50" : 
+                                     obstacle.IsRejected ? "border-red-500 bg-red-50" : 
+                                     "border-blue-500 bg-blue-50";
+                    var statusBadge = obstacle.IsApproved ? "bg-green-100 text-green-800" : 
+                                     obstacle.IsRejected ? "bg-red-100 text-red-800" : 
+                                     "bg-blue-100 text-blue-800";
+                    var statusText = obstacle.IsApproved ? "Approved" : 
+                                    obstacle.IsRejected ? "Rejected" : 
+                                    "Pending Review";
+                    var dataStatus = obstacle.IsApproved ? "approved" : 
+                                    obstacle.IsRejected ? "rejected" : 
+                                    "pending";
+
+                    <div class="obstacle-card border-l-4 @statusClass rounded-lg p-6 hover:shadow-lg transition"
+                         data-status="@dataStatus"
+                         data-date="@obstacle.RegisteredDate.Ticks"
+                         data-name="@obstacle.ObstacleName?.ToLower()"
+                         data-height="@obstacle.ObstacleHeight">
+                        <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                            <!-- Left: Obstacle Info -->
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <h3 class="text-xl font-bold text-gray-900">@obstacle.ObstacleName</h3>
+                                    <span class="px-3 py-1 @statusBadge rounded-full text-sm font-semibold">
+                                        @statusText
+                                    </span>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                                    <div>
+                                        <span class="text-gray-600">Height:</span>
+                                        <span class="font-semibold text-gray-900">@obstacle.ObstacleHeight m</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-600">Registered:</span>
+                                        <span class="font-semibold text-gray-900">@obstacle.RegisteredDate.ToString("dd.MM.yyyy HH:mm")</span>
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <span class="text-gray-600">Description:</span>
+                                        <p class="text-gray-900 mt-1">@obstacle.ObstacleDescription</p>
+                                    </div>
+                                </div>
+
+                                @if (obstacle.IsApproved && !string.IsNullOrEmpty(obstacle.ApprovedBy))
+                                {
+                                    <div class="mt-3 p-3 bg-green-100 rounded-lg text-sm">
+                                        <p class="text-green-800">
+                                            <strong>✓ Approved by:</strong> @obstacle.ApprovedBy 
+                                            on @obstacle.ApprovedDate?.ToString("dd.MM.yyyy HH:mm")
+                                        </p>
+                                        @if (!string.IsNullOrEmpty(obstacle.ApprovalComments))
+                                        {
+                                            <p class="text-green-700 mt-1">
+                                                <strong>Comments:</strong> @obstacle.ApprovalComments
+                                            </p>
+                                        }
+                                    </div>
+                                }
+                                else if (obstacle.IsRejected && !string.IsNullOrEmpty(obstacle.RejectedBy))
+                                {
+                                    <div class="mt-3 p-3 bg-red-100 rounded-lg text-sm">
+                                        <p class="text-red-800">
+                                            <strong>✗ Rejected by:</strong> @obstacle.RejectedBy 
+                                            on @obstacle.RejectedDate?.ToString("dd.MM.yyyy HH:mm")
+                                        </p>
+                                        <p class="text-red-700 mt-1">
+                                            <strong>Reason:</strong> @obstacle.RejectionReason
+                                        </p>
+                                    </div>
+                                }
+                            </div>
+
+                            <!-- Right: Actions -->
+                            <div class="flex flex-col gap-2 md:w-48">
+                                <a asp-action="Overview" asp-route-id="@obstacle.Id"
+                                   class="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg text-center font-medium transition">
+                                    View Details
+                                </a>
+                                @if (!obstacle.IsApproved && !obstacle.IsRejected)
+                                {
+                                    <form asp-action="DeleteRegistration" asp-route-id="@obstacle.Id" method="post"
+                                          onsubmit="return confirm('Delete this registration? This cannot be undone.');">
+                                        <button type="submit" 
+                                                class="w-full px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition">
+                                            Delete
+                                        </button>
+                                    </form>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
         }
         else
         {
             <div class="text-center py-12">
-                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                 </svg>
-                <h3 class="mt-2 text-lg font-medium text-gray-900">No quick registered items yet</h3>
-                <p class="mt-1 text-sm text-gray-500">Get started by quick registering your first obstacle location.</p>
-                <div class="mt-6">
-                    <a asp-action="QuickRegister" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
-                        Quick Register Now
-                    </a>
-                </div>
+                <h3 class="text-xl font-medium text-gray-900 mb-2">No Fully Registered Obstacles Yet</h3>
+                <p class="text-gray-600 mb-6">Complete your quick registrations or create new full registrations</p>
             </div>
         }
+    </div>
 
-        <div class="mt-6">
-            <a asp-controller="Home" asp-action="Index" class="text-gray-600 hover:text-gray-900 font-medium">
-                ← Back to Home
-            </a>
-        </div>
+    <!-- Quick Action -->
+    <div class="mt-8 text-center">
+        <a asp-action="RegisterType" 
+           class="inline-flex items-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-lg transition">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            Register New Obstacle
+        </a>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        let currentFilter = 'all';
+        let currentSort = 'date-new';
+
+        // Filter by status
+        function filterStatus(status) {
+            currentFilter = status;
+            
+            // Update button styles
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('bg-indigo-600', 'text-white');
+                btn.classList.add('bg-gray-200', 'text-gray-700');
+            });
+            document.getElementById('filter-' + status).classList.remove('bg-gray-200', 'text-gray-700');
+            document.getElementById('filter-' + status).classList.add('bg-indigo-600', 'text-white');
+
+            const incompleteSection = document.querySelector('.incomplete-section');
+            const fullyRegisteredSection = document.querySelector('.fully-registered-section');
+            const fullyRegisteredCards = document.querySelectorAll('.obstacle-card:not(.incomplete-card)');
+            const incompleteCards = document.querySelectorAll('.incomplete-card');
+            const sortSection = document.getElementById('sort-section');
+            
+            // Show/hide elements based on filter
+            if (status === 'all') {
+                // Show everything
+                incompleteSection.style.display = '';
+                fullyRegisteredSection.style.display = '';
+                incompleteCards.forEach(card => card.style.display = '');
+                fullyRegisteredCards.forEach(card => card.style.display = '');
+                sortSection.style.display = ''; // Show sort section
+            } else if (status === 'incomplete') {
+                // Show only incomplete section and its cards
+                incompleteSection.style.display = '';
+                fullyRegisteredSection.style.display = 'none';
+                incompleteCards.forEach(card => card.style.display = '');
+                sortSection.style.display = 'none'; // Hide sort section (no data to sort)
+            } else {
+                // Show only fully registered section with specific status
+                incompleteSection.style.display = 'none';
+                fullyRegisteredSection.style.display = '';
+                fullyRegisteredCards.forEach(card => {
+                    if (card.dataset.status === status) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                sortSection.style.display = ''; // Show sort section
+            }
+
+            applySorting();
+        }
+
+        // Sort obstacles
+        function sortBy(sortType) {
+            currentSort = sortType;
+
+            // Update button styles
+            document.querySelectorAll('.sort-btn').forEach(btn => {
+                btn.classList.remove('bg-indigo-600', 'text-white');
+                btn.classList.add('bg-gray-200', 'text-gray-700');
+            });
+            document.getElementById('sort-' + sortType).classList.remove('bg-gray-200', 'text-gray-700');
+            document.getElementById('sort-' + sortType).classList.add('bg-indigo-600', 'text-white');
+
+            applySorting();
+        }
+
+        function applySorting() {
+            const containers = document.querySelectorAll('.space-y-4');
+            
+            containers.forEach(container => {
+                const cards = Array.from(container.querySelectorAll('.obstacle-card')).filter(card => {
+                    return card.style.display !== 'none';
+                });
+
+                cards.sort((a, b) => {
+                    switch(currentSort) {
+                        case 'date-new':
+                            return parseInt(b.dataset.date) - parseInt(a.dataset.date);
+                        case 'date-old':
+                            return parseInt(a.dataset.date) - parseInt(b.dataset.date);
+                        case 'name-asc':
+                            const nameA = a.dataset.name || '';
+                            const nameB = b.dataset.name || '';
+                            return nameA.localeCompare(nameB);
+                        case 'height-desc':
+                            return parseFloat(b.dataset.height) - parseFloat(a.dataset.height);
+                        default:
+                            return 0;
+                    }
+                });
+
+                cards.forEach(card => container.appendChild(card));
+            });
+        }
+
+        // Initialize with default filter
+        window.addEventListener('DOMContentLoaded', () => {
+            filterStatus('all');
+        });
+    </script>
+}

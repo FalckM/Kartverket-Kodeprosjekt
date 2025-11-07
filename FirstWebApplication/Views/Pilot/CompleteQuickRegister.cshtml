@@ -1,62 +1,72 @@
-@using FirstWebApplication.Entities
-@model ObstacleData
+@model FirstWebApplication.Entities.ObstacleData
 
 @{
-    ViewData["Title"] = "Complete Quick Registration";
+    ViewData["Title"] = "Complete Your Registration";
 }
+
+<style>
+    #mapid {
+        height: 450px;
+        width: 100%;
+    }
+</style>
 
 <div class="max-w-4xl mx-auto px-4 py-8 bg-white rounded-lg shadow-lg">
     <h1 class="text-3xl font-bold mb-2 text-center text-gray-800">Complete Your Registration</h1>
-    <p class="text-gray-600 mb-6 text-center">Add details to your quick-registered obstacle</p>
+    <p class="text-gray-600 mb-6 text-center">Fill in the missing details for obstacle #@Model.Id</p>
 
-    <div class="bg-blue-50 border-l-4 border-blue-600 p-4 mb-6">
-        <p class="text-sm text-blue-800">
-            <strong>Quick Registration #@Model.Id</strong><br>
-            Registered on: @Model.RegisteredDate.ToString("dd.MM.yyyy HH:mm")<br>
-            Location has been saved. Please fill in the remaining details below.
-        </p>
-    </div>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700">
+            @TempData["SuccessMessage"]
+        </div>
+    }
 
-    <form asp-action="SaveCompleteQuickRegister" asp-controller="Obstacle" method="post" class="space-y-6">
-        <input type="hidden" asp-for="Id" />
-        <input type="hidden" asp-for="ObstacleGeometry" />
-        <input type="hidden" asp-for="RegisteredDate" />
-        <input type="hidden" asp-for="RegisteredBy" />
-
+    <form asp-action="SaveCompleteQuickRegister" asp-route-id="@Model.Id" method="post" class="space-y-6">
+        
+        <!-- Name -->
         <div>
-            <label asp-for="ObstacleName" class="block text-sm font-medium mb-1 text-gray-700">Obstacle Name *</label>
-            <input asp-for="ObstacleName" placeholder="e.g., Radio Tower, Flagpole"
+            <label asp-for="ObstacleName" class="block text-sm font-medium mb-1 text-gray-700">Name:</label>
+            <input asp-for="ObstacleName" placeholder="E.g., Radio Tower"
                    class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition duration-150 ease-in-out" />
-            <span asp-validation-for="ObstacleName" class="text-base text-red-600 font-mono"></span>
+            <span asp-validation-for="ObstacleName" class="text-sm text-red-600"></span>
         </div>
 
+        <!-- Height -->
         <div>
-            <label asp-for="ObstacleHeight" class="block text-sm font-medium mb-1 text-gray-700">Height in meters *</label>
-            <input asp-for="ObstacleHeight" type="number" step="0.1" placeholder="e.g., 15.5"
+            <label asp-for="ObstacleHeight" class="block text-sm font-medium mb-1 text-gray-700">Height in meters:</label>
+            <input asp-for="ObstacleHeight" type="number" step="0.1" placeholder="E.g., 50"
                    class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition duration-150 ease-in-out" />
-            <span asp-validation-for="ObstacleHeight" class="text-base text-red-600 font-mono"></span>
+            <span asp-validation-for="ObstacleHeight" class="text-sm text-red-600"></span>
         </div>
 
+        <!-- Description -->
         <div>
-            <label asp-for="ObstacleDescription" class="block text-sm font-medium mb-1 text-gray-700">Description *</label>
-            <textarea asp-for="ObstacleDescription" rows="4" placeholder="Provide detailed information about the obstacle..."
+            <label asp-for="ObstacleDescription" class="block text-sm font-medium mb-1 text-gray-700">Description:</label>
+            <textarea asp-for="ObstacleDescription" rows="4" placeholder="E.g., Red and white striped tower near highway"
                       class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition duration-150 ease-in-out"></textarea>
-            <span asp-validation-for="ObstacleDescription" class="text-base text-red-600 font-mono"></span>
+            <span asp-validation-for="ObstacleDescription" class="text-sm text-red-600"></span>
         </div>
 
+        <!-- Map (Read-only - showing existing location) -->
         <div>
-            <label class="block text-sm font-medium mb-1 text-gray-700">Location Preview</label>
-            <div id="location-preview-map" class="w-full h-80 rounded-md border border-gray-300"></div>
+            <label class="block text-sm font-medium mb-1 text-gray-700">Location (Already Saved):</label>
+            <div id="mapid" class="w-full h-80 rounded-md border border-gray-300"></div>
+            <p class="text-sm text-gray-600 mt-2">
+                ℹ️ <strong>Note:</strong> The location was saved during quick registration and cannot be changed here.
+            </p>
         </div>
 
+        <!-- Buttons -->
         <div class="flex gap-4">
             <button type="submit"
-                    class="flex-1 inline-flex justify-center items-center rounded-md bg-blue-600 px-4 py-2 text-white font-medium hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition duration-150 ease-in-out">
-                Save Complete Details
+                class="flex-1 inline-flex justify-center items-center rounded-md bg-blue-600 px-4 py-2 text-white font-medium hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition duration-150 ease-in-out">
+                💾 Save Complete Details
             </button>
-            <a asp-action="QuickRegisteredItems" 
+            
+            <a asp-action="MyRegistrations"
                class="flex-1 inline-flex justify-center items-center rounded-md bg-gray-600 px-4 py-2 text-white font-medium hover:bg-gray-700 transition duration-150 ease-in-out">
-                Cancel
+                ❌ Cancel
             </a>
         </div>
     </form>
@@ -64,43 +74,58 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Get the geometry from the hidden field
-            var geoJsonString = '@Html.Raw(Model.ObstacleGeometry)';
-            
+            const geoJsonString = '@Html.Raw(Model.ObstacleGeometry)';
+
             if (geoJsonString) {
                 try {
-                    var geoJsonData = JSON.parse(geoJsonString);
-                    
+                    const geoJsonData = JSON.parse(geoJsonString);
+
                     // Initialize map
-                    var map = L.map('location-preview-map').setView([0, 0], 2);
+                    const map = L.map('mapid').setView([60.4720, 8.4689], 5);
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     }).addTo(map);
-                    
-                    // Add the geometry to the map
-                    var obstacleLayer = L.geoJSON(geoJsonData, {
-                        pointToLayer: function (feature, latlng) {
-                            return L.marker(latlng, {
-                                icon: L.icon({
-                                    iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-                                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-                                    iconSize: [25, 41],
-                                    iconAnchor: [12, 41],
-                                    popupAnchor: [1, -34],
-                                    shadowSize: [41, 41]
-                                })
-                            });
+
+                    // Add the existing geometry to the map (read-only)
+                    const obstacleLayer = L.geoJSON(geoJsonData, {
+                        style: {
+                            color: '#3b82f6',
+                            weight: 4,
+                            opacity: 0.8
+                        },
+                        pointToLayer: function(feature, latlng) {
+                            return L.marker(latlng);
                         }
                     }).addTo(map);
-                    
-                    // Fit map to obstacle bounds
-                    map.fitBounds(obstacleLayer.getBounds());
-                    
+
+                    // Fit map to show the obstacle
+                    if (geoJsonData.geometry.type === 'Point') {
+                        const coords = geoJsonData.geometry.coordinates;
+                        map.setView([coords[1], coords[0]], 13);
+                    } else {
+                        map.fitBounds(obstacleLayer.getBounds());
+                    }
+
+                    // Disable map interaction (read-only)
+                    map.dragging.disable();
+                    map.touchZoom.disable();
+                    map.doubleClickZoom.disable();
+                    map.scrollWheelZoom.disable();
+                    map.boxZoom.disable();
+                    map.keyboard.disable();
+                    if (map.tap) map.tap.disable();
+
+                    // Add read-only message on map
+                    L.control.attribution({ prefix: '🔒 Location is locked' }).addTo(map);
+
                 } catch (e) {
-                    console.error("Failed to parse GeoJSON:", e);
+                    console.error("Failed to parse GeoJSON data:", e);
+                    document.getElementById('mapid').innerHTML = 
+                        '<div class="flex items-center justify-center h-full text-red-600">' +
+                        '<p>Error loading map. Please contact support.</p>' +
+                        '</div>';
                 }
             }
         });
