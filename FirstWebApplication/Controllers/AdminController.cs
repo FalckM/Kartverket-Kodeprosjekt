@@ -115,7 +115,7 @@ namespace FirstWebApplication.Controllers
                 TempData["Error"] = "Failed to assign role";
             }
 
-            return RedirectToAction("ManageUser", new { id = userId });
+            return RedirectToAction("AdminManageUser", new { id = userId });
         }
 
         // POST: /Admin/RemoveRole
@@ -149,7 +149,7 @@ namespace FirstWebApplication.Controllers
                 TempData["Error"] = "Failed to remove role";
             }
 
-            return RedirectToAction("ManageUser", new { id = userId });
+            return RedirectToAction("AdminManageUser", new { id = userId });
         }
 
         // POST: /Admin/DeleteUser
@@ -176,7 +176,7 @@ namespace FirstWebApplication.Controllers
                 if (admins.Count <= 1)
                 {
                     TempData["Error"] = "Cannot delete the last Admin user!";
-                    return RedirectToAction("Users");
+                    return RedirectToAction("AdminUsers");
                 }
             }
 
@@ -191,7 +191,7 @@ namespace FirstWebApplication.Controllers
                 TempData["Error"] = "Failed to delete user";
             }
 
-            return RedirectToAction("Users");
+            return RedirectToAction("AdminUsers");
         }
 
         // GET: /Admin/AdminStatistics

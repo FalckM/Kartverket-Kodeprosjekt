@@ -1,4 +1,4 @@
-@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityUser>
+@model List<Microsoft.AspNetCore.Identity.IdentityUser>
 
 @{
     ViewData["Title"] = "Manage Users";
@@ -11,7 +11,7 @@
             <h1 class="text-3xl font-bold text-gray-900">Manage Users</h1>
             <p class="text-gray-600 mt-2">View and manage user accounts and roles</p>
         </div>
-        <a asp-action="Dashboard" class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition">
+        <a asp-action="AdminDashboard" class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition">
             ← Back to Dashboard
         </a>
     </div>
@@ -30,38 +30,46 @@
         </div>
     }
 
-    @if (Model.Any())
+    @if (Model != null && Model.Any())
     {
         <div class="bg-white rounded-lg shadow-md overflow-hidden">
             <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-100">
+                <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Email</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Roles</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Actions</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Email
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Roles
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Actions
+                        </th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @foreach (var user in Model)
                     {
-                        var roles = userRoles != null && userRoles.ContainsKey(user.Id) ? userRoles[user.Id] : new List<string>();
-                        
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                @user.Email
-                                @if (user.Email == User.Identity?.Name)
-                                {
-                                    <span class="ml-2 px-2 py-1 text-xs bg-indigo-100 text-indigo-800 rounded">You</span>
-                                }
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                @if (roles.Any())
-                                {
-                                    <div class="flex gap-2 flex-wrap">
-                                        @foreach (var role in roles)
+                        <tr class="hover:bg-gray-50 transition">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="text-sm font-medium text-gray-900">
+                                        @user.Email
+                                        @if (user.Email == User.Identity?.Name)
                                         {
-                                            <span class="px-2 py-1 text-xs font-semibold rounded
-                                                @(role == "Admin" ? "bg-purple-100 text-purple-800" : 
+                                            <span class="ml-2 px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded">You</span>
+                                        }
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                @if (userRoles != null && userRoles.ContainsKey(user.Id) && userRoles[user.Id].Any())
+                                {
+                                    <div class="flex gap-2">
+                                        @foreach (var role in userRoles[user.Id])
+                                        {
+                                            <span class="px-2 py-1 text-xs rounded-full @(role == "Admin" ? 
+                                                  "bg-purple-100 text-purple-800" : 
                                                   role == "Registerfører" ? "bg-green-100 text-green-800" : 
                                                   "bg-blue-100 text-blue-800")">
                                                 @role
@@ -75,7 +83,7 @@
                                 }
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <a asp-action="ManageUser" asp-route-id="@user.Id" 
+                                <a asp-action="AdminManageUser" asp-route-id="@user.Id" 
                                    class="text-indigo-600 hover:text-indigo-800 font-medium mr-4">
                                     Manage Roles
                                 </a>
