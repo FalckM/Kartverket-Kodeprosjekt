@@ -20,9 +20,10 @@ namespace FirstWebApplication.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
-            // If user is already logged in, redirect them to the registration type selection
+            // If user is already logged in, redirect them based on their role
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
+                // Check role and send to correct dashboard (same logic as Login)
                 if (User.IsInRole("Admin"))
                 {
                     return RedirectToAction("AdminDashboard", "Admin");
@@ -73,8 +74,8 @@ namespace FirstWebApplication.Controllers
         }
 
         // GET: /Home/Privacy
-        // Privacy page - only accessible to logged-in users
-        [Authorize]
+        // Privacy page - accessible to everyone (AllowAnonymous)
+        [AllowAnonymous]
         public IActionResult Privacy()
         {
             return View();
