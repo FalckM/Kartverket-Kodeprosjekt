@@ -45,8 +45,11 @@
             <dt class="col-sm-4">Rapportert dato:</dt>
             <dd class="col-sm-8">@Model.Tidsstempel.ToString("g")</dd>
 
-            <dt class="col-sm-4">Navn:</dt>
-            <dd class="col-sm-8">@Model.Navn</dd>
+            <div class="form-group">
+                <label asp-for="HinderTypeID" class="control-label"></label>
+                <select asp-for="HinderTypeID" class="form-control" asp-items="@ViewBag.HinderTypeID"></select>
+                <span asp-validation-for="HinderTypeID" class="text-danger"></span>
+            </div>
 
             <dt class="col-sm-4">Høyde (m):</dt>
             <dd class="col-sm-8">@Model.Hoyde</dd>

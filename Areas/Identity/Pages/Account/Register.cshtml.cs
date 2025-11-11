@@ -128,7 +128,17 @@ namespace NRLWebApp.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    await _userManager.AddToRoleAsync(user, "Pilot"); 
+                    var organisasjon = await _context.Organisasjoner.FindAsync(Input.OrganisasjonID);
+
+                    if (organisasjon != null && organisasjon.Navn == "Kartverket")
+                    {
+                        _logger.LogInformation("Bruker registrert med Kartverket. Venter på admin-godkjenning for rolle.");
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, "Pilot");
+                        _logger.LogInformation("Bruker tildelt 'Pilot'-rollen.");
+                    }
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

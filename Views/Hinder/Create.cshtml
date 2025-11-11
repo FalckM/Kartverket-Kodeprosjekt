@@ -12,10 +12,12 @@
 
             <div asp-validation-summary="All" class="text-danger"></div>
 
-            <div class="form-group mb-3">
-                <label asp-for="Navn" class="control-label"></label>
-                <input asp-for="Navn" class="form-control" />
-                <span asp-validation-for="Navn" class="text-danger"></span>
+            <div class="form-group">
+                <label asp-for="HinderTypeID" class="control-label"></label>
+                <select asp-for="HinderTypeID" class="form-control" asp-items="@ViewBag.HinderTypeID">
+                    <option value="">-- Velg Type --</option>
+                </select>
+                <span asp-validation-for="HinderTypeID" class="text-danger"></span>
             </div>
 
             <div class="form-group mb-3">

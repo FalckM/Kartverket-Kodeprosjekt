@@ -1,0 +1,69 @@
+﻿@model IEnumerable<NRLWebApp.Models.ViewModels.UserViewModel>
+
+@{
+    ViewData["Title"] = "Brukeradministrasjon";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>Her kan du administrere roller for alle brukere i systemet.</p>
+
+<table class="table table-striped table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th>E-post</th>
+            <th>Navn</th>
+            <th>Organisasjon</th>
+            <th>Roller</th>
+            <th>Handlinger</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td>@user.Fornavn @user.Etternavn</td>
+
+                @if (user.OrganisasjonNavn == "Kartverket" && !user.Roller.Any())
+                {
+                    <td class="table-info"><strong>@user.OrganisasjonNavn (Venter)</strong></td>
+                }
+                else
+                {
+                    <td>@user.OrganisasjonNavn</td>
+                }
+
+                <td>@string.Join(", ", user.Roller)</td>
+
+                <td>
+                    <form method="post" style="display: inline-block;">
+                        <input type="hidden" name="userId" value="@user.UserId" />
+                        <input type="hidden" name="roleName" value="Registerfører" />
+                        @if (user.Roller.Contains("Registerfører"))
+                        {
+                            <button type="submit" asp-action="RemoveRole" class="btn btn-warning btn-sm" title="Fjern Registerfører-rolle">Fjern Reg.</button>
+                        }
+                        else
+                        {
+                            <button type="submit" asp-action="AssignRole" class="btn btn-success btn-sm" title="Gi Registerfører-rolle">Gi Reg.</button>
+                        }
+                    </form>
+
+                    <form method="post" style="display: inline-block;">
+                        <input type="hidden" name="userId" value="@user.UserId" />
+                        <input type="hidden" name="roleName" value="Admin" />
+                        @if (user.Roller.Contains("Admin"))
+                        {
+                            <button type="submit" asp-action="RemoveRole" class="btn btn-danger btn-sm" title="Fjern Admin-rolle">Fjern Adm.</button>
+                        }
+                        else
+                        {
+                            <button type="submit" asp-action="AssignRole" class="btn btn-info btn-sm" title="Gi Admin-rolle">Gi Adm.</button>
+                        }
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

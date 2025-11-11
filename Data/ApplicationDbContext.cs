@@ -14,6 +14,7 @@ namespace NRLWebApp.Data
         public DbSet<Status> Statuser { get; set; }
         public DbSet<Hinder> Hindre { get; set; }
         public DbSet<Behandling> Behandlinger { get; set; }
+        public DbSet<HinderType> HinderTyper { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

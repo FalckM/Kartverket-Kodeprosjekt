@@ -24,7 +24,8 @@ namespace NRLWebApp.Controllers
         public async Task<IActionResult> Index()
         {
             var hindre = await _context.Hindre
-                .Include(h => h.Status) 
+                .Include(h => h.Status)
+                .Include(h => h.HinderType)
                 .Include(h => h.ApplicationUser) 
                     .ThenInclude(u => u.Organisasjon) 
                 .ToListAsync();
@@ -43,7 +44,8 @@ namespace NRLWebApp.Controllers
 
             var mineHindre = await _context.Hindre
                 .Where(h => h.ApplicationUserId == user.Id) 
-                .Include(h => h.Status) 
+                .Include(h => h.Status)
+                .Include(h => h.HinderType)
                 .OrderByDescending(h => h.Tidsstempel) 
                 .ToListAsync();
 
@@ -70,6 +72,8 @@ namespace NRLWebApp.Controllers
             }
 
             ViewData["StatusID"] = new SelectList(_context.Statuser, "StatusID", "Navn", hinder.StatusID);
+
+            ViewBag.HinderTypeID = new SelectList(_context.HinderTyper, "HinderTypeID", "Navn", hinder.HinderTypeID);
 
             return View(hinder);
         }
@@ -161,7 +165,8 @@ namespace NRLWebApp.Controllers
             }
 
             var hinder = await _context.Hindre
-                .Include(h => h.Status) 
+                .Include(h => h.Status)
+                .Include(h => h.HinderType)
                 .Include(h => h.ApplicationUser) 
                     .ThenInclude(u => u.Organisasjon) 
                 .Include(h => h.Behandlinger) 
@@ -176,16 +181,17 @@ namespace NRLWebApp.Controllers
             return View(hinder);
         }
 
-        [Authorize(Roles = "Pilot")] 
+        [Authorize(Roles = "Pilot")]
         public IActionResult Create()
         {
+            ViewBag.HinderTypeID = new SelectList(_context.HinderTyper, "HinderTypeID", "Navn");
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken] 
         [Authorize(Roles = "Pilot")]
-        public async Task<IActionResult> Create([Bind("Navn,Hoyde,Beskrivelse,Lokasjon")] Hinder hinder)
+        public async Task<IActionResult> Create([Bind("HinderTypeID,Hoyde,Beskrivelse,Lokasjon")] Hinder hinder)
         {
             try
             {
@@ -195,6 +201,7 @@ namespace NRLWebApp.Controllers
                 ModelState.Remove("ApplicationUser");
                 ModelState.Remove("Status");
                 ModelState.Remove("Behandlinger");
+                ModelState.Remove("HinderType");
 
                 if (ModelState.IsValid)
                 {
@@ -225,9 +232,15 @@ namespace NRLWebApp.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "En feil oppstod under lagring av hinderet.");
+                ModelState.AddModelError("", "DEBUG-FEIL: " + ex.Message);
+
+                if (ex.InnerException != null)
+                {
+                    ModelState.AddModelError("", "INDRE FEIL: " + ex.InnerException.Message);
+                }
             }
 
+            ViewBag.HinderTypeID = new SelectList(_context.HinderTyper, "HinderTypeID", "Navn", hinder.HinderTypeID);
 
             return View(hinder);
         }

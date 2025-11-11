@@ -8,11 +8,12 @@ namespace NRLWebApp.Models.Entities
     public class Hinder
     {
         [Key]
-        public int HinderID { get; set; } 
+        public int HinderID { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        public string Navn { get; set; }
+        [Display(Name = "Type")]
+        public int HinderTypeID { get; set; }
+        [ForeignKey("HinderTypeID")]
+        public virtual HinderType HinderType { get; set; }
 
         [Column(TypeName = "decimal(8, 2)")]
         public decimal Hoyde { get; set; }

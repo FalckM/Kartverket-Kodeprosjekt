@@ -20,8 +20,8 @@
             <dt class="col-sm-4">Rapportert dato:</dt>
             <dd class="col-sm-8">@Model.Tidsstempel.ToString("g")</dd>
 
-            <dt class="col-sm-4">Navn:</dt>
-            <dd class="col-sm-8">@Model.Navn</dd>
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.HinderTypeID)</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.HinderType.Navn)</dd>
 
             <dt class="col-sm-4">Høyde (m):</dt>
             <dd class="col-sm-8">@Model.Hoyde</dd>

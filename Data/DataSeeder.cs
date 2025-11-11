@@ -18,6 +18,7 @@ namespace NRLWebApp.Data
             await SeedRolesAsync(roleManager);
             await SeedStatuserAsync(context);
             await SeedOrganisasjonerAsync(context);
+            await SeedHinderTyperAsync(context);
             await SeedUsersAsync(context, userManager); 
         }
 
@@ -57,6 +58,21 @@ namespace NRLWebApp.Data
                     new Organisasjon { Navn = "Luftforsvaret" },
                     new Organisasjon { Navn = "Politiets helikoptertjeneste" },
                     new Organisasjon { Navn = "Kartverket" } 
+                );
+                await context.SaveChangesAsync();
+            }
+        }
+
+        private static async Task SeedHinderTyperAsync(ApplicationDbContext context)
+        {
+            if (!context.HinderTyper.Any())
+            {
+                context.HinderTyper.AddRange(
+                    new HinderType { Navn = "Mast", Beskrivelse = "Mast, stolpe, tårn eller lignende vertikal struktur." },
+                    new HinderType { Navn = "Linjespenn", Beskrivelse = "Strømledning, kabel, vaier eller lignende spent mellom to punkter." },
+                    new HinderType { Navn = "Bygning", Beskrivelse = "Byggverk, hus eller annen større struktur." },
+                    new HinderType { Navn = "Kran", Beskrivelse = "Byggekran, mobilkran eller lignende." },
+                    new HinderType { Navn = "Annet", Beskrivelse = "Andre typer hindre som ikke passer de øvrige kategoriene." }
                 );
                 await context.SaveChangesAsync();
             }
