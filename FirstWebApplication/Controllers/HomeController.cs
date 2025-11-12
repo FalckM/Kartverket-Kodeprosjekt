@@ -81,7 +81,7 @@ namespace FirstWebApplication.Controllers
             return View();
         }
 
-        // Error page - accessible without login
+        // Error page - accessible without loginn
         [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
