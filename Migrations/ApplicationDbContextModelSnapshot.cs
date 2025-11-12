@@ -282,10 +282,10 @@ namespace NRLWebApp.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
-                    b.Property<int>("HinderTypeID")
+                    b.Property<int?>("HinderTypeID")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Hoyde")
+                    b.Property<decimal?>("Hoyde")
                         .HasColumnType("decimal(8, 2)");
 
                     b.Property<string>("Lokasjon")
@@ -459,9 +459,7 @@ namespace NRLWebApp.Migrations
 
                     b.HasOne("NRLWebApp.Models.Entities.HinderType", "HinderType")
                         .WithMany("Hindre")
-                        .HasForeignKey("HinderTypeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HinderTypeID");
 
                     b.HasOne("NRLWebApp.Models.Entities.Status", "Status")
                         .WithMany("Hindre")

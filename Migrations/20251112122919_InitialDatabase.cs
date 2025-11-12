@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace NRLWebApp.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreateMariaDB : Migration
+    public partial class InitialDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -31,6 +31,23 @@ namespace NRLWebApp.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "HinderTyper",
+                columns: table => new
+                {
+                    HinderTypeID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Navn = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Beskrivelse = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HinderTyper", x => x.HinderTypeID);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -243,9 +260,8 @@ namespace NRLWebApp.Migrations
                 {
                     HinderID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Navn = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Hoyde = table.Column<decimal>(type: "decimal(8,2)", nullable: false),
+                    HinderTypeID = table.Column<int>(type: "int", nullable: true),
+                    Hoyde = table.Column<decimal>(type: "decimal(8,2)", nullable: true),
                     Beskrivelse = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Lokasjon = table.Column<string>(type: "longtext", nullable: false)
@@ -264,6 +280,11 @@ namespace NRLWebApp.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Hindre_HinderTyper_HinderTypeID",
+                        column: x => x.HinderTypeID,
+                        principalTable: "HinderTyper",
+                        principalColumn: "HinderTypeID");
                     table.ForeignKey(
                         name: "FK_Hindre_Statuser_StatusID",
                         column: x => x.StatusID,
@@ -362,6 +383,11 @@ namespace NRLWebApp.Migrations
                 column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Hindre_HinderTypeID",
+                table: "Hindre",
+                column: "HinderTypeID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Hindre_StatusID",
                 table: "Hindre",
                 column: "StatusID");
@@ -396,6 +422,9 @@ namespace NRLWebApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "HinderTyper");
 
             migrationBuilder.DropTable(
                 name: "Statuser");

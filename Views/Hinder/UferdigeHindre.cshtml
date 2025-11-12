@@ -1,0 +1,54 @@
+﻿@model IEnumerable<NRLWebApp.Models.Entities.Hinder>
+
+@{
+    ViewData["Title"] = "Mine Uferdige Hindre";
+}
+
+<h1>Mine Uferdige Hindre</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.HinderType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Hoyde)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Lokasjon)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tidsstempel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HinderType.Navn)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Hoyde)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Lokasjon)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tidsstempel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status.Navn)
+                </td>
+                <td>
+                    <a asp-action="PilotEdit" asp-route-id="@item.HinderID">Fullfør registrering</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

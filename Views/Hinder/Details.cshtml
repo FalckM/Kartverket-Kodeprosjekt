@@ -20,8 +20,8 @@
             <dt class="col-sm-4">Rapportert dato:</dt>
             <dd class="col-sm-8">@Model.Tidsstempel.ToString("g")</dd>
 
-            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.HinderTypeID)</dt>
-            <dd class="col-sm-10">@Html.DisplayFor(model => model.HinderType.Navn)</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.HinderTypeID)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.HinderType.Navn)</dd>
 
             <dt class="col-sm-4">Høyde (m):</dt>
             <dd class="col-sm-8">@Model.Hoyde</dd>
@@ -74,24 +74,26 @@
 
 
 @section Scripts {
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""></script>
 
     <script>
-        var lokasjonDataElement = document.getElementById('lokasjonDataSkjult');
-        var lokasjonGeoJsonString = lokasjonDataElement.getAttribute('data-lokasjon');
+        var lokasjonStreng = "@Html.Raw(Model.Lokasjon)";
 
-        var map = L.map('map').setView([60.47, 8.46], 7);
+        var koordinater = parseLokasjon(lokasjonStreng);
+
+        var map = L.map('map').setView(koordinater, 15); 
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
         }).addTo(map);
 
-        if (lokasjonGeoJsonString) {
-            var geoJsonData = JSON.parse(lokasjonGeoJsonString);
-            var geoJsonLayer = L.geoJSON(geoJsonData).addTo(map);
-            map.fitBounds(geoJsonLayer.getBounds());
-        } else {
-            map.setView([60.47, 8.46], 7);
-        }
+        L.marker(koordinater).addTo(map);
+
     </script>
 }

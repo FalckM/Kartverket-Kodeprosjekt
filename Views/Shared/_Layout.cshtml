@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="~/NRLWebApp.styles.css" asp-append-version="true" />
 </head>
 <body>
+    @Html.AntiForgeryToken()
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -35,6 +36,14 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Hinder" asp-action="Create">Registrer Hinder</a>
+                            </li>
+                            <li class="nav-item">
+                                <button id="hurtigRegistrerKnapp" class="nav-link btn btn-link text-danger font-weight-bold">
+                                    Hurtigregistrering
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Hinder" asp-action="UferdigeHindre">Uferdige Hindre</a>
                             </li>
                         }
                        

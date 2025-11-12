@@ -52,6 +52,119 @@ namespace NRLWebApp.Controllers
             return View(mineHindre);
         }
 
+        [Authorize(Roles = "Pilot")]
+        public async Task<IActionResult> UferdigeHindre()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Challenge();
+            }
+
+            var uferdigeHindre = await _context.Hindre
+                .Where(h => h.ApplicationUserId == user.Id && h.Status.Navn == "Uferdig") 
+                .Include(h => h.Status)
+                .Include(h => h.HinderType)
+                .OrderByDescending(h => h.Tidsstempel)
+                .ToListAsync();
+
+            return View(uferdigeHindre);
+        }
+
+        [Authorize(Roles = "Pilot")]
+        public async Task<IActionResult> PilotEdit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            var hinder = await _context.Hindre
+                .Include(h => h.Status)
+                .FirstOrDefaultAsync(m => m.HinderID == id && m.ApplicationUserId == user.Id);
+
+            if (hinder == null)
+            {
+                return NotFound(); 
+            }
+
+            if (hinder.Status.Navn != "Uferdig")
+            {
+ 
+                return RedirectToAction(nameof(MineHindre));
+            }
+
+            ViewBag.HinderTypeID = new SelectList(_context.HinderTyper, "HinderTypeID", "Navn", hinder.HinderTypeID);
+            return View(hinder);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Pilot")]
+        public async Task<IActionResult> PilotEdit(int id, [Bind("HinderID,HinderTypeID,Hoyde,Beskrivelse,Lokasjon")] Hinder hinder)
+        {
+            if (id != hinder.HinderID)
+            {
+                return NotFound();
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            var hinderToUpdate = await _context.Hindre
+                .FirstOrDefaultAsync(h => h.HinderID == id && h.ApplicationUserId == user.Id);
+
+            if (hinderToUpdate == null)
+            {
+                return NotFound();
+            }
+
+            ModelState.Remove("ApplicationUserId");
+            ModelState.Remove("StatusID");
+            ModelState.Remove("ApplicationUser");
+            ModelState.Remove("Status");
+            ModelState.Remove("Behandlinger");
+            ModelState.Remove("HinderType");
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var nyStatus = await _context.Statuser.FirstOrDefaultAsync(s => s.Navn == "Ny");
+                    if (nyStatus == null)
+                    {
+                        ModelState.AddModelError("", "Nødvendig status-data 'Ny' mangler i databasen.");
+                        ViewBag.HinderTypeID = new SelectList(_context.HinderTyper, "HinderTypeID", "Navn", hinder.HinderTypeID);
+                        return View(hinder);
+                    }
+
+                    hinderToUpdate.HinderTypeID = hinder.HinderTypeID;
+                    hinderToUpdate.Hoyde = hinder.Hoyde;
+                    hinderToUpdate.Beskrivelse = hinder.Beskrivelse;
+                    hinderToUpdate.Lokasjon = hinder.Lokasjon; 
+
+                    hinderToUpdate.StatusID = nyStatus.StatusID;
+
+                    _context.Update(hinderToUpdate);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_context.Hindre.Any(e => e.HinderID == hinder.HinderID))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(MineHindre)); 
+            }
+
+            ViewBag.HinderTypeID = new SelectList(_context.HinderTyper, "HinderTypeID", "Navn", hinder.HinderTypeID);
+            return View(hinder);
+        }
+
         [Authorize(Roles = "Registerfører, Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -88,7 +201,7 @@ namespace NRLWebApp.Controllers
                 return NotFound();
             }
 
-            ModelState.Remove("Navn");
+            ModelState.Remove("HinderType");
             ModelState.Remove("Hoyde");
             ModelState.Remove("Beskrivelse");
             ModelState.Remove("Lokasjon");
@@ -243,6 +356,47 @@ namespace NRLWebApp.Controllers
             ViewBag.HinderTypeID = new SelectList(_context.HinderTyper, "HinderTypeID", "Navn", hinder.HinderTypeID);
 
             return View(hinder);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Pilot")]
+        public async Task<IActionResult> HurtigRegistrer(string lokasjon)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            var uferdigStatus = await _context.Statuser.FirstOrDefaultAsync(s => s.Navn == "Uferdig");
+            if (uferdigStatus == null)
+            {
+                return StatusCode(500, "Databasen mangler 'Uferdig' status.");
+            }
+
+            var hinder = new Hinder
+            {
+                ApplicationUserId = user.Id,
+                Lokasjon = lokasjon,
+                Tidsstempel = DateTime.Now,
+                StatusID = uferdigStatus.StatusID,
+
+                HinderTypeID = null,
+                Hoyde = null,
+                Beskrivelse = "" 
+            };
+
+            try
+            {
+                _context.Add(hinder);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Hinder hurtigregistrert!" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "En feil oppstod ved lagring: " + ex.Message);
+            }
         }
     }
 }

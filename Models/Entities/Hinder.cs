@@ -11,12 +11,12 @@ namespace NRLWebApp.Models.Entities
         public int HinderID { get; set; }
 
         [Display(Name = "Type")]
-        public int HinderTypeID { get; set; }
+        public int? HinderTypeID { get; set; }
         [ForeignKey("HinderTypeID")]
         public virtual HinderType HinderType { get; set; }
 
         [Column(TypeName = "decimal(8, 2)")]
-        public decimal Hoyde { get; set; }
+        public decimal? Hoyde { get; set; }
 
         [StringLength(255)]
         public string Beskrivelse { get; set; }

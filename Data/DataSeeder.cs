@@ -40,6 +40,7 @@ namespace NRLWebApp.Data
             if (!context.Statuser.Any())
             {
                 context.Statuser.AddRange(
+                    new Status { Navn = "Uferdig" },
                     new Status { Navn = "Ny" },
                     new Status { Navn = "Under behandling" },
                     new Status { Navn = "Godkjent" },
