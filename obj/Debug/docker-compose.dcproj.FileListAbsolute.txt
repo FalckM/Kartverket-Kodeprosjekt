@@ -29,3 +29,11 @@ C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\bin\De
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\bin\Debug\Microsoft.Extensions.DependencyInjection.dll
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\bin\Debug\Microsoft.Extensions.Primitives.dll
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\bin\Debug\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\bin\Debug\ClosedXML.dll
+C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\bin\Debug\DocumentFormat.OpenXml.Framework.dll
+C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\bin\Debug\DocumentFormat.OpenXml.dll
+C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\bin\Debug\SixLabors.Fonts.dll
+C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\bin\Debug\ExcelNumberFormat.dll
+C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\bin\Debug\ClosedXML.Parser.dll
+C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\bin\Debug\RBush.dll
+C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\bin\Debug\System.IO.Packaging.dll

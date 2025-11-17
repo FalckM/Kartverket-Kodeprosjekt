@@ -1,0 +1,94 @@
+@{
+    ViewData["Title"] = "Database Seeding";
+}
+
+<div class="max-w-4xl mx-auto px-4 py-8">
+    <h1 class="text-4xl font-bold text-gray-900 mb-6">Database Seeding</h1>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6">
+            <p class="text-green-900 font-semibold">@TempData["Success"]</p>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+            <p class="text-red-900 font-semibold">@TempData["Error"]</p>
+        </div>
+    }
+
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">⚠️ Viktig informasjon</h2>
+        <div class="space-y-3 text-gray-700">
+            <p>Dette verktøyet genererer testdata for databasen. Det er nyttig for:</p>
+            <ul class="list-disc list-inside ml-4 space-y-2">
+                <li>Testing av SQL-spørringer</li>
+                <li>Demonstrasjon av systemet</li>
+                <li>Verifisering av funksjonalitet</li>
+            </ul>
+
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                <p class="text-yellow-900 font-semibold">
+                    ⚠️ Kjør dette kun EN gang! 
+                    <br>
+                    Hvis du kjører det flere ganger, vil du få duplikat data.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">📊 Hva vil bli generert?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-indigo-50 p-4 rounded-lg">
+                <h3 class="font-bold text-indigo-900 mb-2">👥 20 Piloter</h3>
+                <ul class="text-sm text-indigo-800 space-y-1">
+                    <li>• Unike e-postadresser</li>
+                    <li>• Norske navn</li>
+                    <li>• Passord: Pilot123!</li>
+                    <li>• Pilot rolle</li>
+                </ul>
+            </div>
+
+            <div class="bg-purple-50 p-4 rounded-lg">
+                <h3 class="font-bold text-purple-900 mb-2">🏔️ 150 Hindringer</h3>
+                <ul class="text-sm text-purple-800 space-y-1">
+                    <li>• Lokalisert rundt i Norge</li>
+                    <li>• 15 forskjellige byer</li>
+                    <li>• 10 forskjellige typer</li>
+                    <li>• Datoer: 2023-2025</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">🚀 Klar til å generere data?</h2>
+        
+        <form method="post" asp-action="SeedData" onsubmit="return confirm('Er du sikker på at du vil generere testdata? Dette kan ikke angres enkelt.');">
+            <button type="submit" 
+                    class="w-full md:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition duration-200 flex items-center justify-center gap-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+                Generer Testdata
+            </button>
+        </form>
+
+        <p class="text-sm text-gray-600 mt-4">
+            ℹ️ Prosessen tar ca. 10-30 sekunder avhengig av systemet.
+        </p>
+    </div>
+
+    <div class="bg-gray-50 rounded-lg p-6 mt-6">
+        <h3 class="font-bold text-gray-900 mb-3">📝 Hva skjer etter seeding?</h3>
+        <ol class="list-decimal list-inside space-y-2 text-gray-700">
+            <li>Du kan logge inn som en av pilotene (e-post: firstname.lastnameX@pilot.no, passord: Pilot123!)</li>
+            <li>Du kan se alle hindringer på kartet</li>
+            <li>Du kan kjøre SQL-spørringene fra oppgave 4</li>
+            <li>Du kan teste alle funksjonene i systemet</li>
+        </ol>
+    </div>
+</div>

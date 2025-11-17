@@ -13,6 +13,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
+builder.Services.AddScoped<DatabaseSeeder>();
+
 // Configure ASP.NET Identity with roles
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
