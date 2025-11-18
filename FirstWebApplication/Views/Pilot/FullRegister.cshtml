@@ -1,448 +1,465 @@
+@* 
+    INSTRUKSJONER FOR Å INSTALLERE:
+    ================================
+    1. Åpne FirstWebApplication/Controllers/PilotController.cs
+    2. Kopier koden fra PilotController_GetObstaclesForMap_Addition.cs 
+    3. Lim inn metoden RETT FØR den siste } i PilotController-klassen
+    4. Erstatt FirstWebApplication/Views/Pilot/FullRegister.cshtml med DENNE filen
+    5. Start appen og test!
+*@
+
 @model FirstWebApplication.Entities.ObstacleData
 
 @{
     ViewData["Title"] = "Full Registration";
 }
 
-<!-- Leaflet Draw CSS for drawing tools -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+@* 
+    HODE-SEKSJONEN: Importerer nødvendige biblioteker
+    - Leaflet = Kart-bibliotek for å vise kart
+    - Leaflet.draw = Plugin for å tegne på kartet
+*@
+@section Head {
+    <link rel="stylesheet" href="~/lib/leaflet/leaflet.css" />
+    <link rel="stylesheet" href="~/lib/leaflet-draw/leaflet.draw.css" />
+    <script src="~/lib/leaflet/leaflet.js"></script>
+    <script src="~/lib/leaflet-draw/leaflet.draw.js"></script>
 
-<style>
-    #map {
-        height: calc(100vh - 120px);
-        width: 100%;
-        position: relative;
-        z-index: 0;
-    }
-    
-    .registration-form {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        width: 400px;
-        background: white;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-        max-height: calc(100vh - 160px);
-        overflow-y: auto;
-    }
+    <style>
+        /* Hele siden er et stort kart med et skjema på siden */
+        #map {
+            position: absolute;
+            top: 56px; /* Starter under navbar */
+            left: 0;
+            right: 400px; /* Gir plass til skjemaet på høyre side */
+            bottom: 0;
+            z-index: 1;
+        }
 
-    .form-group {
-        margin-bottom: 15px;
-    }
+        /* Registreringsskjemaet som vises på høyre side */
+        .registration-form {
+            position: absolute;
+            top: 56px;
+            right: 0;
+            width: 400px;
+            height: calc(100vh - 56px);
+            background: white;
+            padding: 20px;
+            overflow-y: auto;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 2;
+        }
 
-    .form-group label {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: 600;
-        color: #333;
-    }
+        /* Styling for input-feltene */
+        .form-group {
+            margin-bottom: 15px;
+        }
 
-    .form-control {
-        width: 100%;
-        padding: 8px 12px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 14px;
-    }
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
 
-    .form-control:focus {
-        outline: none;
-        border-color: #4F46E5;
-    }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
 
-    .btn {
-        padding: 10px 20px;
-        border: none;
-        border-radius: 4px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.15s;
-    }
+        /* Feilmeldinger vises i rødt */
+        .text-validation-error {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 4px;
+            display: block;
+        }
 
-    .btn-primary {
-        background: #4F46E5;
-        color: white;
-    }
+        /* Knapper */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+        }
 
-    .btn-primary:hover {
-        background: #4338CA;
-    }
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
 
-    .btn-secondary {
-        background: #6B7280;
-        color: white;
-        margin-top: 10px;
-    }
+        .btn-primary:hover {
+            background: #0056b3;
+        }
 
-    .btn-secondary:hover {
-        background: #4B5563;
-    }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            margin-top: 10px;
+        }
 
-    .alert {
-        padding: 12px;
-        border-radius: 4px;
-        margin-bottom: 15px;
-    }
+        /* Info-bokser */
+        .alert {
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
 
-    .alert-info {
-        background: #DBEAFE;
-        color: #1E40AF;
-        border: 1px solid #93C5FD;
-    }
+        .alert-info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
 
-    .alert-danger {
-        background: #FEE2E2;
-        color: #991B1B;
-        border: 1px solid #FECACA;
-    }
+        /* Responsivt design for iPad og mobil */
+        @@media (max-width: 768px) {
+            #map {
+                right: 0;
+                bottom: 50%;
+            }
+            
+            .registration-form {
+                top: auto;
+                bottom: 0;
+                width: 100%;
+                height: 50%;
+                right: 0;
+            }
+        }
+    </style>
+}
 
-    .text-validation-error {
-        color: #DC2626;
-        font-size: 12px;
-        margin-top: 4px;
-        display: block;
-    }
-
-    /* Loading indicator */
-    .loading-overlay {
-        position: absolute;
-        top: 80px;
-        left: 20px;
-        background: white;
-        padding: 12px 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        z-index: 999;
-        font-size: 14px;
-        color: #6B7280;
-    }
-
-    .loading-overlay.hidden {
-        display: none;
-    }
-</style>
-
-<!-- Map Container -->
+@* KARTCONTAINER - Her vises kartet *@
 <div id="map"></div>
 
-<!-- Loading indicator -->
-<div id="loading-obstacles" class="loading-overlay">
-    <span>📍 Loading existing obstacles...</span>
-</div>
-
-<!-- Registration Form (Sidebar) -->
+@* REGISTRERINGSSKJEMA - Vises på høyre side *@
 <div class="registration-form">
     <h2 style="margin-top: 0; color: #1F2937; font-size: 24px;">Full Registration</h2>
     <p style="color: #6B7280; font-size: 14px;">Mark the obstacle on the map and provide complete details</p>
 
+    @* Info-boks med instruksjoner *@
     <div class="alert alert-info">
         <strong>How to register:</strong>
         <ul style="margin: 8px 0 0 0; padding-left: 20px; font-size: 13px;">
             <li>🔴 Red markers = Existing obstacles (click to view)</li>
-            <li>🟢 Use draw tools to add your new obstacle</li>
-            <li>📝 Fill in all required details below</li>
-            <li>✅ Click Submit to complete registration</li>
+            <li>Use the draw tools to add your obstacle</li>
+            <li>Fill in all required details below</li>
+            <li>Click Submit to complete registration</li>
         </ul>
     </div>
 
+    @* SKJEMA FOR REGISTRERING *@
     <form asp-action="FullRegister" method="post" id="registrationForm">
-        <!-- Hidden field for geometry -->
+        @* Skjult felt som lagrer GeoJSON-data fra kartet *@
         <input type="hidden" asp-for="ObstacleGeometry" id="obstacleGeometry" />
 
-        <!-- Obstacle Name -->
+        @* OBSTACLE NAME - Navn på hindringen *@
         <div class="form-group">
             <label asp-for="ObstacleName">Obstacle Name *</label>
             <input asp-for="ObstacleName" class="form-control" placeholder="e.g., Radio Tower, Power Line" />
             <span asp-validation-for="ObstacleName" class="text-validation-error"></span>
         </div>
 
-        <!-- Obstacle Type -->
+        @* OBSTACLE TYPE - Type hindring (dropdown) *@
         <div class="form-group">
             <label asp-for="ObstacleType">Obstacle Type *</label>
             <select asp-for="ObstacleType" class="form-control">
                 <option value="">-- Select Type --</option>
-                <option value="Mast">Mast (Radio/TV Tower)</option>
-                <option value="Strømledning">Strømledning (Power Line)</option>
-                <option value="Vindturbin">Vindturbin (Wind Turbine)</option>
-                <option value="Bygning">Bygning (Building)</option>
-                <option value="Kirketårn">Kirketårn (Church Spire)</option>
-                <option value="Kran">Kran (Crane)</option>
-                <option value="Skorstein">Skorstein (Smoke Stack)</option>
-                <option value="Monument">Monument</option>
-                <option value="Antenne">Antenne (Mobile/Communication)</option>
-                <option value="Annet">Annet (Other)</option>
+                <option value="Tower">Tower</option>
+                <option value="Power Line">Power Line</option>
+                <option value="Building">Building</option>
+                <option value="Crane">Crane</option>
+                <option value="Antenna">Antenna</option>
+                <option value="Wind Turbine">Wind Turbine</option>
+                <option value="Other">Other</option>
             </select>
             <span asp-validation-for="ObstacleType" class="text-validation-error"></span>
         </div>
 
-        <!-- Height -->
+        @* HEIGHT - Høyde i meter *@
         <div class="form-group">
             <label asp-for="ObstacleHeight">Height (meters) *</label>
             <input asp-for="ObstacleHeight" type="number" step="0.1" class="form-control" placeholder="0" />
             <span asp-validation-for="ObstacleHeight" class="text-validation-error"></span>
         </div>
 
-        <!-- Description -->
+        @* DESCRIPTION - Beskrivelse *@
         <div class="form-group">
             <label asp-for="ObstacleDescription">Description *</label>
             <textarea asp-for="ObstacleDescription" class="form-control" rows="4" placeholder="Provide detailed information about the obstacle..."></textarea>
             <span asp-validation-for="ObstacleDescription" class="text-validation-error"></span>
         </div>
 
-        <!-- Submit Button -->
-        <button type="submit" class="btn btn-primary" style="width: 100%;">Complete Registration</button>
+        @* SUBMIT-KNAPP *@
+        <button type="submit" class="btn btn-primary">
+            ✅ Submit Registration
+        </button>
         
-        <!-- Back Link -->
-        <a asp-action="RegisterType" class="btn btn-secondary" style="width: 100%; display: block; text-align: center; text-decoration: none;">
-            ← Back to Registration Options
+        @* AVBRYT-KNAPP *@
+        <a asp-action="RegisterType" class="btn btn-secondary">
+            ❌ Cancel
         </a>
     </form>
 </div>
 
+@* 
+    JAVASCRIPT-SEKSJONEN
+    ====================
+    Her skjer all logikken for kartet:
+    1. Initialiserer kartet
+    2. Laster inn eksisterende obstacles (røde markers)
+    3. Lar brukeren tegne nye obstacles (grønne markers)
+    4. Lagrer data til skjemaet
+*@
 @section Scripts {
-    <!-- Leaflet Draw JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
-    
     <script>
-        // Initialize map centered on Norway
-        const map = L.map('map').setView([60.4720, 8.4689], 6);
+        // GLOBALE VARIABLER
+        let map;                    // Kartet
+        let drawnItems;             // Layer for nye tegninger
+        let existingObstaclesLayer; // Layer for eksisterende obstacles
 
-        // Add OpenStreetMap tiles
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors',
-            maxZoom: 19
-        }).addTo(map);
-
-        // Create a feature group to store drawn items (NEW obstacles only)
-        const drawnItems = new L.FeatureGroup();
-        map.addLayer(drawnItems);
-
-        // Create a separate layer for EXISTING obstacles (read-only)
-        const existingObstaclesLayer = new L.LayerGroup();
-        map.addLayer(existingObstaclesLayer);
-
-        // Initialize the draw control
-        const drawControl = new L.Control.Draw({
-            position: 'topleft',
-            draw: {
-                polygon: {
-                    allowIntersection: false,
-                    showArea: true,
-                    shapeOptions: {
-                        color: '#10b981' // Green for new obstacles
-                    }
-                },
-                polyline: {
-                    shapeOptions: {
-                        color: '#10b981' // Green for new obstacles
-                    }
-                },
-                circle: false,
-                circlemarker: false,
-                rectangle: {
-                    shapeOptions: {
-                        color: '#10b981' // Green for new obstacles
-                    }
-                },
-                marker: true
-            },
-            edit: {
-                featureGroup: drawnItems,
-                remove: true
-            }
+        // KJØRES NÅR SIDEN ER FERDIG LASTET
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('🗺️ Initialiserer kart...');
+            
+            // STEG 1: Lag kartet
+            initializeMap();
+            
+            // STEG 2: Last inn eksisterende obstacles
+            loadExistingObstacles();
+            
+            // STEG 3: Sett opp tegneverktøy
+            setupDrawingTools();
+            
+            // STEG 4: Sett opp skjema-validering
+            setupFormValidation();
+            
+            // STEG 5: Prøv å finne brukerens lokasjon
+            getUserLocation();
         });
-        map.addControl(drawControl);
 
-        // ========================================================================
-        // LOAD EXISTING OBSTACLES FROM SERVER
-        // ========================================================================
-        fetch('/Pilot/GetAllObstaclesJson')
-            .then(response => response.json())
-            .then(obstacles => {
-                console.log(`Loaded ${obstacles.length} existing obstacles`);
+        /**
+         * STEG 1: INITIALISER KARTET
+         * Lager et Leaflet-kart sentrert på Norge
+         */
+        function initializeMap() {
+            console.log('📍 Lager kart...');
+            
+            // Lag kartet sentrert på Norge
+            map = L.map('map').setView([60.4720, 8.4689], 6);
+
+            // Legg til kartfliser fra OpenStreetMap
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors',
+                maxZoom: 19
+            }).addTo(map);
+
+            // Lag layers for eksisterende og nye obstacles
+            existingObstaclesLayer = L.layerGroup().addTo(map);
+            drawnItems = new L.FeatureGroup().addTo(map);
+            
+            console.log('✅ Kart initialisert!');
+        }
+
+        /**
+         * STEG 2: LAST INN EKSISTERENDE OBSTACLES
+         * Henter alle godkjente obstacles fra serveren via API
+         */
+        async function loadExistingObstacles() {
+            console.log('🔍 Laster inn eksisterende obstacles...');
+            
+            try {
+                // Kall API-endepunktet som returnerer alle obstacles
+                const response = await fetch('@Url.Action("GetObstaclesForMap", "Pilot")');
                 
+                // Sjekk om forespørselen var vellykket
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                // Konverter respons til JSON
+                const obstacles = await response.json();
+                console.log(`📊 Fant ${obstacles.length} obstacles`);
+                
+                // Gå gjennom hver obstacle og lag en marker
                 obstacles.forEach(obstacle => {
-                    try {
-                        // Parse geometry (can be GeoJSON or WKT)
-                        let geometry = null;
-                        
-                        try {
-                            // Try GeoJSON first
-                            const geoJSON = JSON.parse(obstacle.geometry);
-                            geometry = geoJSON;
-                        } catch {
-                            // If not GeoJSON, try WKT
-                            geometry = parseWKT(obstacle.geometry);
-                        }
+                    addObstacleMarker(obstacle);
+                });
+                
+                console.log('✅ Eksisterende obstacles lastet inn!');
+                
+            } catch (error) {
+                // Hvis noe går galt, vis feilmelding
+                console.error('❌ Feil ved lasting av obstacles:', error);
+                alert('Failed to load existing obstacles. Please refresh the page.');
+            }
+        }
 
-                        if (geometry) {
-                            // Create marker/layer for this obstacle
-                            let layer;
-
-                            if (geometry.type === 'Point' || geometry.geometry?.type === 'Point') {
-                                const coords = geometry.geometry ? geometry.geometry.coordinates : geometry.coordinates;
-                                layer = L.marker([coords[1], coords[0]], {
-                                    icon: L.icon({
-                                        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-                                        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
-                                        iconSize: [25, 41],
-                                        iconAnchor: [12, 41],
-                                        popupAnchor: [1, -34],
-                                        shadowSize: [41, 41]
-                                    })
-                                });
-                            } else if (geometry.type === 'LineString' || geometry.geometry?.type === 'LineString') {
-                                const coords = geometry.geometry ? geometry.geometry.coordinates : geometry.coordinates;
-                                const latLngs = coords.map(c => [c[1], c[0]]);
-                                layer = L.polyline(latLngs, { color: '#ef4444', weight: 3 }); // Red
-                            } else if (geometry.type === 'Polygon' || geometry.geometry?.type === 'Polygon') {
-                                const coords = geometry.geometry ? geometry.geometry.coordinates[0] : geometry.coordinates[0];
-                                const latLngs = coords.map(c => [c[1], c[0]]);
-                                layer = L.polygon(latLngs, { color: '#ef4444', weight: 3 }); // Red
-                            }
-
-                            if (layer) {
-                                // Add popup with obstacle info
-                                const statusText = obstacle.isApproved ? '✅ Approved' : 
-                                                 obstacle.isRejected ? '❌ Rejected' : 
-                                                 '⏳ Pending';
-
-                                layer.bindPopup(`
-                                    <div style="min-width: 200px;">
-                                        <strong style="font-size: 16px;">${obstacle.name}</strong><br>
-                                        <strong>Type:</strong> ${obstacle.type}<br>
-                                        <strong>Height:</strong> ${obstacle.height} m<br>
-                                        <strong>Status:</strong> ${statusText}<br>
-                                        <br>
-                                        <em style="color: #6B7280; font-size: 12px;">ID: #${obstacle.id}</em>
-                                    </div>
-                                `);
-
-                                // Add to existing obstacles layer (NOT editable)
-                                existingObstaclesLayer.addLayer(layer);
-                            }
-                        }
-                    } catch (error) {
-                        console.error('Error displaying obstacle:', obstacle.id, error);
+        /**
+         * HJELPEFUNKSJON: LEGG TIL EN OBSTACLE-MARKER
+         * Tar en obstacle og lager en rød marker på kartet
+         */
+        function addObstacleMarker(obstacle) {
+            try {
+                // Parse GeoJSON fra obstacle
+                const geometry = JSON.parse(obstacle.geometry);
+                
+                // Lag en rød marker
+                const marker = L.geoJSON(geometry, {
+                    // Angi stil for marker (rød farge)
+                    style: {
+                        color: '#ef4444',      // Rød farge
+                        weight: 3,
+                        opacity: 0.8
+                    },
+                    // For punkter: bruk røde markers
+                    pointToLayer: function(feature, latlng) {
+                        return L.marker(latlng, {
+                            icon: L.icon({
+                                iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+                                iconSize: [25, 41],
+                                iconAnchor: [12, 41],
+                                popupAnchor: [1, -34]
+                            })
+                        });
                     }
                 });
 
-                // Hide loading indicator
-                document.getElementById('loading-obstacles').classList.add('hidden');
-            })
-            .catch(error => {
-                console.error('Error loading obstacles:', error);
-                document.getElementById('loading-obstacles').innerHTML = '<span style="color: #ef4444;">❌ Failed to load obstacles</span>';
-            });
-
-        // ========================================================================
-        // HANDLE NEW OBSTACLE CREATION (GREEN)
-        // ========================================================================
-        map.on(L.Draw.Event.CREATED, function (event) {
-            const layer = event.layer;
-            
-            // Remove previous drawings (only allow one NEW obstacle)
-            drawnItems.clearLayers();
-            
-            // Add the new drawing (GREEN)
-            drawnItems.addLayer(layer);
-            
-            // Convert to WKT format and save to hidden field
-            const geoJSON = layer.toGeoJSON();
-            const wkt = convertGeoJSONToWKT(geoJSON);
-            document.getElementById('obstacleGeometry').value = wkt;
-            
-            console.log('New obstacle geometry saved:', wkt);
-        });
-
-        // Handle when user edits their NEW obstacle
-        map.on(L.Draw.Event.EDITED, function (event) {
-            const layers = event.layers;
-            layers.eachLayer(function (layer) {
-                const geoJSON = layer.toGeoJSON();
-                const wkt = convertGeoJSONToWKT(geoJSON);
-                document.getElementById('obstacleGeometry').value = wkt;
-            });
-        });
-
-        // Handle when user deletes their NEW obstacle
-        map.on(L.Draw.Event.DELETED, function (event) {
-            document.getElementById('obstacleGeometry').value = '';
-        });
-
-        // ========================================================================
-        // UTILITY FUNCTIONS
-        // ========================================================================
-
-        // Convert GeoJSON to WKT format
-        function convertGeoJSONToWKT(geoJSON) {
-            const geometry = geoJSON.geometry;
-            const type = geometry.type;
-            const coordinates = geometry.coordinates;
-
-            if (type === 'Point') {
-                return `POINT(${coordinates[0]} ${coordinates[1]})`;
-            } else if (type === 'LineString') {
-                const coords = coordinates.map(c => `${c[0]} ${c[1]}`).join(', ');
-                return `LINESTRING(${coords})`;
-            } else if (type === 'Polygon') {
-                const coords = coordinates[0].map(c => `${c[0]} ${c[1]}`).join(', ');
-                return `POLYGON((${coords}))`;
+                // Lag popup med info om obstacle
+                const popupContent = `
+                    <div style="min-width: 200px;">
+                        <h3 style="margin: 0 0 8px 0; font-size: 16px; font-weight: bold;">
+                            ${obstacle.name}
+                        </h3>
+                        <div style="font-size: 14px; color: #666;">
+                            <strong>Type:</strong> ${obstacle.type}<br>
+                            <strong>Height:</strong> ${obstacle.height} m<br>
+                            <strong>Status:</strong> 
+                            <span style="color: green; font-weight: bold;">✓ Approved</span>
+                        </div>
+                    </div>
+                `;
+                
+                marker.bindPopup(popupContent);
+                marker.addTo(existingObstaclesLayer);
+                
+            } catch (error) {
+                console.error('Feil ved parsing av obstacle:', error);
             }
-            return '';
         }
 
-        // Parse WKT to GeoJSON-like structure
-        function parseWKT(wkt) {
-            if (wkt.startsWith('POINT')) {
-                const coords = wkt.match(/POINT\(([-\d.]+) ([-\d.]+)\)/);
-                if (coords) {
-                    return {
-                        type: 'Point',
-                        coordinates: [parseFloat(coords[1]), parseFloat(coords[2])]
-                    };
+        /**
+         * STEG 3: SETT OPP TEGNEVERKTØY
+         * Lar brukeren tegne punkter, linjer og polygoner på kartet
+         */
+        function setupDrawingTools() {
+            console.log('🖊️ Setter opp tegneverktøy...');
+            
+            // Legg til tegne-kontroller til kartet
+            const drawControl = new L.Control.Draw({
+                edit: {
+                    featureGroup: drawnItems,
+                    remove: true
+                },
+                draw: {
+                    // Aktiver disse verktøyene:
+                    marker: true,      // Punkter
+                    polyline: true,    // Linjer
+                    polygon: true,     // Polygoner
+                    
+                    // Deaktiver disse:
+                    circle: false,
+                    rectangle: false,
+                    circlemarker: false
                 }
-            } else if (wkt.startsWith('LINESTRING')) {
-                const coordsStr = wkt.match(/LINESTRING\((.*)\)/)[1];
-                const coordinates = coordsStr.split(', ').map(coord => {
-                    const [lon, lat] = coord.split(' ').map(parseFloat);
-                    return [lon, lat];
+            });
+            map.addControl(drawControl);
+
+            // HENDELSE: Når noe tegnes på kartet
+            map.on(L.Draw.Event.CREATED, function (event) {
+                console.log('✏️ Ny tegning opprettet');
+                
+                const layer = event.layer;
+
+                // Fjern tidligere tegninger (kun én obstacle om gangen)
+                drawnItems.clearLayers();
+                
+                // Legg til den nye tegningen
+                drawnItems.addLayer(layer);
+
+                // Konverter til GeoJSON og lagre
+                const geoJSON = layer.toGeoJSON();
+                document.getElementById('obstacleGeometry').value = JSON.stringify(geoJSON);
+                
+                console.log('💾 Geometri lagret:', geoJSON);
+            });
+
+            // HENDELSE: Når en tegning redigeres
+            map.on(L.Draw.Event.EDITED, function (event) {
+                console.log('✏️ Tegning redigert');
+                
+                const layers = event.layers;
+                layers.eachLayer(function (layer) {
+                    const geoJSON = layer.toGeoJSON();
+                    document.getElementById('obstacleGeometry').value = JSON.stringify(geoJSON);
                 });
-                return { type: 'LineString', coordinates };
-            } else if (wkt.startsWith('POLYGON')) {
-                const coordsStr = wkt.match(/POLYGON\(\((.*)\)\)/)[1];
-                const coordinates = coordsStr.split(', ').map(coord => {
-                    const [lon, lat] = coord.split(' ').map(parseFloat);
-                    return [lon, lat];
-                });
-                return { type: 'Polygon', coordinates: [coordinates] };
-            }
-            return null;
+            });
+
+            // HENDELSE: Når en tegning slettes
+            map.on(L.Draw.Event.DELETED, function (event) {
+                console.log('🗑️ Tegning slettet');
+                document.getElementById('obstacleGeometry').value = '';
+            });
+            
+            console.log('✅ Tegneverktøy satt opp!');
         }
 
-        // Form validation
-        document.getElementById('registrationForm').addEventListener('submit', function(e) {
-            const geometry = document.getElementById('obstacleGeometry').value;
-            
-            if (!geometry) {
-                e.preventDefault();
-                alert('⚠️ Please mark the obstacle location on the map before submitting!');
-                return false;
-            }
-        });
-
-        // Try to get user's location and center map
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                const lat = position.coords.latitude;
-                const lon = position.coords.longitude;
-                map.setView([lat, lon], 13);
+        /**
+         * STEG 4: SETT OPP SKJEMA-VALIDERING
+         * Sjekker at brukeren har tegnet noe før de sender inn
+         */
+        function setupFormValidation() {
+            document.getElementById('registrationForm').addEventListener('submit', function(e) {
+                const geometry = document.getElementById('obstacleGeometry').value;
+                
+                // Hvis ingen geometri er tegnet, stopp innsending
+                if (!geometry) {
+                    e.preventDefault();
+                    alert('❌ Please mark the obstacle location on the map before submitting!');
+                    return false;
+                }
+                
+                console.log('✅ Skjema sendes inn...');
             });
+        }
+
+        /**
+         * STEG 5: FINN BRUKERENS LOKASJON
+         * Prøver å finne brukerens posisjon og zoome inn
+         */
+        function getUserLocation() {
+            if (navigator.geolocation) {
+                console.log('📍 Finner brukerens lokasjon...');
+                
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        map.setView([lat, lon], 13);
+                        console.log(`✅ Lokasjon funnet: ${lat}, ${lon}`);
+                    },
+                    function(error) {
+                        console.log('⚠️ Kunne ikke finne lokasjon:', error.message);
+                    }
+                );
+            }
         }
     </script>
 
+    @* Inkluder validering-scripts *@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

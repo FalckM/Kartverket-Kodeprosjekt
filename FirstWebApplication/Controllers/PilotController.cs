@@ -391,5 +391,57 @@ namespace FirstWebApplication.Controllers
 
             return distance;
         }
+
+
+
+        /// API endpoint som returnerer alle godkjente obstacles som JSON.
+        /// Dette brukes av FullRegister view for å vise eksisterende obstacles på kartet.
+        [HttpGet]
+        public async Task<IActionResult> GetObstaclesForMap()
+        {
+            try
+            {
+                // Hent alle godkjente obstacles fra databasen
+                // Vi filtrerer på IsApproved = true for å bare vise godkjente hindringer
+                var obstacles = await _context.Obstacles
+                    .Where(o => o.IsApproved) // Bare godkjente obstacles
+                    .Select(o => new
+                    {
+                        // id brukes for å identifisere obstacle
+                        id = o.Id,
+
+                        // name vises i popup når man klikker på marker
+                        name = o.ObstacleName,
+
+                        // type brukes for å kategorisere (f.eks. "Tower", "Power Line")
+                        type = o.ObstacleType ?? "Unknown",
+
+                        // height vises i popup (i meter)
+                        height = o.ObstacleHeight,
+
+                        // geometry inneholder GeoJSON data for å vise på kartet
+                        geometry = o.ObstacleGeometry,
+
+                        // Status-felter for å vite tilstanden til obstacle
+                        isApproved = o.IsApproved,
+                        isRejected = o.IsRejected
+
+                        // Vi inkluderer IKKE registeredBy for personvern
+                    })
+                    .ToListAsync();
+
+                // Returner obstacles som JSON
+                // Dette blir automatisk konvertert til JSON av ASP.NET Core
+                return Json(obstacles);
+            }
+            catch (Exception ex)
+            {
+                // Hvis noe går galt, logg feilen og returner en error-melding
+                _logger.LogError(ex, "Feil ved henting av obstacles for kart");
+
+                // Returner en HTTP 500 status med feilmelding
+                return StatusCode(500, new { error = "Failed to load obstacles" });
+            }
+        }
     }
 }

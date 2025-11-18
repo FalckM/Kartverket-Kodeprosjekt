@@ -10,6 +10,9 @@
     
     <!-- Leaflet CSS for maps -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+
+    @await RenderSectionAsync("Head", required: false)
 </head>
 <body class="bg-gray-50">
     <header>
@@ -48,6 +51,9 @@
                             {
                                 <li class="px-4 py-2 hover:text-indigo-500">
                                     <a asp-controller="Registerforer" asp-action="RegisterforerDashboard">Dashboard</a>
+                                </li>
+                                <li class="px-4 py-2 hover:text-indigo-500">
+                                    <a as-controller="Registerforer" asp-action="MapView">Map View</a>
                                 </li>
                                 <li class="px-4 py-2 hover:text-indigo-500">
                                     <a asp-controller="Registerforer" asp-action="PendingObstacles">Pending</a>

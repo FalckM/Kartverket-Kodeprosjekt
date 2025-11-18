@@ -1,0 +1,469 @@
+@{
+    ViewData["Title"] = "Obstacle Map View";
+}
+
+@section Head {
+    <link rel="stylesheet" href="~/lib/leaflet/leaflet.css" />
+    <script src="~/lib/leaflet/leaflet.js"></script>
+    
+    <style>
+        body { overflow: hidden; }
+        #map-container {
+            position: fixed;
+            top: 64px;
+            left: 0;
+            right: 400px;
+            bottom: 0;
+            z-index: 1;
+        }
+        #map { width: 100%; height: 100%; }
+        .map-sidebar {
+            position: fixed;
+            top: 64px;
+            right: 0;
+            width: 400px;
+            height: calc(100vh - 64px);
+            background: white;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            overflow-y: auto;
+            z-index: 2;
+            padding: 20px;
+        }
+        .stats-panel {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        .stat-item:last-child { margin-bottom: 0; }
+        .stat-value { font-weight: bold; font-size: 18px; }
+        .search-box { margin-bottom: 20px; }
+        .search-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .filter-section {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .filter-section h3 {
+            font-size: 16px;
+            font-weight: bold;
+            color: #374151;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 0;
+            cursor: pointer;
+            transition: background 0.2s;
+            border-radius: 4px;
+            padding-left: 8px;
+        }
+        .filter-option:hover { background: #e5e7eb; }
+        .filter-option input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        .filter-option label {
+            cursor: pointer;
+            flex: 1;
+            font-size: 14px;
+            color: #4b5563;
+        }
+        .color-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-left: auto;
+        }
+        .color-green { background: #10b981; }
+        .color-yellow { background: #f59e0b; }
+        .color-red { background: #ef4444; }
+        .reset-btn {
+            width: 100%;
+            padding: 12px;
+            background: #6b7280;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .reset-btn:hover { background: #4b5563; }
+        .loading-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            text-align: center;
+            z-index: 1000;
+        }
+        .spinner {
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        @@keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @@media (max-width: 968px) {
+            #map-container { right: 0; bottom: 50%; }
+            .map-sidebar { top: auto; bottom: 0; width: 100%; height: 50%; }
+        }
+        @@media (max-width: 640px) {
+            .map-sidebar { height: 60%; }
+        }
+    </style>
+}
+
+<div id="loading-overlay" class="loading-overlay">
+    <div class="spinner"></div>
+    <p style="color: #6b7280; font-weight: 500;">Loading obstacles...</p>
+</div>
+
+<div id="map-container">
+    <div id="map"></div>
+</div>
+
+<div class="map-sidebar">
+    <h2 style="font-size: 24px; font-weight: bold; color: #1f2937; margin-bottom: 20px;">
+        🗺️ Obstacle Map View
+    </h2>
+
+    <div class="stats-panel">
+        <h3 style="margin: 0 0 15px 0; font-size: 18px;">📊 Statistics</h3>
+        <div class="stat-item">
+            <span>Total Obstacles:</span>
+            <span class="stat-value" id="stat-total">0</span>
+        </div>
+        <div class="stat-item">
+            <span>✅ Approved:</span>
+            <span class="stat-value" id="stat-approved">0</span>
+        </div>
+        <div class="stat-item">
+            <span>⏳ Pending:</span>
+            <span class="stat-value" id="stat-pending">0</span>
+        </div>
+        <div class="stat-item">
+            <span>❌ Rejected:</span>
+            <span class="stat-value" id="stat-rejected">0</span>
+        </div>
+    </div>
+
+    <div class="search-box">
+        <input type="text" id="search-input" class="search-input" placeholder="🔍 Search by obstacle name..." />
+    </div>
+
+    <div class="filter-section" id="type-filter-section">
+        <h3>🏗️ Filter by Type</h3>
+        <div class="filter-option">
+            <input type="checkbox" id="filter-type-all" checked>
+            <label for="filter-type-all">All Types</label>
+        </div>
+        <!-- Dynamiske type-filtre legges til her av JavaScript -->
+    </div>
+
+    <div class="filter-section">
+        <h3>📋 Filter by Status</h3>
+        <div class="filter-option">
+            <input type="checkbox" id="filter-status-approved" checked>
+            <label for="filter-status-approved">Approved</label>
+            <span class="color-indicator color-green"></span>
+        </div>
+        <div class="filter-option">
+            <input type="checkbox" id="filter-status-pending" checked>
+            <label for="filter-status-pending">Pending</label>
+            <span class="color-indicator color-yellow"></span>
+        </div>
+        <div class="filter-option">
+            <input type="checkbox" id="filter-status-rejected" checked>
+            <label for="filter-status-rejected">Rejected</label>
+            <span class="color-indicator color-red"></span>
+        </div>
+    </div>
+
+    <button class="reset-btn" onclick="resetFilters()">
+        🔄 Reset All Filters
+    </button>
+
+    <a asp-action="RegisterforerDashboard" style="display: block; margin-top: 15px; text-align: center; color: #667eea; text-decoration: none; font-weight: 500;">
+        ← Back to Dashboard
+    </a>
+</div>
+
+@section Scripts {
+    <script>
+        let map;
+        let allObstacles = [];
+        let markersLayer;
+        let searchTimeout;
+        let availableTypes = [];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🗺️ Initialiserer Map View...');
+            initializeMap();
+            loadObstacles();
+            setupInitialEventListeners();
+        });
+
+        function initializeMap() {
+            map = L.map('map').setView([60.4720, 8.4689], 6);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors',
+                maxZoom: 19
+            }).addTo(map);
+            markersLayer = L.layerGroup().addTo(map);
+            console.log('✅ Kart initialisert');
+        }
+
+        async function loadObstacles() {
+            try {
+                console.log('📡 Henter obstacles...');
+                const response = await fetch('@Url.Action("GetObstaclesForMapView", "Registerforer")');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                allObstacles = data.obstacles;
+                
+                console.log(`✅ Hentet ${allObstacles.length} obstacles`);
+                
+                // Hent unike typer
+                availableTypes = [...new Set(allObstacles.map(o => o.type))].sort();
+                console.log('📋 Tilgjengelige typer:', availableTypes);
+                
+                // Bygg type-filters
+                buildTypeFilters();
+                
+                updateStatistics(data.stats);
+                displayObstacles(allObstacles);
+                document.getElementById('loading-overlay').style.display = 'none';
+                
+            } catch (error) {
+                console.error('❌ Feil:', error);
+                document.getElementById('loading-overlay').innerHTML = `
+                    <p style="color: #ef4444; font-weight: bold;">Failed to load obstacles</p>
+                    <p style="color: #6b7280; font-size: 14px;">${error.message}</p>
+                    <button onclick="location.reload()" style="margin-top: 15px; padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        Retry
+                    </button>
+                `;
+            }
+        }
+
+        function buildTypeFilters() {
+            const typeFilterSection = document.getElementById('type-filter-section');
+            
+            // Legg til checkbox for hver type
+            availableTypes.forEach((type, index) => {
+                const div = document.createElement('div');
+                div.className = 'filter-option';
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.id = `filter-type-${index}`;
+                checkbox.className = 'type-checkbox';
+                checkbox.dataset.type = type;
+                checkbox.addEventListener('change', handleTypeFilterChange);
+                
+                const label = document.createElement('label');
+                label.htmlFor = `filter-type-${index}`;
+                label.textContent = type;
+                
+                div.appendChild(checkbox);
+                div.appendChild(label);
+                typeFilterSection.appendChild(div);
+            });
+            
+            console.log(`✅ Bygget ${availableTypes.length} type-filtre`);
+        }
+
+        function displayObstacles(obstacles) {
+            markersLayer.clearLayers();
+            console.log(`🎨 Viser ${obstacles.length} markers...`);
+            
+            obstacles.forEach(obstacle => {
+                try {
+                    const geometry = JSON.parse(obstacle.geometry);
+                    
+                    let markerColor = '#6b7280';
+                    let statusText = 'Unknown';
+                    
+                    if (obstacle.isApproved) {
+                        markerColor = '#10b981';
+                        statusText = 'Approved';
+                    } else if (obstacle.isPending) {
+                        markerColor = '#f59e0b';
+                        statusText = 'Pending';
+                    } else if (obstacle.isRejected) {
+                        markerColor = '#ef4444';
+                        statusText = 'Rejected';
+                    }
+                    
+                    const marker = L.geoJSON(geometry, {
+                        style: { color: markerColor, weight: 3, opacity: 0.8 },
+                        pointToLayer: function(feature, latlng) {
+                            const iconUrl = getMarkerIconUrl(statusText);
+                            return L.marker(latlng, {
+                                icon: L.icon({
+                                    iconUrl: iconUrl,
+                                    iconSize: [25, 41],
+                                    iconAnchor: [12, 41],
+                                    popupAnchor: [1, -34]
+                                })
+                            });
+                        }
+                    });
+                    
+                    marker.bindPopup(createPopupContent(obstacle, statusText));
+                    marker.addTo(markersLayer);
+                    
+                } catch (error) {
+                    console.error('Feil ved obstacle:', obstacle.id, error);
+                }
+            });
+            
+            console.log('✅ Markers vist');
+        }
+
+        function getMarkerIconUrl(status) {
+            const baseUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-';
+            switch(status) {
+                case 'Approved': return baseUrl + 'green.png';
+                case 'Pending': return baseUrl + 'yellow.png';
+                case 'Rejected': return baseUrl + 'red.png';
+                default: return baseUrl + 'grey.png';
+            }
+        }
+
+        function createPopupContent(obstacle, statusText) {
+            let statusColor = obstacle.isApproved ? '#10b981' : (obstacle.isPending ? '#f59e0b' : (obstacle.isRejected ? '#ef4444' : '#6b7280'));
+            return `
+                <div style="min-width: 250px; padding: 10px;">
+                    <h3 style="margin: 0 0 10px 0; font-size: 18px; font-weight: bold;">${obstacle.name}</h3>
+                    <div style="font-size: 14px; color: #4b5563; line-height: 1.6;">
+                        <p style="margin: 5px 0;"><strong>Type:</strong> ${obstacle.type}</p>
+                        <p style="margin: 5px 0;"><strong>Height:</strong> ${obstacle.height} m</p>
+                        <p style="margin: 5px 0;"><strong>Status:</strong> <span style="color: ${statusColor}; font-weight: bold;">${statusText}</span></p>
+                        ${obstacle.description ? `<p style="margin: 5px 0;"><strong>Description:</strong> ${obstacle.description}</p>` : ''}
+                        <p style="margin: 5px 0;"><strong>Registered by:</strong> ${obstacle.registeredBy}</p>
+                        <p style="margin: 5px 0;"><strong>Registered:</strong> ${new Date(obstacle.registeredDate).toLocaleDateString()}</p>
+                    </div>
+                    <a href="/Registerforer/ViewObstacle/${obstacle.id}" style="display: inline-block; margin-top: 10px; padding: 8px 16px; background: #667eea; color: white; text-decoration: none; border-radius: 5px;">
+                        View Details →
+                    </a>
+                </div>
+            `;
+        }
+
+        function updateStatistics(stats) {
+            document.getElementById('stat-total').textContent = stats.total;
+            document.getElementById('stat-approved').textContent = stats.approved;
+            document.getElementById('stat-pending').textContent = stats.pending;
+            document.getElementById('stat-rejected').textContent = stats.rejected;
+        }
+
+        function setupInitialEventListeners() {
+            document.getElementById('search-input').addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(applyFilters, 300);
+            });
+            
+            document.getElementById('filter-type-all').addEventListener('change', handleTypeFilterChange);
+            
+            document.querySelectorAll('[id^="filter-status-"]').forEach(checkbox => {
+                checkbox.addEventListener('change', applyFilters);
+            });
+        }
+
+        function handleTypeFilterChange(e) {
+            const allCheckbox = document.getElementById('filter-type-all');
+            
+            if (e.target.id === 'filter-type-all') {
+                if (e.target.checked) {
+                    document.querySelectorAll('.type-checkbox').forEach(cb => cb.checked = false);
+                }
+            } else {
+                if (e.target.checked) allCheckbox.checked = false;
+                
+                const anyChecked = Array.from(document.querySelectorAll('.type-checkbox')).some(cb => cb.checked);
+                if (!anyChecked) allCheckbox.checked = true;
+            }
+            
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const searchText = document.getElementById('search-input').value.toLowerCase();
+            const allTypesChecked = document.getElementById('filter-type-all').checked;
+            const selectedTypes = Array.from(document.querySelectorAll('.type-checkbox:checked')).map(cb => cb.dataset.type);
+            
+            const showApproved = document.getElementById('filter-status-approved').checked;
+            const showPending = document.getElementById('filter-status-pending').checked;
+            const showRejected = document.getElementById('filter-status-rejected').checked;
+            
+            const filteredObstacles = allObstacles.filter(obstacle => {
+                if (searchText && !obstacle.name.toLowerCase().includes(searchText)) return false;
+                if (!allTypesChecked && selectedTypes.length > 0 && !selectedTypes.includes(obstacle.type)) return false;
+                
+                let matchesStatus = false;
+                if (obstacle.isApproved && showApproved) matchesStatus = true;
+                if (obstacle.isPending && showPending) matchesStatus = true;
+                if (obstacle.isRejected && showRejected) matchesStatus = true;
+                if (!matchesStatus) return false;
+                
+                return true;
+            });
+            
+            console.log(`🔍 Viser ${filteredObstacles.length} av ${allObstacles.length}`);
+            displayObstacles(filteredObstacles);
+        }
+
+        function resetFilters() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('filter-type-all').checked = true;
+            document.querySelectorAll('.type-checkbox').forEach(cb => cb.checked = false);
+            document.getElementById('filter-status-approved').checked = true;
+            document.getElementById('filter-status-pending').checked = true;
+            document.getElementById('filter-status-rejected').checked = true;
+            displayObstacles(allObstacles);
+        }
+    </script>
+}
