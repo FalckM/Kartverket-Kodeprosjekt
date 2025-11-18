@@ -1,16 +1,20 @@
 @{
     ViewData["Title"] = "Quick Register";
-    Layout = "_Layout";
 }
 
 <style>
-    /* Full-screen map background */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
     .quick-register-container {
-        position: fixed;
+        position: absolute;
         top: 64px;
         left: 0;
-        right: 0;
-        bottom: 0;
+        width: 100%;
+        height: calc(100vh - 64px);
         z-index: 1;
     }
 
@@ -19,59 +23,53 @@
         height: 100%;
     }
 
-    /* Status overlay */
     .status-overlay {
-        position: fixed;
+        position: absolute;
         top: 64px;
         left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(3px);
+        width: 100%;
+        height: calc(100vh - 64px);
+        background-color: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(5px);
         z-index: 2;
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 20px;
     }
 
-    /* Status box */
     .status-box {
         background: white;
-        border-radius: 20px;
-        padding: 50px 40px;
+        border-radius: 15px;
+        padding: 40px;
         max-width: 500px;
-        width: 100%;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         text-align: center;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     }
 
-    .status-box .icon {
-        font-size: 80px;
+    .icon {
+        font-size: 64px;
         margin-bottom: 20px;
     }
 
-    .status-box h2 {
-        font-size: 28px;
-        font-weight: bold;
-        color: #1f2937;
-        margin-bottom: 15px;
+    .success-icon {
+        color: #10b981;
+        animation: scaleIn 0.5s ease-in-out;
     }
 
-    .status-box p {
-        font-size: 16px;
-        color: #6b7280;
-        line-height: 1.6;
-        margin-bottom: 30px;
+    .error-icon {
+        color: #ef4444;
     }
 
-    /* Loading spinner */
+    .warning-icon {
+        color: #f59e0b;
+    }
+
     .spinner {
         border: 4px solid #f3f4f6;
-        border-top: 4px solid #667eea;
+        border-top: 4px solid #3b82f6;
         border-radius: 50%;
-        width: 60px;
-        height: 60px;
+        width: 50px;
+        height: 50px;
         animation: spin 1s linear infinite;
         margin: 20px auto;
     }
@@ -81,39 +79,28 @@
         100% { transform: rotate(360deg); }
     }
 
-    /* Error state */
-    .error-icon {
-        color: #ef4444;
+    @@keyframes scaleIn {
+        0% { transform: scale(0); }
+        50% { transform: scale(1.2); }
+        100% { transform: scale(1); }
     }
 
-    .error-text {
-        color: #ef4444;
-    }
-
-    /* Success state */
-    .success-icon {
-        color: #10b981;
-    }
-
-    /* Hidden by default */
     .hidden {
-        display: none;
+        display: none !important;
     }
 
-    /* Button styling */
     .action-btn {
         display: inline-block;
-        padding: 14px 40px;
-        border-radius: 10px;
-        font-size: 16px;
-        font-weight: 600;
-        text-decoration: none;
+        padding: 12px 30px;
+        margin: 10px 5px;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: transform 0.2s, box-shadow 0.2s;
         border: none;
         cursor: pointer;
-        transition: all 0.3s ease;
-        margin: 5px;
     }
 
     .action-btn:hover {
@@ -125,6 +112,119 @@
         background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
     }
 
+    .duplicate-popup {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        max-width: 600px;
+        max-height: 80vh;
+        overflow-y: auto;
+        text-align: left;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .duplicate-popup h2 {
+        color: #f59e0b;
+        font-size: 24px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .duplicate-item {
+        background: #f3f4f6;
+        border-left: 4px solid #f59e0b;
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 8px;
+    }
+
+    .duplicate-item h3 {
+        color: #1f2937;
+        font-size: 18px;
+        margin-bottom: 8px;
+    }
+
+    .duplicate-item p {
+        color: #6b7280;
+        font-size: 14px;
+        margin: 5px 0;
+    }
+
+    .duplicate-item .distance {
+        color: #ef4444;
+        font-weight: bold;
+    }
+
+    .popup-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 25px;
+    }
+
+    .popup-buttons button {
+        flex: 1;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-cancel {
+        background: #ef4444;
+        color: white;
+    }
+
+    .btn-cancel:hover {
+        background: #dc2626;
+        transform: translateY(-2px);
+    }
+
+    .btn-continue {
+        background: #10b981;
+        color: white;
+    }
+
+    .btn-continue:hover {
+        background: #059669;
+        transform: translateY(-2px);
+    }
+
+    .help-text {
+        background: #eff6ff;
+        border-left: 4px solid #3b82f6;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 4px;
+        font-size: 14px;
+        color: #1e40af;
+        text-align: left;
+    }
+
+    .help-text strong {
+        display: block;
+        margin-bottom: 8px;
+        color: #1e3a8a;
+    }
+
+    .help-text ul {
+        margin: 8px 0 0 20px;
+    }
+
+    .help-text li {
+        margin: 4px 0;
+    }
+
+    .redirect-timer {
+        font-size: 14px;
+        color: #6b7280;
+        margin-top: 1rem;
+        font-weight: 500;
+    }
+
     @@media (max-width: 768px) {
         .quick-register-container {
             top: 56px;
@@ -133,18 +233,20 @@
         .status-overlay {
             top: 56px;
         }
+
+        .status-box, .duplicate-popup {
+            margin: 20px;
+            padding: 25px;
+        }
     }
 </style>
 
-<!-- Map background -->
 <div class="quick-register-container">
     <div id="quick-register-map"></div>
 </div>
 
-<!-- Status overlay -->
-<div class="status-overlay">
+<div class="status-overlay" id="status-overlay">
     <div class="status-box">
-        <!-- Loading state -->
         <div id="loading-state">
             <div class="icon">📍</div>
             <h2>Getting Your Location</h2>
@@ -153,25 +255,57 @@
             <p style="font-size: 14px; color: #9ca3af;">This may take a few seconds...</p>
         </div>
 
-        <!-- Success state -->
-        <div id="success-state" class="hidden">
-            <div class="icon success-icon">✓</div>
-            <h2>Location Registered Successfully!</h2>
-            <p>Your obstacle location has been saved. You can add more details later from the Quick Registered Items page.</p>
-            <div style="margin-top: 30px;">
-                <a href="@Url.Action("RegisterType", "Pilot")" class="action-btn">Register Another</a>
-                <a href="@Url.Action("MyRegistrations", "Pilot")" class="action-btn secondary">View Quick Items</a>
+        <div id="duplicate-state" class="hidden duplicate-popup">
+            <h2>⚠️ Existing Obstacles Found!</h2>
+            <p style="color: #6b7280; margin-bottom: 20px;">
+                We found one or more obstacles already registered near this location. 
+                Please review them before continuing:
+            </p>
+            
+            <div id="duplicate-list"></div>
+
+            <p style="color: #374151; font-weight: 500; margin-top: 20px;">
+                Are you sure you want to register a new obstacle here?
+            </p>
+
+            <div class="popup-buttons">
+                <button class="btn-cancel" onclick="cancelRegistration()">
+                    ❌ Cancel
+                </button>
+                <button class="btn-continue" onclick="continueRegistration()">
+                    ✓ Continue Anyway
+                </button>
             </div>
         </div>
 
-        <!-- Error state -->
+        <div id="success-state" class="hidden">
+            <div class="icon success-icon">✓</div>
+            <h2>Location Saved Successfully!</h2>
+            <p>Your GPS location has been saved. You can complete the details later from My Registrations.</p>
+            <p class="redirect-timer">Redirecting in <span id="countdown">3</span> seconds...</p>
+            <div style="margin-top: 30px;">
+                <a href="@Url.Action("RegisterType", "Pilot")" class="action-btn">Continue Now</a>
+            </div>
+        </div>
+
         <div id="error-state" class="hidden">
             <div class="icon error-icon">✗</div>
-            <h2 class="error-text">Location Access Denied</h2>
-            <p>We couldn't get your location. Please enable location services in your browser or use Full Register instead.</p>
+            <h2 class="error-text">Location Access Problem</h2>
+            <p id="error-message">We couldn't get your location.</p>
+            
+            <div class="help-text">
+                <strong>💡 Common Solutions:</strong>
+                <ul>
+                    <li><strong>Using IP address?</strong> Try <code>localhost</code> instead</li>
+                    <li><strong>Check browser settings:</strong> Allow location for this site</li>
+                    <li><strong>HTTPS required:</strong> Location only works on localhost or HTTPS</li>
+                    <li><strong>Alternative:</strong> Use Full Register to manually choose location</li>
+                </ul>
+            </div>
+
             <div style="margin-top: 30px;">
-                <button onclick="retryLocation()" class="action-btn">Try Again</button>
-                <a href="@Url.Action("FullRegister", "Pilot")" class="action-btn secondary">Use Full Register</a>
+                <button onclick="retryLocation()" class="action-btn">🔄 Try Again</button>
+                <a href="@Url.Action("FullRegister", "Pilot")" class="action-btn secondary">📝 Use Full Register</a>
             </div>
         </div>
     </div>
@@ -181,9 +315,10 @@
     <script>
         var map;
         var userMarker;
+        var currentPosition = null;
+        var duplicateCheckPassed = false;
 
         document.addEventListener('DOMContentLoaded', function () {
-            // Initialize the map
             map = L.map('quick-register-map', {
                 center: [60.4720, 8.4689],
                 zoom: 6,
@@ -194,37 +329,47 @@
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
 
-            // Start getting user location
             getUserLocation();
         });
 
         function getUserLocation() {
-            // Check if browser supports geolocation
-            if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition(
-                    handleLocationSuccess,
-                    handleLocationError,
-                    {
-                        enableHighAccuracy: true,
-                        timeout: 10000,
-                        maximumAge: 0
-                    }
-                );
-            } else {
-                handleLocationError({ code: 0, message: "Geolocation not supported" });
+            console.log('Attempting to get user location...');
+
+            if (!("geolocation" in navigator)) {
+                console.error('Geolocation not supported');
+                showError("Your browser doesn't support location services. Please use Full Register instead.");
+                return;
             }
+
+            const isSecureContext = window.isSecureContext || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            
+            if (!isSecureContext) {
+                console.warn('Not running in secure context (HTTPS or localhost)');
+                showError("Location access requires HTTPS or localhost. Please use Full Register or access via localhost.");
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                handleLocationSuccess,
+                handleLocationError,
+                {
+                    enableHighAccuracy: true,
+                    timeout: 15000,
+                    maximumAge: 0
+                }
+            );
         }
 
         function handleLocationSuccess(position) {
+            console.log('Location success:', position);
+            
             var lat = position.coords.latitude;
             var lng = position.coords.longitude;
 
-            console.log('Location captured:', lat, lng);
+            currentPosition = { lat: lat, lng: lng };
 
-            // Center map on user location
             map.setView([lat, lng], 15);
 
-            // Add marker at user location
             userMarker = L.marker([lat, lng], {
                 icon: L.icon({
                     iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
@@ -236,62 +381,145 @@
                 })
             }).addTo(map);
 
-            // Create GeoJSON for the point
-            var geoJson = {
-                type: "Feature",
-                geometry: {
-                    type: "Point",
-                    coordinates: [lng, lat]
-                },
-                properties: {}
-            };
-
-            // Send to server
-            saveQuickRegistration(geoJson);
+            checkForDuplicates(lat, lng);
         }
 
         function handleLocationError(error) {
             console.error('Location error:', error);
             
-            // Hide loading, show error
-            document.getElementById('loading-state').classList.add('hidden');
-            document.getElementById('error-state').classList.remove('hidden');
+            let errorMessage = "We couldn't get your location. ";
+            
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    errorMessage += "You denied location access. Please allow location in your browser settings.";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    errorMessage += "Location information is unavailable. Check your device settings.";
+                    break;
+                case error.TIMEOUT:
+                    errorMessage += "Location request timed out. Please try again.";
+                    break;
+                default:
+                    errorMessage += "An unknown error occurred.";
+            }
+            
+            if (!window.isSecureContext && window.location.hostname !== 'localhost') {
+                errorMessage += " Note: Location requires HTTPS or localhost.";
+            }
+            
+            showError(errorMessage);
         }
 
-        function saveQuickRegistration(geoJson) {
-            // Send the location data to the server
-            fetch('@Url.Action("SaveQuickRegister", "Pilot")', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
-                },
-                body: JSON.stringify({
-                    obstacleGeometry: JSON.stringify(geoJson)
+        function showError(message) {
+            document.getElementById('loading-state').classList.add('hidden');
+            document.getElementById('error-state').classList.remove('hidden');
+            document.getElementById('error-message').textContent = message;
+        }
+
+        function checkForDuplicates(lat, lng) {
+            console.log('Checking for duplicates...');
+
+            fetch(`/Pilot/CheckDuplicates?latitude=${lat}&longitude=${lng}&radiusMeters=10`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Duplicate check response:', data);
+
+                    if (data.success && data.count > 0) {
+                        showDuplicateWarning(data.obstacles);
+                    } else {
+                        duplicateCheckPassed = true;
+                        proceedWithRegistration();
+                    }
                 })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Hide loading, show success
-                    document.getElementById('loading-state').classList.add('hidden');
-                    document.getElementById('success-state').classList.remove('hidden');
-                } else {
-                    handleLocationError({ message: data.message || 'Failed to save location' });
-                }
-            })
-            .catch(error => {
-                console.error('Save error:', error);
-                handleLocationError({ message: 'Failed to save location' });
+                .catch(error => {
+                    console.error('Error checking duplicates:', error);
+                    duplicateCheckPassed = true;
+                    proceedWithRegistration();
+                });
+        }
+
+        function showDuplicateWarning(obstacles) {
+            document.getElementById('loading-state').classList.add('hidden');
+            document.getElementById('duplicate-state').classList.remove('hidden');
+
+            const listContainer = document.getElementById('duplicate-list');
+            listContainer.innerHTML = '';
+
+            obstacles.forEach((obstacle, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'duplicate-item';
+                itemDiv.innerHTML = `
+                    <h3>${index + 1}. ${obstacle.type}</h3>
+                    <p><strong>Navn:</strong> ${obstacle.name}</p>
+                    <p><strong>Høyde:</strong> ${obstacle.height} meter</p>
+                    <p><strong>Beskrivelse:</strong> ${obstacle.description}</p>
+                    <p class="distance"><strong>Avstand:</strong> ${obstacle.distance} meter unna</p>
+                `;
+                listContainer.appendChild(itemDiv);
             });
         }
 
+        function cancelRegistration() {
+            window.location.href = '@Url.Action("RegisterType", "Pilot")';
+        }
+
+        function continueRegistration() {
+            document.getElementById('duplicate-state').classList.add('hidden');
+            document.getElementById('loading-state').classList.remove('hidden');
+            duplicateCheckPassed = true;
+            proceedWithRegistration();
+        }
+
+        function proceedWithRegistration() {
+            if (!currentPosition) {
+                console.error('No position available');
+                return;
+            }
+
+            const wkt = `POINT(${currentPosition.lng} ${currentPosition.lat})`;
+            console.log('Saving registration:', wkt);
+
+            fetch('@Url.Action("QuickRegister", "Pilot")', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `obstacleGeometry=${encodeURIComponent(wkt)}`
+            })
+                .then(response => {
+                    if (response.ok) {
+                        showSuccess();
+                    } else {
+                        throw new Error('Save failed');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error saving:', error);
+                    showError('Failed to save registration. Please try again.');
+                });
+        }
+
+        function showSuccess() {
+            document.getElementById('loading-state').classList.add('hidden');
+            document.getElementById('success-state').classList.remove('hidden');
+            
+            let seconds = 3;
+            const countdownElement = document.getElementById('countdown');
+            
+            const timer = setInterval(function() {
+                seconds--;
+                countdownElement.textContent = seconds;
+                
+                if (seconds <= 0) {
+                    clearInterval(timer);
+                    window.location.href = '@Url.Action("RegisterType", "Pilot")';
+                }
+            }, 1000);
+        }
+
         function retryLocation() {
-            // Hide error, show loading
             document.getElementById('error-state').classList.add('hidden');
             document.getElementById('loading-state').classList.remove('hidden');
-            
-            // Try again
             getUserLocation();
         }
     </script>

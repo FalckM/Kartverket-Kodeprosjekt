@@ -184,10 +184,10 @@ C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstW
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\staticwebassets.build.json.cache
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\staticwebassets.development.json
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\staticwebassets.build.endpoints.json
-C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\FirstWeb.EB49BA39.Up2Date
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\FirstWebApplication.dll
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\refint\FirstWebApplication.dll
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\FirstWebApplication.pdb
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\FirstWebApplication.genruntimeconfig.cache
 C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\ref\FirstWebApplication.dll
+C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

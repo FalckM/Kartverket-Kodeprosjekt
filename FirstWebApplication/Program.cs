@@ -48,21 +48,43 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 var app = builder.Build();
 
-// Initialize roles and seed test users at startup
+// ============================================================================
+// RIKTIG: Ensure database exists FIRST, then seed roles and users
+// ============================================================================
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+    var logger = services.GetRequiredService<ILogger<Program>>();
 
-    // Create the three roles (Pilot, Registerfører, Admin)
-    var roleInitializer = services.GetRequiredService<RoleInitializerService>();
-    await roleInitializer.InitializeRolesAsync();
-
-    // Seed test users (pilot@test.com, registerforer@test.com, admin@test.com)
-    // Only runs in Development environment
-    if (app.Environment.IsDevelopment())
+    try
     {
-        var userSeeder = services.GetRequiredService<UserSeederService>();
-        await userSeeder.SeedTestUsersAsync();
+        // Step 1: Get database context
+        var context = services.GetRequiredService<ApplicationDbContext>();
+
+        // Step 2: Apply migrations (this creates database if it doesn't exist)
+        logger.LogInformation("Applying database migrations...");
+        context.Database.Migrate();
+        logger.LogInformation("Database migrations applied successfully");
+
+        // Step 3: NOW we can safely initialize roles (database exists now!)
+        logger.LogInformation("Initializing roles...");
+        var roleInitializer = services.GetRequiredService<RoleInitializerService>();
+        await roleInitializer.InitializeRolesAsync();
+        logger.LogInformation("Roles initialized successfully");
+
+        // Step 4: Seed test users (only in Development)
+        if (app.Environment.IsDevelopment())
+        {
+            logger.LogInformation("Seeding test users...");
+            var userSeeder = services.GetRequiredService<UserSeederService>();
+            await userSeeder.SeedTestUsersAsync();
+            logger.LogInformation("Test users seeded successfully");
+        }
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "An error occurred during database initialization");
+        // Don't crash the app, just log the error
     }
 }
 

@@ -7,6 +7,7 @@ namespace FirstWebApplication.Services
 {
     /// <summary>
     /// Forbedret service for å generere realistisk testdata til databasen.
+    /// Nå inkluderer vi også ObstacleType-feltet!
     /// </summary>
     public class DatabaseSeeder
     {
@@ -67,14 +68,6 @@ namespace FirstWebApplication.Services
                 string lastName = lastNames[_random.Next(lastNames.Length)];
                 string email = $"{firstName.ToLower()}.{lastName.ToLower()}{i}@pilot.no";
 
-                // Sjekk om bruker allerede eksisterer
-                var existingUser = await _userManager.FindByEmailAsync(email);
-                if (existingUser != null)
-                {
-                    pilots.Add(existingUser);
-                    continue;
-                }
-
                 var user = new IdentityUser
                 {
                     UserName = email,
@@ -95,7 +88,8 @@ namespace FirstWebApplication.Services
         }
 
         /// <summary>
-        /// Oppretter hindringer med realistiske norske lokasjoner, koordinater og varierte tidspunkt.
+        /// Oppretter hindringer med realistiske norske lokasjoner, koordinater, varierte tidspunkt,
+        /// og nå også med ObstacleType!
         /// </summary>
         private async Task<int> SeedObstaclesAsync(List<IdentityUser> pilots, int count)
         {
@@ -119,19 +113,19 @@ namespace FirstWebApplication.Services
                 new { City = "Sandefjord", Lat = 59.1312, Lon = 10.2166 }
             };
 
-            // Hindertyper med realistiske høyder
+            // Hindertyper med realistiske høyder OG TYPE
             var obstacleTypes = new[]
             {
-                new { Type = "Radio Tower", MinHeight = 30, MaxHeight = 80 },
-                new { Type = "TV Mast", MinHeight = 40, MaxHeight = 90 },
-                new { Type = "Mobile Antenna", MinHeight = 15, MaxHeight = 45 },
-                new { Type = "Power Line", MinHeight = 20, MaxHeight = 50 },
-                new { Type = "Wind Turbine", MinHeight = 60, MaxHeight = 100 },
-                new { Type = "Building", MinHeight = 15, MaxHeight = 85 },
-                new { Type = "Church Spire", MinHeight = 25, MaxHeight = 70 },
-                new { Type = "Crane", MinHeight = 30, MaxHeight = 75 },
-                new { Type = "Smoke Stack", MinHeight = 35, MaxHeight = 80 },
-                new { Type = "Monument", MinHeight = 10, MaxHeight = 40 }
+                new { Type = "Mast", DisplayName = "Radio Tower", MinHeight = 30, MaxHeight = 80 },
+                new { Type = "Mast", DisplayName = "TV Mast", MinHeight = 40, MaxHeight = 90 },
+                new { Type = "Antenne", DisplayName = "Mobile Antenna", MinHeight = 15, MaxHeight = 45 },
+                new { Type = "Strømledning", DisplayName = "Power Line", MinHeight = 20, MaxHeight = 50 },
+                new { Type = "Vindturbin", DisplayName = "Wind Turbine", MinHeight = 60, MaxHeight = 100 },
+                new { Type = "Bygning", DisplayName = "Building", MinHeight = 15, MaxHeight = 85 },
+                new { Type = "Kirketårn", DisplayName = "Church Spire", MinHeight = 25, MaxHeight = 70 },
+                new { Type = "Kran", DisplayName = "Crane", MinHeight = 30, MaxHeight = 75 },
+                new { Type = "Skorstein", DisplayName = "Smoke Stack", MinHeight = 35, MaxHeight = 80 },
+                new { Type = "Monument", DisplayName = "Monument", MinHeight = 10, MaxHeight = 40 }
             };
 
             var obstacles = new List<ObstacleData>();
@@ -162,19 +156,27 @@ namespace FirstWebApplication.Services
                 bool isApproved = statusRoll < 70;
                 bool isRejected = !isApproved && statusRoll < 90;
 
+                // Lag en GeoJSON Point for lokasjonen
+                string geometryJson = $@"{{
+                    ""type"": ""Feature"",
+                    ""geometry"": {{
+                        ""type"": ""Point"",
+                        ""coordinates"": [{lon}, {lat}]
+                    }},
+                    ""properties"": {{}}
+                }}";
+
                 var obstacle = new ObstacleData
                 {
-                    // UTEN bynavn - bare type og nummer
-                    ObstacleName = $"{obstacleType.Type} #{i + 1}",
-                    ObstacleHeight = height,
-                    ObstacleDescription = $"{obstacleType.Type} near {location.City}. Height: {height}m. Registered for aviation safety.",
+                    // Navn uten bynavn - bare type og nummer
+                    ObstacleName = $"{obstacleType.DisplayName} #{i + 1}",
 
-                    // MED koordinater hvis feltene finnes
-                    // Uncomment hvis du har disse feltene:
-                    // Latitude = lat,
-                    // Longitude = lon,
-                    // GeometryType = "Point",
-                    // Coordinates = $"POINT({lon} {lat})",
+                    // VIKTIG: ObstacleType er nå inkludert!
+                    ObstacleType = obstacleType.Type,
+
+                    ObstacleHeight = height,
+                    ObstacleDescription = $"{obstacleType.DisplayName} near {location.City}. Height: {height}m. Registered for aviation safety.",
+                    ObstacleGeometry = geometryJson,
 
                     RegisteredBy = pilot.Email,
                     RegisteredDate = registeredDate,
@@ -194,32 +196,32 @@ namespace FirstWebApplication.Services
 
         /// <summary>
         /// Genererer tilfeldig dato MED variert tidspunkt mellom 2023-2025.
+        /// Dette gir mer realistiske data med forskjellige klokkeslett.
         /// </summary>
         private DateTime GenerateRandomDateTime()
         {
-            // 20% sjanse for 2023, 30% for 2024, 50% for 2025
-            int yearRoll = _random.Next(100);
-            int year;
+            // Start: 1. januar 2023
+            DateTime startDate = new DateTime(2023, 1, 1);
 
-            if (yearRoll < 20)
-                year = 2023;
-            else if (yearRoll < 50)
-                year = 2024;
-            else
-                year = 2025;
+            // Slutt: 31. desember 2024
+            DateTime endDate = new DateTime(2024, 12, 31);
 
-            // Tilfeldig måned (1-12)
-            int month = _random.Next(1, 13);
+            // Antall dager mellom start og slutt
+            int range = (endDate - startDate).Days;
 
-            // Tilfeldig dag (1-28 for å unngå problemer med februar)
-            int day = _random.Next(1, 29);
+            // Velg tilfeldig dag
+            int randomDays = _random.Next(range);
 
-            // NYTT: Tilfeldig tidspunkt på dagen (0-23 timer, 0-59 minutter)
-            int hour = _random.Next(0, 24);
-            int minute = _random.Next(0, 60);
-            int second = _random.Next(0, 60);
+            // Velg tilfeldig time (0-23)
+            int randomHour = _random.Next(0, 24);
 
-            return new DateTime(year, month, day, hour, minute, second);
+            // Velg tilfeldig minutt (0-59)
+            int randomMinute = _random.Next(0, 60);
+
+            // Returner komplett dato med tid
+            return startDate.AddDays(randomDays)
+                           .AddHours(randomHour)
+                           .AddMinutes(randomMinute);
         }
     }
 }

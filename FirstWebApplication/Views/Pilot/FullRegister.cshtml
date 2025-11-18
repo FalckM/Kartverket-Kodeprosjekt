@@ -103,11 +103,35 @@
         color: #DC2626;
         font-size: 12px;
         margin-top: 4px;
+        display: block;
+    }
+
+    /* Loading indicator */
+    .loading-overlay {
+        position: absolute;
+        top: 80px;
+        left: 20px;
+        background: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        z-index: 999;
+        font-size: 14px;
+        color: #6B7280;
+    }
+
+    .loading-overlay.hidden {
+        display: none;
     }
 </style>
 
 <!-- Map Container -->
 <div id="map"></div>
+
+<!-- Loading indicator -->
+<div id="loading-obstacles" class="loading-overlay">
+    <span>📍 Loading existing obstacles...</span>
+</div>
 
 <!-- Registration Form (Sidebar) -->
 <div class="registration-form">
@@ -117,14 +141,14 @@
     <div class="alert alert-info">
         <strong>How to register:</strong>
         <ul style="margin: 8px 0 0 0; padding-left: 20px; font-size: 13px;">
-            <li>Use the marker tool on the map</li>
-            <li>Click to place a marker or draw a line</li>
-            <li>Fill in all required details below</li>
-            <li>Click Submit to complete registration</li>
+            <li>🔴 Red markers = Existing obstacles (click to view)</li>
+            <li>🟢 Use draw tools to add your new obstacle</li>
+            <li>📝 Fill in all required details below</li>
+            <li>✅ Click Submit to complete registration</li>
         </ul>
     </div>
 
-    <form asp-action="SaveFullRegister" method="post" id="registrationForm">
+    <form asp-action="FullRegister" method="post" id="registrationForm">
         <!-- Hidden field for geometry -->
         <input type="hidden" asp-for="ObstacleGeometry" id="obstacleGeometry" />
 
@@ -133,6 +157,25 @@
             <label asp-for="ObstacleName">Obstacle Name *</label>
             <input asp-for="ObstacleName" class="form-control" placeholder="e.g., Radio Tower, Power Line" />
             <span asp-validation-for="ObstacleName" class="text-validation-error"></span>
+        </div>
+
+        <!-- Obstacle Type -->
+        <div class="form-group">
+            <label asp-for="ObstacleType">Obstacle Type *</label>
+            <select asp-for="ObstacleType" class="form-control">
+                <option value="">-- Select Type --</option>
+                <option value="Mast">Mast (Radio/TV Tower)</option>
+                <option value="Strømledning">Strømledning (Power Line)</option>
+                <option value="Vindturbin">Vindturbin (Wind Turbine)</option>
+                <option value="Bygning">Bygning (Building)</option>
+                <option value="Kirketårn">Kirketårn (Church Spire)</option>
+                <option value="Kran">Kran (Crane)</option>
+                <option value="Skorstein">Skorstein (Smoke Stack)</option>
+                <option value="Monument">Monument</option>
+                <option value="Antenne">Antenne (Mobile/Communication)</option>
+                <option value="Annet">Annet (Other)</option>
+            </select>
+            <span asp-validation-for="ObstacleType" class="text-validation-error"></span>
         </div>
 
         <!-- Height -->
@@ -165,7 +208,7 @@
     
     <script>
         // Initialize map centered on Norway
-        const map = L.map('map').setView([58.5, 8.5], 6);
+        const map = L.map('map').setView([60.4720, 8.4689], 6);
 
         // Add OpenStreetMap tiles
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -173,9 +216,13 @@
             maxZoom: 19
         }).addTo(map);
 
-        // Create a feature group to store drawn items
+        // Create a feature group to store drawn items (NEW obstacles only)
         const drawnItems = new L.FeatureGroup();
         map.addLayer(drawnItems);
+
+        // Create a separate layer for EXISTING obstacles (read-only)
+        const existingObstaclesLayer = new L.LayerGroup();
+        map.addLayer(existingObstaclesLayer);
 
         // Initialize the draw control
         const drawControl = new L.Control.Draw({
@@ -185,19 +232,19 @@
                     allowIntersection: false,
                     showArea: true,
                     shapeOptions: {
-                        color: '#e74c3c'
+                        color: '#10b981' // Green for new obstacles
                     }
                 },
                 polyline: {
                     shapeOptions: {
-                        color: '#3498db'
+                        color: '#10b981' // Green for new obstacles
                     }
                 },
                 circle: false,
                 circlemarker: false,
                 rectangle: {
                     shapeOptions: {
-                        color: '#2ecc71'
+                        color: '#10b981' // Green for new obstacles
                     }
                 },
                 marker: true
@@ -209,25 +256,109 @@
         });
         map.addControl(drawControl);
 
-        // Handle when user draws something
+        // ========================================================================
+        // LOAD EXISTING OBSTACLES FROM SERVER
+        // ========================================================================
+        fetch('/Pilot/GetAllObstaclesJson')
+            .then(response => response.json())
+            .then(obstacles => {
+                console.log(`Loaded ${obstacles.length} existing obstacles`);
+                
+                obstacles.forEach(obstacle => {
+                    try {
+                        // Parse geometry (can be GeoJSON or WKT)
+                        let geometry = null;
+                        
+                        try {
+                            // Try GeoJSON first
+                            const geoJSON = JSON.parse(obstacle.geometry);
+                            geometry = geoJSON;
+                        } catch {
+                            // If not GeoJSON, try WKT
+                            geometry = parseWKT(obstacle.geometry);
+                        }
+
+                        if (geometry) {
+                            // Create marker/layer for this obstacle
+                            let layer;
+
+                            if (geometry.type === 'Point' || geometry.geometry?.type === 'Point') {
+                                const coords = geometry.geometry ? geometry.geometry.coordinates : geometry.coordinates;
+                                layer = L.marker([coords[1], coords[0]], {
+                                    icon: L.icon({
+                                        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+                                        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+                                        iconSize: [25, 41],
+                                        iconAnchor: [12, 41],
+                                        popupAnchor: [1, -34],
+                                        shadowSize: [41, 41]
+                                    })
+                                });
+                            } else if (geometry.type === 'LineString' || geometry.geometry?.type === 'LineString') {
+                                const coords = geometry.geometry ? geometry.geometry.coordinates : geometry.coordinates;
+                                const latLngs = coords.map(c => [c[1], c[0]]);
+                                layer = L.polyline(latLngs, { color: '#ef4444', weight: 3 }); // Red
+                            } else if (geometry.type === 'Polygon' || geometry.geometry?.type === 'Polygon') {
+                                const coords = geometry.geometry ? geometry.geometry.coordinates[0] : geometry.coordinates[0];
+                                const latLngs = coords.map(c => [c[1], c[0]]);
+                                layer = L.polygon(latLngs, { color: '#ef4444', weight: 3 }); // Red
+                            }
+
+                            if (layer) {
+                                // Add popup with obstacle info
+                                const statusText = obstacle.isApproved ? '✅ Approved' : 
+                                                 obstacle.isRejected ? '❌ Rejected' : 
+                                                 '⏳ Pending';
+
+                                layer.bindPopup(`
+                                    <div style="min-width: 200px;">
+                                        <strong style="font-size: 16px;">${obstacle.name}</strong><br>
+                                        <strong>Type:</strong> ${obstacle.type}<br>
+                                        <strong>Height:</strong> ${obstacle.height} m<br>
+                                        <strong>Status:</strong> ${statusText}<br>
+                                        <br>
+                                        <em style="color: #6B7280; font-size: 12px;">ID: #${obstacle.id}</em>
+                                    </div>
+                                `);
+
+                                // Add to existing obstacles layer (NOT editable)
+                                existingObstaclesLayer.addLayer(layer);
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Error displaying obstacle:', obstacle.id, error);
+                    }
+                });
+
+                // Hide loading indicator
+                document.getElementById('loading-obstacles').classList.add('hidden');
+            })
+            .catch(error => {
+                console.error('Error loading obstacles:', error);
+                document.getElementById('loading-obstacles').innerHTML = '<span style="color: #ef4444;">❌ Failed to load obstacles</span>';
+            });
+
+        // ========================================================================
+        // HANDLE NEW OBSTACLE CREATION (GREEN)
+        // ========================================================================
         map.on(L.Draw.Event.CREATED, function (event) {
             const layer = event.layer;
             
-            // Remove previous drawings (only allow one obstacle)
+            // Remove previous drawings (only allow one NEW obstacle)
             drawnItems.clearLayers();
             
-            // Add the new drawing
+            // Add the new drawing (GREEN)
             drawnItems.addLayer(layer);
-
+            
             // Convert to WKT format and save to hidden field
             const geoJSON = layer.toGeoJSON();
             const wkt = convertGeoJSONToWKT(geoJSON);
             document.getElementById('obstacleGeometry').value = wkt;
             
-            console.log('Geometry saved:', wkt);
+            console.log('New obstacle geometry saved:', wkt);
         });
 
-        // Handle when user edits
+        // Handle when user edits their NEW obstacle
         map.on(L.Draw.Event.EDITED, function (event) {
             const layers = event.layers;
             layers.eachLayer(function (layer) {
@@ -237,10 +368,14 @@
             });
         });
 
-        // Handle when user deletes
+        // Handle when user deletes their NEW obstacle
         map.on(L.Draw.Event.DELETED, function (event) {
             document.getElementById('obstacleGeometry').value = '';
         });
+
+        // ========================================================================
+        // UTILITY FUNCTIONS
+        // ========================================================================
 
         // Convert GeoJSON to WKT format
         function convertGeoJSONToWKT(geoJSON) {
@@ -260,18 +395,46 @@
             return '';
         }
 
+        // Parse WKT to GeoJSON-like structure
+        function parseWKT(wkt) {
+            if (wkt.startsWith('POINT')) {
+                const coords = wkt.match(/POINT\(([-\d.]+) ([-\d.]+)\)/);
+                if (coords) {
+                    return {
+                        type: 'Point',
+                        coordinates: [parseFloat(coords[1]), parseFloat(coords[2])]
+                    };
+                }
+            } else if (wkt.startsWith('LINESTRING')) {
+                const coordsStr = wkt.match(/LINESTRING\((.*)\)/)[1];
+                const coordinates = coordsStr.split(', ').map(coord => {
+                    const [lon, lat] = coord.split(' ').map(parseFloat);
+                    return [lon, lat];
+                });
+                return { type: 'LineString', coordinates };
+            } else if (wkt.startsWith('POLYGON')) {
+                const coordsStr = wkt.match(/POLYGON\(\((.*)\)\)/)[1];
+                const coordinates = coordsStr.split(', ').map(coord => {
+                    const [lon, lat] = coord.split(' ').map(parseFloat);
+                    return [lon, lat];
+                });
+                return { type: 'Polygon', coordinates: [coordinates] };
+            }
+            return null;
+        }
+
         // Form validation
         document.getElementById('registrationForm').addEventListener('submit', function(e) {
             const geometry = document.getElementById('obstacleGeometry').value;
             
             if (!geometry) {
                 e.preventDefault();
-                alert('Please mark the obstacle location on the map before submitting!');
+                alert('⚠️ Please mark the obstacle location on the map before submitting!');
                 return false;
             }
         });
 
-        // Try to get user's location
+        // Try to get user's location and center map
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
                 const lat = position.coords.latitude;

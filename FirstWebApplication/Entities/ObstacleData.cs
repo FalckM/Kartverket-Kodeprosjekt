@@ -4,21 +4,20 @@ namespace FirstWebApplication.Entities
 {
     public class ObstacleData
     {
-        // Primary key
         [Key]
         public int Id { get; set; }
 
-        // Obstacle information
+        // ALLE FELT ER REQUIRED IGJEN! ✅
         [Required(ErrorMessage = "Obstacle name is required")]
-        [StringLength(100, ErrorMessage = "Name cannot exceed 100 characters")]
+        [StringLength(100)]
         public string ObstacleName { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Height is required")]
-        [Range(0.1, 10000, ErrorMessage = "Height must be between 0.1 and 10000 meters")]
+        [Range(0.1, 10000)]
         public double ObstacleHeight { get; set; }
 
         [Required(ErrorMessage = "Description is required")]
-        [StringLength(1000, ErrorMessage = "Description cannot exceed 1000 characters")]
+        [StringLength(1000)]
         public string ObstacleDescription { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Location is required")]
@@ -27,15 +26,12 @@ namespace FirstWebApplication.Entities
         [StringLength(50)]
         public string? ObstacleType { get; set; }
 
-        // Registration information
         public DateTime RegisteredDate { get; set; } = DateTime.Now;
 
         [StringLength(100)]
         public string? RegisteredBy { get; set; }
 
-        // Approval/Rejection fields
         public bool IsApproved { get; set; } = false;
-
         public bool IsRejected { get; set; } = false;
 
         [StringLength(100)]
