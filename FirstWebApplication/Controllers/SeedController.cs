@@ -37,7 +37,7 @@ namespace FirstWebApplication.Controllers
             try
             {
                 await _seeder.SeedAllDataAsync();
-                TempData["Success"] = "✅ Database seeding fullført! 20 piloter og 150 hindringer ble opprettet.";
+                TempData["Success"] = "✅ Database seeding fullført! 20 piloter, 8 obstacle types, og 150 hindringer ble opprettet.";
             }
             catch (Exception ex)
             {

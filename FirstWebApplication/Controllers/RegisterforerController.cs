@@ -1,38 +1,42 @@
 using FirstWebApplication.Data;
 using FirstWebApplication.Entities;
+using FirstWebApplication.Models.Obstacle;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace FirstWebApplication.Controllers
 {
-    // Only users with "Registerfører" role can access this controller
     [Authorize(Roles = "Registerfører")]
     public class RegisterforerController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly ILogger<RegisterforerController> _logger;
 
-        public RegisterforerController(ApplicationDbContext context, ILogger<RegisterforerController> logger)
+        public RegisterforerController(ApplicationDbContext context)
         {
             _context = context;
-            _logger = logger;
         }
 
-        // GET: /Registerforer/RegisterforerDashboard
-        // Landing page for Registerfører after login
         [HttpGet]
         public async Task<IActionResult> RegisterforerDashboard()
         {
-            // Get counts for dashboard - only count completed obstacles
-            var pendingCount = await _context.Obstacles.CountAsync(o =>
-                !o.IsApproved && !o.IsRejected
-                && !string.IsNullOrEmpty(o.ObstacleName)
-                && o.ObstacleHeight > 0
-                && !string.IsNullOrEmpty(o.ObstacleDescription));
+            var pendingCount = await _context.ObstacleStatuses
+                .Where(s => s.IsActive && s.StatusTypeId == 2)
+                .Select(s => s.ObstacleId)
+                .Distinct()
+                .CountAsync();
 
-            var approvedCount = await _context.Obstacles.CountAsync(o => o.IsApproved);
-            var rejectedCount = await _context.Obstacles.CountAsync(o => o.IsRejected);
+            var approvedCount = await _context.ObstacleStatuses
+                .Where(s => s.IsActive && s.StatusTypeId == 3)
+                .Select(s => s.ObstacleId)
+                .Distinct()
+                .CountAsync();
+
+            var rejectedCount = await _context.ObstacleStatuses
+                .Where(s => s.IsActive && s.StatusTypeId == 4)
+                .Select(s => s.ObstacleId)
+                .Distinct()
+                .CountAsync();
 
             ViewBag.PendingCount = pendingCount;
             ViewBag.ApprovedCount = approvedCount;
@@ -41,210 +45,346 @@ namespace FirstWebApplication.Controllers
             return View();
         }
 
-        // GET: /Registerforer/PendingObstacles
-        // Show all obstacles waiting for approval
         [HttpGet]
         public async Task<IActionResult> PendingObstacles()
         {
-            // Only show completed obstacles (those with name, height, and description)
-            // Incomplete quick registrations should not appear here
-            var pendingObstacles = await _context.Obstacles
-                .Where(o => !o.IsApproved && !o.IsRejected
-                    && !string.IsNullOrEmpty(o.ObstacleName)  // Must have name
-                    && o.ObstacleHeight > 0                    // Must have height
-                    && !string.IsNullOrEmpty(o.ObstacleDescription)) // Must have description
-                .OrderBy(o => o.RegisteredDate)
+            var pendingObstacleIds = await _context.ObstacleStatuses
+                .Where(s => s.IsActive && s.StatusTypeId == 2)
+                .Select(s => s.ObstacleId)
+                .Distinct()
                 .ToListAsync();
 
-            return View(pendingObstacles);
+            var obstacles = await _context.Obstacles
+                .Include(o => o.ObstacleType)
+                .Include(o => o.RegisteredByUser)
+                .Where(o => pendingObstacleIds.Contains(o.Id))
+                .ToListAsync();
+
+            var viewModels = obstacles.Select(o => new ObstacleListItemViewModel
+            {
+                Id = o.Id,
+                Name = o.Name ?? "Unnamed",
+                Type = o.ObstacleType?.Name,
+                Height = o.Height ?? 0,
+                RegisteredBy = o.RegisteredByUser?.Email ?? "Unknown",
+                RegisteredDate = o.RegisteredDate
+            }).ToList();
+
+            return View(viewModels);
         }
 
-        // GET: /Registerforer/ApprovedObstacles
-        // Show all approved obstacles
         [HttpGet]
         public async Task<IActionResult> ApprovedObstacles()
         {
-            var approvedObstacles = await _context.Obstacles
-                .Where(o => o.IsApproved)
-                .OrderByDescending(o => o.ApprovedDate)
+            var approvedObstacleIds = await _context.ObstacleStatuses
+                .Where(s => s.IsActive && s.StatusTypeId == 3)
+                .Select(s => s.ObstacleId)
+                .Distinct()
                 .ToListAsync();
 
-            return View(approvedObstacles);
+            var obstacles = await _context.Obstacles
+                .Include(o => o.ObstacleType)
+                .Include(o => o.CurrentStatus)
+                    .ThenInclude(s => s.ChangedByUser)
+                .Where(o => approvedObstacleIds.Contains(o.Id))
+                .ToListAsync();
+
+            var viewModels = obstacles.Select(o => new ObstacleListItemViewModel
+            {
+                Id = o.Id,
+                Name = o.Name ?? "Unnamed",
+                Type = o.ObstacleType?.Name,
+                Height = o.Height ?? 0,
+                ProcessedBy = o.CurrentStatus?.ChangedByUser?.Email,
+                ProcessedDate = o.CurrentStatus?.ChangedDate
+            }).ToList();
+
+            return View(viewModels);
         }
 
-        // GET: /Registerforer/RejectedObstacles
-        // Show all rejected obstacles
         [HttpGet]
         public async Task<IActionResult> RejectedObstacles()
         {
-            var rejectedObstacles = await _context.Obstacles
-                .Where(o => o.IsRejected)
-                .OrderByDescending(o => o.RejectedDate)
+            var rejectedObstacleIds = await _context.ObstacleStatuses
+                .Where(s => s.IsActive && s.StatusTypeId == 4)
+                .Select(s => s.ObstacleId)
+                .Distinct()
                 .ToListAsync();
 
-            return View(rejectedObstacles);
+            var obstacles = await _context.Obstacles
+                .Include(o => o.CurrentStatus)
+                    .ThenInclude(s => s.ChangedByUser)
+                .Where(o => rejectedObstacleIds.Contains(o.Id))
+                .ToListAsync();
+
+            var viewModels = obstacles.Select(o => new ObstacleListItemViewModel
+            {
+                Id = o.Id,
+                Name = o.Name ?? "Unnamed",
+                ProcessedBy = o.CurrentStatus?.ChangedByUser?.Email,
+                ProcessedDate = o.CurrentStatus?.ChangedDate,
+                RejectionReason = o.CurrentStatus?.Comments
+            }).ToList();
+
+            return View(viewModels);
         }
 
-        // GET: /Registerforer/ReviewObstacle/5
-        // Review a specific obstacle
         [HttpGet]
         public async Task<IActionResult> ReviewObstacle(int? id)
         {
             if (id == null)
                 return NotFound();
 
-            var obstacle = await _context.Obstacles.FindAsync(id);
+            var obstacle = await _context.Obstacles
+                .Include(o => o.ObstacleType)
+                .Include(o => o.RegisteredByUser)
+                .Include(o => o.CurrentStatus)
+                    .ThenInclude(s => s.StatusType)
+                .Include(o => o.CurrentStatus)
+                    .ThenInclude(s => s.ChangedByUser)
+                .FirstOrDefaultAsync(o => o.Id == id);
 
             if (obstacle == null)
                 return NotFound();
 
-            return View(obstacle);
-        }
+            // Load status history separately
+            var statusHistory = await _context.ObstacleStatuses
+                .Where(s => s.ObstacleId == obstacle.Id && !s.IsActive)
+                .Include(s => s.StatusType)
+                .Include(s => s.ChangedByUser)
+                .OrderByDescending(s => s.ChangedDate)
+                .ToListAsync();
 
-        // POST: /Registerforer/ApproveObstacle/5
-        [HttpPost]
-        public async Task<IActionResult> ApproveObstacle(int id, string approvalComments)
-        {
-            var obstacle = await _context.Obstacles.FindAsync(id);
-
-            if (obstacle == null)
-                return NotFound();
-
-            obstacle.IsApproved = true;
-            obstacle.IsRejected = false;
-            obstacle.ApprovedBy = User.Identity?.Name;
-            obstacle.ApprovedDate = DateTime.Now;
-            obstacle.ApprovalComments = approvalComments;
-
-            await _context.SaveChangesAsync();
-
-            TempData["Message"] = $"Obstacle '{obstacle.ObstacleName}' has been approved!";
-            return RedirectToAction("PendingObstacles");
-        }
-
-        // POST: /Registerforer/RejectObstacle/5
-        [HttpPost]
-        public async Task<IActionResult> RejectObstacle(int id, string rejectionReason)
-        {
-            if (string.IsNullOrWhiteSpace(rejectionReason))
+            var viewModel = new ObstacleDetailsViewModel
             {
-                TempData["Error"] = "Rejection reason is required!";
-                return RedirectToAction("ReviewObstacle", new { id });
+                Id = obstacle.Id,
+                Name = obstacle.Name ?? "Unnamed",
+                Type = obstacle.ObstacleType?.Name,
+                Height = obstacle.Height ?? 0,
+                Description = obstacle.Description ?? "",
+                Location = obstacle.Location,
+                RegisteredBy = obstacle.RegisteredByUser?.Email ?? "Unknown",
+                RegisteredDate = obstacle.RegisteredDate,
+                IsPending = obstacle.CurrentStatus?.StatusTypeId == 2,
+                IsApproved = obstacle.CurrentStatus?.StatusTypeId == 3,
+                IsRejected = obstacle.CurrentStatus?.StatusTypeId == 4,
+                ProcessedBy = obstacle.CurrentStatus?.ChangedByUser?.Email,
+                ProcessedDate = obstacle.CurrentStatus?.ChangedDate,
+                ProcessComments = obstacle.CurrentStatus?.Comments,
+                RejectionReason = obstacle.CurrentStatus?.StatusTypeId == 4 ? obstacle.CurrentStatus?.Comments : null,
+                StatusHistory = statusHistory
+                    .Select(s => new StatusHistoryItem
+                    {
+                        Status = s.StatusType?.Name ?? "Unknown",
+                        ChangedBy = s.ChangedByUser?.Email ?? "Unknown",
+                        ChangedDate = s.ChangedDate,
+                        Comments = s.Comments
+                    })
+                    .ToList()
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ApproveObstacle(ApproveObstacleViewModel model)
+        {
+            var obstacle = await _context.Obstacles
+                .Include(o => o.CurrentStatus)
+                .FirstOrDefaultAsync(o => o.Id == model.ObstacleId);
+
+            if (obstacle == null)
+                return NotFound();
+
+            // Deactivate current status
+            if (obstacle.CurrentStatus != null)
+            {
+                obstacle.CurrentStatus.IsActive = false;
             }
 
-            var obstacle = await _context.Obstacles.FindAsync(id);
+            // Create new approved status
+            var newStatus = new ObstacleStatus
+            {
+                ObstacleId = obstacle.Id,
+                StatusTypeId = 3, // Approved
+                ChangedByUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "",
+                ChangedDate = DateTime.Now,
+                Comments = model.Comments,
+                IsActive = true
+            };
+
+            _context.ObstacleStatuses.Add(newStatus);
+            await _context.SaveChangesAsync();
+
+            obstacle.CurrentStatusId = newStatus.Id;
+            _context.Obstacles.Update(obstacle);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = $"Obstacle '{obstacle.Name}' has been approved!";
+            return RedirectToAction("PendingObstacles");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RejectObstacle(RejectObstacleViewModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model.RejectionReason))
+            {
+                TempData["ErrorMessage"] = "Rejection reason is required!";
+                return RedirectToAction("ReviewObstacle", new { id = model.ObstacleId });
+            }
+
+            var obstacle = await _context.Obstacles
+                .Include(o => o.CurrentStatus)
+                .FirstOrDefaultAsync(o => o.Id == model.ObstacleId);
 
             if (obstacle == null)
                 return NotFound();
 
-            obstacle.IsRejected = true;
-            obstacle.IsApproved = false;
-            obstacle.RejectedBy = User.Identity?.Name;
-            obstacle.RejectedDate = DateTime.Now;
-            obstacle.RejectionReason = rejectionReason;
+            // Deactivate current status
+            if (obstacle.CurrentStatus != null)
+            {
+                obstacle.CurrentStatus.IsActive = false;
+            }
 
+            // Create new rejected status
+            var newStatus = new ObstacleStatus
+            {
+                ObstacleId = obstacle.Id,
+                StatusTypeId = 4, // Rejected
+                ChangedByUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "",
+                ChangedDate = DateTime.Now,
+                Comments = model.RejectionReason + (string.IsNullOrEmpty(model.Comments) ? "" : $"\n\nAdditional: {model.Comments}"),
+                IsActive = true
+            };
+
+            _context.ObstacleStatuses.Add(newStatus);
             await _context.SaveChangesAsync();
 
-            TempData["Message"] = $"Obstacle '{obstacle.ObstacleName}' has been rejected.";
+            obstacle.CurrentStatusId = newStatus.Id;
+            _context.Obstacles.Update(obstacle);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = $"Obstacle '{obstacle.Name}' has been rejected.";
             return RedirectToAction("PendingObstacles");
         }
 
-        // GET: /Registerforer/ViewObstacle/5
-        // View details of any obstacle (approved or rejected)
         [HttpGet]
         public async Task<IActionResult> ViewObstacle(int? id)
         {
             if (id == null)
                 return NotFound();
 
-            var obstacle = await _context.Obstacles.FindAsync(id);
+            var obstacle = await _context.Obstacles
+                .Include(o => o.ObstacleType)
+                .Include(o => o.RegisteredByUser)
+                .Include(o => o.CurrentStatus)
+                    .ThenInclude(s => s.StatusType)
+                .Include(o => o.CurrentStatus)
+                    .ThenInclude(s => s.ChangedByUser)
+                .FirstOrDefaultAsync(o => o.Id == id);
 
             if (obstacle == null)
                 return NotFound();
 
-            return View(obstacle);
+            // Load status history separately
+            var statusHistory = await _context.ObstacleStatuses
+                .Where(s => s.ObstacleId == obstacle.Id && !s.IsActive)
+                .Include(s => s.StatusType)
+                .Include(s => s.ChangedByUser)
+                .OrderByDescending(s => s.ChangedDate)
+                .ToListAsync();
+
+            var viewModel = new ObstacleDetailsViewModel
+            {
+                Id = obstacle.Id,
+                Name = obstacle.Name ?? "Unnamed",
+                Type = obstacle.ObstacleType?.Name,
+                Height = obstacle.Height ?? 0,
+                Description = obstacle.Description ?? "",
+                Location = obstacle.Location,
+                RegisteredBy = obstacle.RegisteredByUser?.Email ?? "Unknown",
+                RegisteredDate = obstacle.RegisteredDate,
+                IsPending = obstacle.CurrentStatus?.StatusTypeId == 2,
+                IsApproved = obstacle.CurrentStatus?.StatusTypeId == 3,
+                IsRejected = obstacle.CurrentStatus?.StatusTypeId == 4,
+                ProcessedBy = obstacle.CurrentStatus?.ChangedByUser?.Email,
+                ProcessedDate = obstacle.CurrentStatus?.ChangedDate,
+                ProcessComments = obstacle.CurrentStatus?.Comments,
+                RejectionReason = obstacle.CurrentStatus?.StatusTypeId == 4 ? obstacle.CurrentStatus?.Comments : null,
+                StatusHistory = statusHistory
+                    .Select(s => new StatusHistoryItem
+                    {
+                        Status = s.StatusType?.Name ?? "Unknown",
+                        ChangedBy = s.ChangedByUser?.Email ?? "Unknown",
+                        ChangedDate = s.ChangedDate,
+                        Comments = s.Comments
+                    })
+                    .ToList()
+            };
+
+            return View(viewModel);
         }
 
-        /// API endpoint for Map View - returnerer alle obstacles med filter-muligheter
-        /// Brukes av Registerfører for å se alle obstacles på kartet
-  
-        /// </summary>
-        /// <param name="type">Filter på obstacle type (f.eks. "Tower", "Power Line")</param>
-        /// <param name="status">Filter på status: "approved", "pending", "rejected", eller "all"</param>
+        [HttpGet]
+        public IActionResult MapView()
+        {
+            return View();
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetObstaclesForMapView(string? type = null, string? status = null)
         {
             try
             {
-                // Start med å hente alle obstacles
-                var query = _context.Obstacles.AsQueryable();
+                var query = _context.Obstacles
+                    .Include(o => o.ObstacleType)
+                    .Include(o => o.CurrentStatus)
+                        .ThenInclude(s => s.StatusType)
+                    .Include(o => o.RegisteredByUser)
+                    .AsQueryable();
 
-                // FILTER 1: Filter på ObstacleType hvis spesifisert
-                // Eksempel: Hvis type = "Tower", vis bare tårn
+                // Filter by type if specified
                 if (!string.IsNullOrEmpty(type) && type != "all")
                 {
-                    query = query.Where(o => o.ObstacleType == type);
+                    query = query.Where(o => o.ObstacleType != null && o.ObstacleType.Name == type);
                 }
 
-                // FILTER 2: Filter på status hvis spesifisert
+                // Filter by status if specified
                 if (!string.IsNullOrEmpty(status) && status != "all")
                 {
-                    switch (status.ToLower())
-                    {
-                        case "approved":
-                            // Bare godkjente obstacles
-                            query = query.Where(o => o.IsApproved);
-                            break;
-                        case "pending":
-                            // Bare obstacles som venter på godkjenning
-                            // (har navn og høyde, men ikke godkjent eller avvist)
-                            query = query.Where(o => !o.IsApproved && !o.IsRejected
-                                                   && !string.IsNullOrEmpty(o.ObstacleName)
-                                                   && o.ObstacleHeight > 0);
-                            break;
-                        case "rejected":
-                            // Bare avviste obstacles
-                            query = query.Where(o => o.IsRejected);
-                            break;
-                    }
+                    if (status == "approved")
+                        query = query.Where(o => o.CurrentStatus != null && o.CurrentStatus.StatusTypeId == 3);
+                    else if (status == "pending")
+                        query = query.Where(o => o.CurrentStatus != null && o.CurrentStatus.StatusTypeId == 2);
+                    else if (status == "rejected")
+                        query = query.Where(o => o.CurrentStatus != null && o.CurrentStatus.StatusTypeId == 4);
                 }
 
-                // Hent dataene fra databasen
                 var obstacles = await query
                     .Select(o => new
                     {
-                        // Grunnleggende info
                         id = o.Id,
-                        name = o.ObstacleName ?? "Unnamed",
-                        type = o.ObstacleType ?? "Unknown",
-                        height = o.ObstacleHeight,
-                        description = o.ObstacleDescription ?? "",
+                        name = o.Name ?? "Unnamed",
+                        type = o.ObstacleType != null ? o.ObstacleType.Name : "Unknown",
+                        height = o.Height ?? 0,
+                        description = o.Description ?? "",
+                        geometry = o.Location,
 
-                        // Geometri for å vise på kart
-                        geometry = o.ObstacleGeometry,
+                        // Status from CurrentStatus
+                        isApproved = o.CurrentStatus != null && o.CurrentStatus.StatusTypeId == 3,
+                        isRejected = o.CurrentStatus != null && o.CurrentStatus.StatusTypeId == 4,
+                        isPending = o.CurrentStatus != null && o.CurrentStatus.StatusTypeId == 2,
 
-                        // Status-informasjon
-                        isApproved = o.IsApproved,
-                        isRejected = o.IsRejected,
-                        isPending = !o.IsApproved && !o.IsRejected
-                                  && !string.IsNullOrEmpty(o.ObstacleName)
-                                  && o.ObstacleHeight > 0,
+                        statusName = o.CurrentStatus != null && o.CurrentStatus.StatusType != null
+                            ? o.CurrentStatus.StatusType.Name
+                            : "Unknown",
 
-                        // Godkjenning/avvisning info
-                        approvedBy = o.ApprovedBy ?? "",
-                        approvedDate = o.ApprovedDate,
-                        rejectedBy = o.RejectedBy ?? "",
-                        rejectedDate = o.RejectedDate,
-                        rejectionReason = o.RejectionReason ?? "",
-
-                        // Registrerings-info (anonymisert for piloter, men Registerfører kan se)
-                        registeredBy = o.RegisteredBy ?? "Unknown",
+                        registeredBy = o.RegisteredByUser != null ? o.RegisteredByUser.Email : "Unknown",
                         registeredDate = o.RegisteredDate
                     })
                     .OrderByDescending(o => o.registeredDate)
                     .ToListAsync();
 
-                // Tell opp statistikk
                 var stats = new
                 {
                     total = obstacles.Count,
@@ -253,7 +393,6 @@ namespace FirstWebApplication.Controllers
                     rejected = obstacles.Count(o => o.isRejected)
                 };
 
-                // Returner både obstacles og statistikk
                 return Json(new
                 {
                     obstacles = obstacles,
@@ -262,16 +401,9 @@ namespace FirstWebApplication.Controllers
             }
             catch (Exception ex)
             {
-                // Logger feilen
                 Console.WriteLine($"Error in GetObstaclesForMapView: {ex.Message}");
                 return StatusCode(500, new { error = "Failed to load obstacles" });
             }
-        }
-
-        [HttpGet]
-        public IActionResult MapView()
-        {
-            return View();
         }
     }
 }

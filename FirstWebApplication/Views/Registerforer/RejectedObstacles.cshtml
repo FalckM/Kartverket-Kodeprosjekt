@@ -1,4 +1,4 @@
-@model IEnumerable<FirstWebApplication.Entities.ObstacleData>
+@model IEnumerable<FirstWebApplication.Models.Obstacle.ObstacleListItemViewModel>
 
 @{
     ViewData["Title"] = "Rejected Obstacles";
@@ -34,21 +34,25 @@
                     {
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#@obstacle.Id</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">@obstacle.ObstacleName</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">@obstacle.RejectedBy</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">@obstacle.Name</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">@(obstacle.ProcessedBy ?? "N/A")</td>
                             <td class="px-6 py-4 text-sm text-gray-700">
                                 @if (!string.IsNullOrEmpty(obstacle.RejectionReason))
                                 {
                                     <span class="line-clamp-2">@obstacle.RejectionReason</span>
                                 }
+                                else
+                                {
+                                    <span class="text-gray-400">No reason provided</span>
+                                }
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                @obstacle.RejectedDate?.ToString("dd.MM.yyyy HH:mm")
+                                @(obstacle.ProcessedDate?.ToString("dd.MM.yyyy HH:mm") ?? "N/A")
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <a asp-action="ViewObstacle" asp-route-id="@obstacle.Id" 
-                                   class="text-indigo-600 hover:text-indigo-800 font-medium">
-                                    View Details
+                                   class="text-indigo-600 hover:text-indigo-900">
+                                    View Details →
                                 </a>
                             </td>
                         </tr>
@@ -56,19 +60,11 @@
                 </tbody>
             </table>
         </div>
-
-        <div class="mt-4 text-gray-600 text-sm">
-            Total rejected: <strong>@Model.Count()</strong> obstacles
-        </div>
     }
     else
     {
-        <div class="bg-white rounded-lg shadow-md p-12 text-center">
-            <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            <h3 class="text-xl font-medium text-gray-900 mb-2">No Rejected Obstacles</h3>
-            <p class="text-gray-600">No obstacles have been rejected.</p>
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
+            <p class="text-gray-600 text-lg">No rejected obstacles.</p>
         </div>
     }
 </div>

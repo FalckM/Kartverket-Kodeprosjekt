@@ -1,4 +1,5 @@
-﻿using FirstWebApplication.Models.User;
+﻿using FirstWebApplication.Entities;
+using FirstWebApplication.Models.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,24 +7,26 @@ namespace FirstWebApplication.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
         public AccountController(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
         }
 
-        // POST: /Account/Register
+        // ============================================================
+        // REGISTER - Opprett ny bruker
+        // ============================================================
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser
+                var user = new ApplicationUser
                 {
                     UserName = model.Email,
                     Email = model.Email
@@ -33,13 +36,13 @@ namespace FirstWebApplication.Controllers
 
                 if (result.Succeeded)
                 {
-                    // Automatically assign "Pilot" role to all new users
+                    // Automatisk tildel "Pilot" rolle til alle nye brukere
                     await _userManager.AddToRoleAsync(user, "Pilot");
 
-                    // Log in the user
+                    // Logg inn brukeren
                     await _signInManager.SignInAsync(user, isPersistent: false);
 
-                    // Redirect to RegisterType (first thing they see)
+                    // Redirect til RegisterType (første side de ser)
                     return RedirectToAction("RegisterType", "Pilot");
                 }
 
@@ -57,7 +60,9 @@ namespace FirstWebApplication.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // POST: /Account/Login
+        // ============================================================
+        // LOGIN - Logg inn bruker
+        // ============================================================
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
@@ -72,14 +77,14 @@ namespace FirstWebApplication.Controllers
 
                 if (result.Succeeded)
                 {
-                    // Get the user
+                    // Hent brukeren
                     var user = await _userManager.FindByEmailAsync(model.Email);
                     if (user != null)
                     {
-                        // Get user's roles
+                        // Hent brukerens roller
                         var roles = await _userManager.GetRolesAsync(user);
 
-                        // Redirect based on role (highest role takes priority)
+                        // Redirect basert på rolle (prioritering: Admin > Registerfører > Pilot)
                         if (roles.Contains("Admin"))
                         {
                             return RedirectToAction("AdminDashboard", "Admin");
@@ -88,16 +93,22 @@ namespace FirstWebApplication.Controllers
                         {
                             return RedirectToAction("RegisterforerDashboard", "Registerforer");
                         }
-                        else // Pilot or no role
+                        else if (roles.Contains("Pilot"))
                         {
                             return RedirectToAction("RegisterType", "Pilot");
+                        }
+                        else
+                        {
+                            // Hvis ingen rolle (burde ikke skje), send til home
+                            return RedirectToAction("Index", "Home");
                         }
                     }
                 }
 
-                ModelState.AddModelError(string.Empty, "Invalid login attempt");
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             }
 
+            TempData["ShowLogin"] = true;
             TempData["LoginErrors"] = string.Join("|", ModelState.Values
                 .SelectMany(v => v.Errors)
                 .Select(e => e.ErrorMessage));
@@ -105,7 +116,9 @@ namespace FirstWebApplication.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // POST: /Account/Logout
+        // ============================================================
+        // LOGOUT - Logg ut bruker
+        // ============================================================
         [HttpPost]
         public async Task<IActionResult> Logout()
         {

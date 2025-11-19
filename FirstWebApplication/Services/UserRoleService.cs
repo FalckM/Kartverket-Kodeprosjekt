@@ -1,23 +1,24 @@
+using FirstWebApplication.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace FirstWebApplication.Services
 {
     /// <summary>
-    /// Service to manage user roles using ASP.NET Core Identity's built-in role system
+    /// Service to manage user roles using ASP.NET Core Identity
     /// </summary>
     public class UserRoleService
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public UserRoleService(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public UserRoleService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
         }
 
         /// <summary>
-        /// Creates a new role in the system (e.g., "Admin", "Moderator", "User")
+        /// Creates a new role in the system
         /// </summary>
         public async Task<bool> CreateRoleAsync(string roleName)
         {
@@ -26,7 +27,7 @@ namespace FirstWebApplication.Services
                 var result = await _roleManager.CreateAsync(new IdentityRole(roleName));
                 return result.Succeeded;
             }
-            return false; // Role already exists
+            return false;
         }
 
         /// <summary>
@@ -37,10 +38,9 @@ namespace FirstWebApplication.Services
             var user = await _userManager.FindByEmailAsync(userEmail);
             if (user == null)
             {
-                return false; // User not found
+                return false;
             }
 
-            // Make sure role exists
             if (!await _roleManager.RoleExistsAsync(roleName))
             {
                 await CreateRoleAsync(roleName);
@@ -98,14 +98,14 @@ namespace FirstWebApplication.Services
         /// </summary>
         public async Task<List<string>> GetAllRolesAsync()
         {
-            var roles = _roleManager.Roles.Select(r => r.Name).ToList();
-            return await Task.FromResult(roles.Where(r => r != null).Cast<string>().ToList());
+            var roles = await Task.Run(() => _roleManager.Roles.Select(r => r.Name).ToList());
+            return roles.Where(r => r != null).Cast<string>().ToList();
         }
 
         /// <summary>
         /// Gets all users with a specific role
         /// </summary>
-        public async Task<IList<IdentityUser>> GetUsersInRoleAsync(string roleName)
+        public async Task<IList<ApplicationUser>> GetUsersInRoleAsync(string roleName)
         {
             return await _userManager.GetUsersInRoleAsync(roleName);
         }

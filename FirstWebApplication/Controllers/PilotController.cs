@@ -1,8 +1,10 @@
 ﻿using FirstWebApplication.Data;
 using FirstWebApplication.Entities;
+using FirstWebApplication.Models.Obstacle;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace FirstWebApplication.Controllers
 {
@@ -18,23 +20,24 @@ namespace FirstWebApplication.Controllers
             _logger = logger;
         }
 
-        // GET: Choose registration type
+        // ============================================================
+        // REGISTER TYPE - Velg Quick eller Full Register
+        // ============================================================
         [HttpGet]
         public IActionResult RegisterType()
         {
             return View();
         }
 
-        // GET: Quick Register - Save location first
+        // ============================================================
+        // QUICK REGISTER - Lagre bare GPS-posisjon
+        // ============================================================
         [HttpGet]
         public IActionResult QuickRegister()
         {
             return View();
         }
 
-        // ============================================================
-        // ENDRET: Lagrer nå i QuickRegistrations i stedet for Obstacles
-        // ============================================================
         [HttpPost]
         public async Task<IActionResult> QuickRegister(string obstacleGeometry)
         {
@@ -44,127 +47,171 @@ namespace FirstWebApplication.Controllers
                 return View();
             }
 
-            var userEmail = User.Identity?.Name;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            // Lagre i QuickRegistrations (IKKE Obstacles!)
-            var quickReg = new QuickRegistration
+            // Opprett nytt Obstacle med bare location (status = Registered)
+            var obstacle = new Obstacle
             {
-                ObstacleGeometry = obstacleGeometry,
-                RegisteredBy = userEmail,
-                RegisteredDate = DateTime.Now,
-                IsCompleted = false
+                Location = obstacleGeometry,
+                RegisteredByUserId = userId!,
+                RegisteredDate = DateTime.Now
             };
 
-            _context.QuickRegistrations.Add(quickReg);
+            _context.Obstacles.Add(obstacle);
+            await _context.SaveChangesAsync();
+
+            // Opprett første status: Registered (incomplete)
+            var status = new ObstacleStatus
+            {
+                ObstacleId = obstacle.Id,
+                StatusTypeId = 1, // Registered
+                ChangedByUserId = userId!,
+                ChangedDate = DateTime.Now,
+                Comments = "Quick Register - location saved",
+                IsActive = true
+            };
+
+            _context.ObstacleStatuses.Add(status);
+            await _context.SaveChangesAsync();
+
+            // Oppdater obstacle med CurrentStatusId
+            obstacle.CurrentStatusId = status.Id;
+            _context.Obstacles.Update(obstacle);
             await _context.SaveChangesAsync();
 
             TempData["SuccessMessage"] = "Location saved! Please complete the registration.";
             return RedirectToAction("RegisterType");
         }
 
-        // GET: Full Register - Complete form with location
+        // ============================================================
+        // FULL REGISTER - Registrer alt på en gang
+        // ============================================================
         [HttpGet]
         public IActionResult FullRegister()
         {
-            return View();
+            return View(new RegisterObstacleViewModel());
         }
 
-        // POST: Full Register - Save everything at once
-        // INGEN ENDRINGER HER - lagrer fortsatt direkte i Obstacles
         [HttpPost]
-        public async Task<IActionResult> FullRegister(ObstacleData obstacle)
+        public async Task<IActionResult> FullRegister(RegisterObstacleViewModel model)
         {
-            // Manuell validering for Full Register
-            if (string.IsNullOrWhiteSpace(obstacle.ObstacleName))
+            // Manuell validering
+            if (string.IsNullOrWhiteSpace(model.ObstacleName))
             {
                 ModelState.AddModelError("ObstacleName", "Obstacle name is required");
             }
 
-            if (obstacle.ObstacleHeight <= 0)
+            if (!model.ObstacleHeight.HasValue || model.ObstacleHeight <= 0)
             {
                 ModelState.AddModelError("ObstacleHeight", "Height must be greater than 0");
             }
 
-            if (string.IsNullOrWhiteSpace(obstacle.ObstacleDescription))
+            if (string.IsNullOrWhiteSpace(model.ObstacleDescription))
             {
                 ModelState.AddModelError("ObstacleDescription", "Description is required");
             }
 
-            if (string.IsNullOrWhiteSpace(obstacle.ObstacleGeometry))
+            if (string.IsNullOrWhiteSpace(model.ObstacleGeometry))
             {
                 ModelState.AddModelError("ObstacleGeometry", "Please mark the location on the map");
             }
 
             if (!ModelState.IsValid)
             {
-                return View(obstacle);
+                return View(model);
             }
 
-            var userEmail = User.Identity?.Name;
-            obstacle.RegisteredBy = userEmail;
-            obstacle.RegisteredDate = DateTime.Now;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Opprett obstacle med alle felt
+            var obstacle = new Obstacle
+            {
+                Name = model.ObstacleName,
+                Height = model.ObstacleHeight,
+                Description = model.ObstacleDescription,
+                Location = model.ObstacleGeometry,
+                RegisteredByUserId = userId!,
+                RegisteredDate = DateTime.Now
+            };
+
+            // Finn ObstacleType hvis oppgitt
+            if (!string.IsNullOrWhiteSpace(model.ObstacleType))
+            {
+                var obstacleType = await _context.ObstacleTypes
+                    .FirstOrDefaultAsync(ot => ot.Name == model.ObstacleType);
+
+                if (obstacleType != null)
+                {
+                    obstacle.ObstacleTypeId = obstacleType.Id;
+                }
+            }
 
             _context.Obstacles.Add(obstacle);
             await _context.SaveChangesAsync();
 
-            TempData["IsNewRegistration"] = true;
+            // Opprett status: Pending (venter på godkjenning)
+            var status = new ObstacleStatus
+            {
+                ObstacleId = obstacle.Id,
+                StatusTypeId = 2, // Pending
+                ChangedByUserId = userId!,
+                ChangedDate = DateTime.Now,
+                Comments = "Full registration completed",
+                IsActive = true
+            };
+
+            _context.ObstacleStatuses.Add(status);
+            await _context.SaveChangesAsync();
+
+            // Oppdater obstacle med CurrentStatusId
+            obstacle.CurrentStatusId = status.Id;
+            _context.Obstacles.Update(obstacle);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Obstacle registered successfully!";
             return RedirectToAction("Overview", new { id = obstacle.Id });
         }
 
         // ============================================================
-        // ENDRET: Henter nå fra QuickRegistrations
+        // COMPLETE QUICK REGISTER - Fullfør en ufullstendig registrering
         // ============================================================
         [HttpGet]
-        public async Task<IActionResult> CompleteQuickRegister(int id)
+        public async Task<IActionResult> CompleteQuickRegister(long id)
         {
-            var userEmail = User.Identity?.Name;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            // Hent QuickRegistration (ikke Obstacle!)
-            var quickReg = await _context.QuickRegistrations
-                .Where(q => q.Id == id && q.RegisteredBy == userEmail && !q.IsCompleted)
+            // Hent obstacle med status = Registered (incomplete)
+            var obstacle = await _context.Obstacles
+                .Include(o => o.CurrentStatus)
+                    .ThenInclude(s => s!.StatusType)
+                .Include(o => o.RegisteredByUser)
+                .Where(o => o.Id == id
+                    && o.RegisteredByUserId == userId
+                    && o.CurrentStatus!.StatusTypeId == 1) // Registered
                 .FirstOrDefaultAsync();
 
-            if (quickReg == null)
+            if (obstacle == null)
             {
                 TempData["ErrorMessage"] = "Quick registration not found or already completed.";
                 return RedirectToAction("MyRegistrations");
             }
 
-            // Lag en ny ObstacleData med geometry fra QuickRegistration
-            var obstacle = new ObstacleData
+            // Lag ViewModel
+            var viewModel = new CompleteQuickRegViewModel
             {
-                ObstacleGeometry = quickReg.ObstacleGeometry,
-                RegisteredBy = userEmail,
-                RegisteredDate = quickReg.RegisteredDate // Behold original dato
+                ObstacleId = obstacle.Id,
+                ObstacleGeometry = obstacle.Location,
+                RegisteredDate = obstacle.RegisteredDate,
+                RegisteredBy = obstacle.RegisteredByUser?.Email
             };
 
-            // Send QuickReg ID til view
-            ViewBag.QuickRegId = id;
-            return View(obstacle);
+            return View(viewModel);
         }
 
-        // ============================================================
-        // ENDRET: Flytter data fra QuickRegistrations til Obstacles
-        // ============================================================
         [HttpPost]
-        public async Task<IActionResult> SaveCompleteQuickRegister(int quickRegId, ObstacleData model)
+        public async Task<IActionResult> CompleteQuickRegister(CompleteQuickRegViewModel model)
         {
-            var userEmail = User.Identity?.Name;
-
-            // Finn QuickRegistration
-            var quickReg = await _context.QuickRegistrations
-                .Where(q => q.Id == quickRegId && q.RegisteredBy == userEmail && !q.IsCompleted)
-                .FirstOrDefaultAsync();
-
-            if (quickReg == null)
-            {
-                TempData["ErrorMessage"] = "Quick registration not found or already completed.";
-                return RedirectToAction("MyRegistrations");
-            }
-
             // Manuell validering
-            ModelState.Clear();
-
             if (string.IsNullOrWhiteSpace(model.ObstacleName))
             {
                 ModelState.AddModelError("ObstacleName", "Obstacle name is required");
@@ -182,34 +229,69 @@ namespace FirstWebApplication.Controllers
 
             if (!ModelState.IsValid)
             {
-                // Behold geometry og metadata
-                model.ObstacleGeometry = quickReg.ObstacleGeometry;
-                model.RegisteredBy = userEmail;
-                model.RegisteredDate = quickReg.RegisteredDate;
-                ViewBag.QuickRegId = quickRegId;
-                return View("CompleteQuickRegister", model);
+                return View(model);
             }
 
-            // Opprett fullstendig ObstacleData
-            var obstacle = new ObstacleData
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Hent obstacle
+            var obstacle = await _context.Obstacles
+                .Include(o => o.CurrentStatus)
+                .Where(o => o.Id == model.ObstacleId
+                    && o.RegisteredByUserId == userId
+                    && o.CurrentStatus!.StatusTypeId == 1) // Registered
+                .FirstOrDefaultAsync();
+
+            if (obstacle == null)
             {
-                ObstacleName = model.ObstacleName,
-                ObstacleHeight = model.ObstacleHeight,
-                ObstacleDescription = model.ObstacleDescription,
-                ObstacleType = model.ObstacleType,
-                ObstacleGeometry = quickReg.ObstacleGeometry, // Fra QuickReg
-                RegisteredBy = userEmail,
-                RegisteredDate = quickReg.RegisteredDate // Behold original dato
+                TempData["ErrorMessage"] = "Quick registration not found or already completed.";
+                return RedirectToAction("MyRegistrations");
+            }
+
+            // Oppdater obstacle med detaljer
+            obstacle.Name = model.ObstacleName;
+            obstacle.Height = model.ObstacleHeight;
+            obstacle.Description = model.ObstacleDescription;
+
+            // Finn ObstacleType hvis oppgitt
+            if (!string.IsNullOrWhiteSpace(model.ObstacleType))
+            {
+                var obstacleType = await _context.ObstacleTypes
+                    .FirstOrDefaultAsync(ot => ot.Name == model.ObstacleType);
+
+                if (obstacleType != null)
+                {
+                    obstacle.ObstacleTypeId = obstacleType.Id;
+                }
+            }
+
+            _context.Obstacles.Update(obstacle);
+
+            // Deaktiver gammel status
+            var oldStatus = obstacle.CurrentStatus;
+            if (oldStatus != null)
+            {
+                oldStatus.IsActive = false;
+                _context.ObstacleStatuses.Update(oldStatus);
+            }
+
+            // Opprett ny status: Pending
+            var newStatus = new ObstacleStatus
+            {
+                ObstacleId = obstacle.Id,
+                StatusTypeId = 2, // Pending
+                ChangedByUserId = userId!,
+                ChangedDate = DateTime.Now,
+                Comments = "Quick registration completed",
+                IsActive = true
             };
 
-            // Lagre i Obstacles
-            _context.Obstacles.Add(obstacle);
+            _context.ObstacleStatuses.Add(newStatus);
             await _context.SaveChangesAsync();
 
-            // Marker QuickRegistration som completed
-            quickReg.IsCompleted = true;
-            quickReg.CompletedObstacleId = obstacle.Id;
-            _context.QuickRegistrations.Update(quickReg);
+            // Oppdater CurrentStatusId
+            obstacle.CurrentStatusId = newStatus.Id;
+            _context.Obstacles.Update(obstacle);
             await _context.SaveChangesAsync();
 
             TempData["SuccessMessage"] = "Registration completed successfully!";
@@ -217,39 +299,87 @@ namespace FirstWebApplication.Controllers
         }
 
         // ============================================================
-        // ENDRET: Viser både Obstacles og ufullstendige QuickRegistrations
+        // MY REGISTRATIONS - Vis alle mine registreringer
         // ============================================================
         [HttpGet]
         public async Task<IActionResult> MyRegistrations()
         {
-            var userEmail = User.Identity?.Name;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            // Hent fullstendige obstacles
+            // Hent alle obstacles for denne brukeren
             var obstacles = await _context.Obstacles
-                .Where(o => o.RegisteredBy == userEmail)
+                .Include(o => o.CurrentStatus)
+                    .ThenInclude(s => s!.StatusType)
+                .Include(o => o.ObstacleType)
+                .Include(o => o.RegisteredByUser)
+                .Where(o => o.RegisteredByUserId == userId)
                 .OrderByDescending(o => o.RegisteredDate)
                 .ToListAsync();
 
-            // Hent ufullstendige quick registrations
-            var incompleteQuickRegs = await _context.QuickRegistrations
-                .Where(q => q.RegisteredBy == userEmail && !q.IsCompleted)
-                .OrderByDescending(q => q.RegisteredDate)
-                .ToListAsync();
+            // Hent siste behandling for hvert obstacle (for å få rejection reason osv.)
+            var obstacleIds = obstacles.Select(o => o.Id).ToList();
+            var latestBehandlinger = await _context.Behandlinger
+                .Include(b => b.RegisterforerUser)
+                .Where(b => obstacleIds.Contains(b.ObstacleId))
+                .GroupBy(b => b.ObstacleId)
+                .Select(g => g.OrderByDescending(b => b.ProcessedDate).First())
+                .ToDictionaryAsync(b => b.ObstacleId);
 
-            // Send begge til view
-            ViewBag.IncompleteQuickRegs = incompleteQuickRegs;
-            return View(obstacles);
+            // Bygg ViewModel
+            var viewModel = new MyRegistrationsViewModel();
+
+            foreach (var obstacle in obstacles)
+            {
+                var statusName = obstacle.CurrentStatus?.StatusType?.Name ?? "Unknown";
+
+                // Incomplete Quick Registrations (Registered status + mangler detaljer)
+                if (statusName == "Registered" && string.IsNullOrEmpty(obstacle.Name))
+                {
+                    viewModel.IncompleteQuickRegs.Add(new IncompleteQuickRegItem
+                    {
+                        Id = obstacle.Id,
+                        Location = obstacle.Location,
+                        RegisteredDate = obstacle.RegisteredDate
+                    });
+                }
+                // Pending
+                else if (statusName == "Pending")
+                {
+                    viewModel.PendingObstacles.Add(MapToListItem(obstacle, latestBehandlinger));
+                }
+                // Approved
+                else if (statusName == "Approved")
+                {
+                    viewModel.ApprovedObstacles.Add(MapToListItem(obstacle, latestBehandlinger));
+                }
+                // Rejected
+                else if (statusName == "Rejected")
+                {
+                    viewModel.RejectedObstacles.Add(MapToListItem(obstacle, latestBehandlinger));
+                }
+            }
+
+            return View(viewModel);
         }
 
-        // GET: Overview - View single obstacle details
-        // INGEN ENDRINGER HER
+        // ============================================================
+        // OVERVIEW - Vis detaljer for et obstacle
+        // ============================================================
         [HttpGet]
-        public async Task<IActionResult> Overview(int id)
+        public async Task<IActionResult> Overview(long id)
         {
-            var userEmail = User.Identity?.Name;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var obstacle = await _context.Obstacles
-                .Where(o => o.Id == id && o.RegisteredBy == userEmail)
+                .Include(o => o.ObstacleType)
+                .Include(o => o.RegisteredByUser)
+                .Include(o => o.CurrentStatus)
+                    .ThenInclude(s => s!.StatusType)
+                .Include(o => o.StatusHistory)
+                    .ThenInclude(sh => sh.StatusType)
+                .Include(o => o.StatusHistory)
+                    .ThenInclude(sh => sh.ChangedByUser)
+                .Where(o => o.Id == id && o.RegisteredByUserId == userId)
                 .FirstOrDefaultAsync();
 
             if (obstacle == null)
@@ -257,191 +387,130 @@ namespace FirstWebApplication.Controllers
                 return NotFound();
             }
 
-            ViewBag.IsNewRegistration = TempData["IsNewRegistration"] as bool? ?? false;
-            return View(obstacle);
+            // Hent siste behandling
+            var latestBehandling = await _context.Behandlinger
+                .Include(b => b.RegisterforerUser)
+                .Where(b => b.ObstacleId == id)
+                .OrderByDescending(b => b.ProcessedDate)
+                .FirstOrDefaultAsync();
+
+            // Bygg ViewModel
+            var viewModel = new ObstacleDetailsViewModel
+            {
+                Id = obstacle.Id,
+                Name = obstacle.Name ?? "Unnamed",
+                Height = obstacle.Height ?? 0,
+                Description = obstacle.Description ?? "No description",
+                Type = obstacle.ObstacleType?.Name,
+                Location = obstacle.Location,
+                RegisteredDate = obstacle.RegisteredDate,
+                RegisteredBy = obstacle.RegisteredByUser?.Email ?? "Unknown",
+                CurrentStatus = obstacle.CurrentStatus?.StatusType?.Name ?? "Unknown",
+                IsPending = obstacle.CurrentStatus?.StatusType?.Name == "Pending",
+                IsApproved = obstacle.CurrentStatus?.StatusType?.Name == "Approved",
+                IsRejected = obstacle.CurrentStatus?.StatusType?.Name == "Rejected"
+            };
+
+            // Legg til behandling-info
+            if (latestBehandling != null)
+            {
+                viewModel.ProcessedBy = latestBehandling.RegisterforerUser?.Email;
+                viewModel.ProcessedDate = latestBehandling.ProcessedDate;
+                viewModel.ProcessComments = latestBehandling.Comments;
+                viewModel.RejectionReason = latestBehandling.RejectionReason;
+            }
+
+            // Legg til status history
+            if (obstacle.StatusHistory != null)
+            {
+                viewModel.StatusHistory = obstacle.StatusHistory
+                    .OrderBy(sh => sh.ChangedDate)
+                    .Select(sh => new StatusHistoryItem
+                    {
+                        Status = sh.StatusType?.Name ?? "Unknown",
+                        ChangedBy = sh.ChangedByUser?.Email ?? "Unknown",
+                        ChangedDate = sh.ChangedDate,
+                        Comments = sh.Comments
+                    })
+                    .ToList();
+            }
+
+            return View(viewModel);
         }
 
-        // POST: Delete registration (only if pending)
-        // INGEN ENDRINGER HER
+        // ============================================================
+        // DELETE REGISTRATION - Slett et pending obstacle
+        // ============================================================
         [HttpPost]
-        public async Task<IActionResult> DeleteRegistration(int id)
+        public async Task<IActionResult> DeleteRegistration(long id)
         {
-            var userEmail = User.Identity?.Name;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var obstacle = await _context.Obstacles
-                .Where(o => o.Id == id && o.RegisteredBy == userEmail)
+                .Include(o => o.CurrentStatus)
+                    .ThenInclude(s => s!.StatusType)
+                .Where(o => o.Id == id && o.RegisteredByUserId == userId)
                 .FirstOrDefaultAsync();
 
             if (obstacle == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Obstacle not found.";
+                return RedirectToAction("MyRegistrations");
             }
 
-            if (obstacle.IsApproved || obstacle.IsRejected)
+            var statusName = obstacle.CurrentStatus?.StatusType?.Name;
+
+            // Kan kun slette Registered eller Pending
+            if (statusName != "Registered" && statusName != "Pending")
             {
-                TempData["ErrorMessage"] = "Cannot delete obstacles that have been approved or rejected";
+                TempData["ErrorMessage"] = "You can only delete obstacles that are pending or incomplete.";
                 return RedirectToAction("MyRegistrations");
             }
 
             _context.Obstacles.Remove(obstacle);
             await _context.SaveChangesAsync();
 
-            TempData["SuccessMessage"] = "Registration deleted successfully";
+            TempData["SuccessMessage"] = "Obstacle deleted successfully.";
             return RedirectToAction("MyRegistrations");
         }
 
         // ============================================================
-        // NY METODE: Slett ufullstendig QuickRegistration
+        // HELPER METHOD - Map Obstacle til ObstacleListItemViewModel
         // ============================================================
-        [HttpPost]
-        public async Task<IActionResult> DeleteQuickRegistration(int id)
+        private ObstacleListItemViewModel MapToListItem(Obstacle obstacle, Dictionary<long, Behandling> behandlinger)
         {
-            var userEmail = User.Identity?.Name;
+            var statusName = obstacle.CurrentStatus?.StatusType?.Name ?? "Unknown";
 
-            var quickReg = await _context.QuickRegistrations
-                .Where(q => q.Id == id && q.RegisteredBy == userEmail && !q.IsCompleted)
-                .FirstOrDefaultAsync();
-
-            if (quickReg == null)
+            var item = new ObstacleListItemViewModel
             {
-                TempData["ErrorMessage"] = "Quick registration not found or already completed";
-                return RedirectToAction("MyRegistrations");
+                Id = obstacle.Id,
+                Name = obstacle.Name ?? "Unnamed",
+                Height = obstacle.Height ?? 0,
+                Type = obstacle.ObstacleType?.Name,
+                Location = obstacle.Location,
+                RegisteredDate = obstacle.RegisteredDate,
+                RegisteredBy = obstacle.RegisteredByUser?.Email ?? "Unknown",
+                CurrentStatus = statusName,
+                IsIncomplete = statusName == "Registered" && string.IsNullOrEmpty(obstacle.Name),
+                IsPending = statusName == "Pending",
+                IsApproved = statusName == "Approved",
+                IsRejected = statusName == "Rejected"
+            };
+
+            // Legg til behandling-info hvis finnes
+            if (behandlinger.TryGetValue(obstacle.Id, out var behandling))
+            {
+                item.ProcessedBy = behandling.RegisterforerUser?.Email;
+                item.ProcessedDate = behandling.ProcessedDate;
+                item.RejectionReason = behandling.RejectionReason;
             }
 
-            _context.QuickRegistrations.Remove(quickReg);
-            await _context.SaveChangesAsync();
-
-            TempData["SuccessMessage"] = "Quick registration deleted successfully";
-            return RedirectToAction("MyRegistrations");
+            return item;
         }
 
-        [HttpGet]
         public IActionResult Dashboard()
         {
             return View();
-        }
-
-        // ============================================================
-        // DUPLIKATSJEKK - INGEN ENDRINGER
-        // ============================================================
-        [HttpGet]
-        public async Task<IActionResult> CheckDuplicates(double latitude, double longitude, double radiusMeters = 10)
-        {
-            try
-            {
-                var allObstacles = await _context.Obstacles.ToListAsync();
-                var nearbyObstacles = new List<object>();
-
-                foreach (var obstacle in allObstacles)
-                {
-                    var geometry = obstacle.ObstacleGeometry.Replace("POINT(", "").Replace(")", "");
-                    var coords = geometry.Split(' ');
-
-                    if (coords.Length == 2 &&
-                        double.TryParse(coords[0], out double obsLon) &&
-                        double.TryParse(coords[1], out double obsLat))
-                    {
-                        double distance = CalculateDistance(latitude, longitude, obsLat, obsLon);
-
-                        if (distance <= radiusMeters)
-                        {
-                            nearbyObstacles.Add(new
-                            {
-                                id = obstacle.Id,
-                                type = obstacle.ObstacleType ?? "Ukjent type",
-                                name = obstacle.ObstacleName ?? "Ingen navn",
-                                height = obstacle.ObstacleHeight,
-                                description = obstacle.ObstacleDescription ?? "Ingen beskrivelse",
-                                distance = Math.Round(distance, 1),
-                                latitude = obsLat,
-                                longitude = obsLon
-                            });
-                        }
-                    }
-                }
-
-                return Json(new
-                {
-                    success = true,
-                    count = nearbyObstacles.Count,
-                    obstacles = nearbyObstacles.OrderBy(o => ((dynamic)o).distance).ToList()
-                });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error checking for duplicate obstacles");
-                return Json(new { success = false, error = ex.Message });
-            }
-        }
-
-        private double CalculateDistance(double lat1, double lon1, double lat2, double lon2)
-        {
-            const double R = 6371000;
-            double lat1Rad = lat1 * Math.PI / 180;
-            double lat2Rad = lat2 * Math.PI / 180;
-            double deltaLat = (lat2 - lat1) * Math.PI / 180;
-            double deltaLon = (lon2 - lon1) * Math.PI / 180;
-
-            double a = Math.Sin(deltaLat / 2) * Math.Sin(deltaLat / 2) +
-                      Math.Cos(lat1Rad) * Math.Cos(lat2Rad) *
-                      Math.Sin(deltaLon / 2) * Math.Sin(deltaLon / 2);
-
-            double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-            double distance = R * c;
-
-            return distance;
-        }
-
-
-
-        /// API endpoint som returnerer alle godkjente obstacles som JSON.
-        /// Dette brukes av FullRegister view for å vise eksisterende obstacles på kartet.
-        [HttpGet]
-        public async Task<IActionResult> GetObstaclesForMap()
-        {
-            try
-            {
-                // Hent alle godkjente obstacles fra databasen
-                // Vi filtrerer på IsApproved = true for å bare vise godkjente hindringer
-                var obstacles = await _context.Obstacles
-                    .Where(o => o.IsApproved) // Bare godkjente obstacles
-                    .Select(o => new
-                    {
-                        // id brukes for å identifisere obstacle
-                        id = o.Id,
-
-                        // name vises i popup når man klikker på marker
-                        name = o.ObstacleName,
-
-                        // type brukes for å kategorisere (f.eks. "Tower", "Power Line")
-                        type = o.ObstacleType ?? "Unknown",
-
-                        // height vises i popup (i meter)
-                        height = o.ObstacleHeight,
-
-                        // geometry inneholder GeoJSON data for å vise på kartet
-                        geometry = o.ObstacleGeometry,
-
-                        // Status-felter for å vite tilstanden til obstacle
-                        isApproved = o.IsApproved,
-                        isRejected = o.IsRejected
-
-                        // Vi inkluderer IKKE registeredBy for personvern
-                    })
-                    .ToListAsync();
-
-                // Returner obstacles som JSON
-                // Dette blir automatisk konvertert til JSON av ASP.NET Core
-                return Json(obstacles);
-            }
-            catch (Exception ex)
-            {
-                // Hvis noe går galt, logg feilen og returner en error-melding
-                _logger.LogError(ex, "Feil ved henting av obstacles for kart");
-
-                // Returner en HTTP 500 status med feilmelding
-                return StatusCode(500, new { error = "Failed to load obstacles" });
-            }
         }
     }
 }

@@ -1,58 +1,52 @@
+using FirstWebApplication.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace FirstWebApplication.Services
 {
-    /// <summary>
-    /// Seeds test users for development
-    /// This creates the same test accounts on every developer's computer
-    /// </summary>
     public class UserSeederService
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ILogger<UserSeederService> _logger;
 
-        public UserSeederService(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public UserSeederService(UserManager<ApplicationUser> userManager, ILogger<UserSeederService> logger)
         {
             _userManager = userManager;
-            _roleManager = roleManager;
+            _logger = logger;
         }
 
-        /// <summary>
-        /// Creates test users if they don't exist
-        /// Creates one Pilot, one Registerfører, and one Admin
-        /// </summary>
-        public async Task SeedTestUsersAsync()
+        public async Task SeedAsync()
         {
-            // Test users to create
-            var testUsers = new[]
-            {
-                new { Email = "pilot@test.com", Password = "Pilot123", Role = "Pilot" },
-                new { Email = "registerforer@test.com", Password = "Register123", Role = "Registerfører" },
-                new { Email = "admin@test.com", Password = "Admin123", Role = "Admin" }
-            };
+            // Pilot user
+            await CreateUserIfNotExists("pilot@test.com", "Pilot123", "Pilot");
 
-            foreach (var testUser in testUsers)
+            // Registerfører user
+            await CreateUserIfNotExists("registerforer@test.com", "Register123", "Registerfører");
+
+            // Admin user
+            await CreateUserIfNotExists("admin@test.com", "Admin123", "Admin");
+        }
+
+        private async Task CreateUserIfNotExists(string email, string password, string role)
+        {
+            var existingUser = await _userManager.FindByEmailAsync(email);
+            if (existingUser == null)
             {
-                // Check if user already exists
-                var existingUser = await _userManager.FindByEmailAsync(testUser.Email);
-                
-                if (existingUser == null)
+                var user = new ApplicationUser
                 {
-                    // Create the user
-                    var user = new IdentityUser
-                    {
-                        UserName = testUser.Email,
-                        Email = testUser.Email,
-                        EmailConfirmed = true // Skip email confirmation for test users
-                    };
+                    UserName = email,
+                    Email = email,
+                    EmailConfirmed = true
+                };
 
-                    var result = await _userManager.CreateAsync(user, testUser.Password);
-
-                    if (result.Succeeded)
-                    {
-                        // Assign the role
-                        await _userManager.AddToRoleAsync(user, testUser.Role);
-                    }
+                var result = await _userManager.CreateAsync(user, password);
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(user, role);
+                    _logger.LogInformation($"Test user '{email}' created with role '{role}'.");
+                }
+                else
+                {
+                    _logger.LogError($"Failed to create test user '{email}': {string.Join(", ", result.Errors.Select(e => e.Description))}");
                 }
             }
         }

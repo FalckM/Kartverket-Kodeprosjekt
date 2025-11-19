@@ -9,117 +9,117 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = FirstWebApplication
 build_property.RootNamespace = FirstWebApplication
-build_property.ProjectDir = C:\Users\matsf\Documents\Skole\Semester3\Kartverket-Kodeprosjekt\FirstWebApplication\
+build_property.ProjectDir = C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 9.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\matsf\Documents\Skole\Semester3\Kartverket-Kodeprosjekt\FirstWebApplication
+build_property.MSBuildProjectDirectory = C:\Users\matsf\Documents\Skole\Kodeprosjekt_2_sem\Kartverket-Kodeprosjekt\FirstWebApplication
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 9.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/matsf/Documents/Skole/Semester3/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Admin/AdminDashboard.cshtml]
+[C:/Users/matsf/Documents/Skole/Kodeprosjekt_2_sem/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Admin/AdminDashboard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQWRtaW5EYXNoYm9hcmQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/matsf/Documents/Skole/Semester3/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Admin/AdminManageUser.cshtml]
+[C:/Users/matsf/Documents/Skole/Kodeprosjekt_2_sem/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Admin/AdminManageUser.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQWRtaW5NYW5hZ2VVc2VyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/matsf/Documents/Skole/Semester3/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Admin/AdminStatistics.cshtml]
+[C:/Users/matsf/Documents/Skole/Kodeprosjekt_2_sem/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Admin/AdminStatistics.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQWRtaW5TdGF0aXN0aWNzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/matsf/Documents/Skole/Semester3/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Admin/AdminUsers.cshtml]
+[C:/Users/matsf/Documents/Skole/Kodeprosjekt_2_sem/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Admin/AdminUsers.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQWRtaW5Vc2Vycy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/matsf/Documents/Skole/Semester3/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Home/Index.cshtml]
+[C:/Users/matsf/Documents/Skole/Kodeprosjekt_2_sem/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/matsf/Documents/Skole/Semester3/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Home/Privacy.cshtml]
+[C:/Users/matsf/Documents/Skole/Kodeprosjekt_2_sem/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/matsf/Documents/Skole/Semester3/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Pilot/CompleteQuickRegister.cshtml]
+[C:/Users/matsf/Documents/Skole/Kodeprosjekt_2_sem/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Pilot/CompleteQuickRegister.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGlsb3RcQ29tcGxldGVRdWlja1JlZ2lzdGVyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/matsf/Documents/Skole/Semester3/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Pilot/Dashboard.cshtml]
+[C:/Users/matsf/Documents/Skole/Kodeprosjekt_2_sem/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Pilot/Dashboard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGlsb3RcRGFzaGJvYXJkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/matsf/Documents/Skole/Semester3/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Pilot/FullRegister.cshtml]
+[C:/Users/matsf/Documents/Skole/Kodeprosjekt_2_sem/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Pilot/FullRegister.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGlsb3RcRnVsbFJlZ2lzdGVyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/matsf/Documents/Skole/Semester3/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Pilot/MyRegistrations.cshtml]
+[C:/Users/matsf/Documents/Skole/Kodeprosjekt_2_sem/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Pilot/MyRegistrations.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGlsb3RcTXlSZWdpc3RyYXRpb25zLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/matsf/Documents/Skole/Semester3/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Pilot/Overview.cshtml]
+[C:/Users/matsf/Documents/Skole/Kodeprosjekt_2_sem/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Pilot/Overview.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGlsb3RcT3ZlcnZpZXcuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/matsf/Documents/Skole/Semester3/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Pilot/QuickRegister.cshtml]
+[C:/Users/matsf/Documents/Skole/Kodeprosjekt_2_sem/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Pilot/QuickRegister.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGlsb3RcUXVpY2tSZWdpc3Rlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/matsf/Documents/Skole/Semester3/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Pilot/RegisterType.cshtml]
+[C:/Users/matsf/Documents/Skole/Kodeprosjekt_2_sem/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Pilot/RegisterType.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGlsb3RcUmVnaXN0ZXJUeXBlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/matsf/Documents/Skole/Semester3/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Registerforer/ApprovedObstacles.cshtml]
+[C:/Users/matsf/Documents/Skole/Kodeprosjekt_2_sem/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Registerforer/ApprovedObstacles.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVnaXN0ZXJmb3JlclxBcHByb3ZlZE9ic3RhY2xlcy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/matsf/Documents/Skole/Semester3/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Registerforer/MapView.cshtml]
+[C:/Users/matsf/Documents/Skole/Kodeprosjekt_2_sem/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Registerforer/MapView.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVnaXN0ZXJmb3JlclxNYXBWaWV3LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/matsf/Documents/Skole/Semester3/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Registerforer/PendingObstacles.cshtml]
+[C:/Users/matsf/Documents/Skole/Kodeprosjekt_2_sem/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Registerforer/PendingObstacles.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVnaXN0ZXJmb3JlclxQZW5kaW5nT2JzdGFjbGVzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/matsf/Documents/Skole/Semester3/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Registerforer/RegisterforerDashboard.cshtml]
+[C:/Users/matsf/Documents/Skole/Kodeprosjekt_2_sem/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Registerforer/RegisterforerDashboard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVnaXN0ZXJmb3JlclxSZWdpc3RlcmZvcmVyRGFzaGJvYXJkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/matsf/Documents/Skole/Semester3/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Registerforer/RejectedObstacles.cshtml]
+[C:/Users/matsf/Documents/Skole/Kodeprosjekt_2_sem/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Registerforer/RejectedObstacles.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVnaXN0ZXJmb3JlclxSZWplY3RlZE9ic3RhY2xlcy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/matsf/Documents/Skole/Semester3/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Registerforer/ReviewObstacle.cshtml]
+[C:/Users/matsf/Documents/Skole/Kodeprosjekt_2_sem/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Registerforer/ReviewObstacle.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVnaXN0ZXJmb3JlclxSZXZpZXdPYnN0YWNsZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/matsf/Documents/Skole/Semester3/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Registerforer/ViewObstacle.cshtml]
+[C:/Users/matsf/Documents/Skole/Kodeprosjekt_2_sem/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Registerforer/ViewObstacle.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVnaXN0ZXJmb3JlclxWaWV3T2JzdGFjbGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/matsf/Documents/Skole/Semester3/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Seed/Index.cshtml]
+[C:/Users/matsf/Documents/Skole/Kodeprosjekt_2_sem/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Seed/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2VlZFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/matsf/Documents/Skole/Semester3/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Shared/Error.cshtml]
+[C:/Users/matsf/Documents/Skole/Kodeprosjekt_2_sem/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/matsf/Documents/Skole/Semester3/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Shared/_Layout.cshtml]
+[C:/Users/matsf/Documents/Skole/Kodeprosjekt_2_sem/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/matsf/Documents/Skole/Semester3/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/matsf/Documents/Skole/Kodeprosjekt_2_sem/Kartverket-Kodeprosjekt/FirstWebApplication/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/matsf/Documents/Skole/Semester3/Kartverket-Kodeprosjekt/FirstWebApplication/Views/_ViewImports.cshtml]
+[C:/Users/matsf/Documents/Skole/Kodeprosjekt_2_sem/Kartverket-Kodeprosjekt/FirstWebApplication/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/matsf/Documents/Skole/Semester3/Kartverket-Kodeprosjekt/FirstWebApplication/Views/_ViewStart.cshtml]
+[C:/Users/matsf/Documents/Skole/Kodeprosjekt_2_sem/Kartverket-Kodeprosjekt/FirstWebApplication/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

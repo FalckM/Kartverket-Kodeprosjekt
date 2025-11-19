@@ -1,4 +1,5 @@
 using FirstWebApplication.Data;
+using FirstWebApplication.Entities;
 using FirstWebApplication.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -9,15 +10,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 // Configure database connection
-// ENDRING: Bruker hardkodet MariaDB versjon i stedet for AutoDetect
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(connectionString, new MariaDbServerVersion(new Version(10, 11, 0))));
 
+// Register DatabaseSeeder
 builder.Services.AddScoped<DatabaseSeeder>();
 
-// Configure ASP.NET Identity with roles
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+// Configure ASP.NET Identity with ApplicationUser and roles
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     // Password settings
     options.Password.RequireDigit = true;
@@ -49,9 +50,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 var app = builder.Build();
 
-// ============================================================================
-// RIKTIG: Ensure database exists FIRST, then seed roles and users
-// ============================================================================
+// Initialize database, roles, and seed users
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -62,15 +61,15 @@ using (var scope = app.Services.CreateScope())
         // Step 1: Get database context
         var context = services.GetRequiredService<ApplicationDbContext>();
 
-        // Step 2: Apply migrations (this creates database if it doesn't exist)
+        // Step 2: Apply migrations (creates database if it doesn't exist)
         logger.LogInformation("Applying database migrations...");
         context.Database.Migrate();
         logger.LogInformation("Database migrations applied successfully");
 
-        // Step 3: NOW we can safely initialize roles (database exists now!)
+        // Step 3: Initialize roles (database exists now!)
         logger.LogInformation("Initializing roles...");
         var roleInitializer = services.GetRequiredService<RoleInitializerService>();
-        await roleInitializer.InitializeRolesAsync();
+        await roleInitializer.InitializeAsync();
         logger.LogInformation("Roles initialized successfully");
 
         // Step 4: Seed test users (only in Development)
@@ -78,7 +77,7 @@ using (var scope = app.Services.CreateScope())
         {
             logger.LogInformation("Seeding test users...");
             var userSeeder = services.GetRequiredService<UserSeederService>();
-            await userSeeder.SeedTestUsersAsync();
+            await userSeeder.SeedAsync();
             logger.LogInformation("Test users seeded successfully");
         }
     }

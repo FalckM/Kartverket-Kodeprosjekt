@@ -1,11 +1,7 @@
-@model IEnumerable<FirstWebApplication.Entities.ObstacleData>
+@model FirstWebApplication.Models.Obstacle.MyRegistrationsViewModel
 
 @{
     ViewData["Title"] = "My Registrations";
-    var incompleteQuickRegs = ViewBag.IncompleteQuickRegs as List<FirstWebApplication.Entities.QuickRegistration> ?? new List<FirstWebApplication.Entities.QuickRegistration>();
-    var pending = Model.Where(o => !o.IsApproved && !o.IsRejected).ToList();
-    var approved = Model.Where(o => o.IsApproved).ToList();
-    var rejected = Model.Where(o => o.IsRejected).ToList();
 }
 
 <div class="container mx-auto px-4 py-8">
@@ -17,19 +13,19 @@
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
         <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded">
             <p class="text-yellow-800 font-semibold">Incomplete</p>
-            <p class="text-3xl font-bold text-yellow-900">@incompleteQuickRegs.Count</p>
+            <p class="text-3xl font-bold text-yellow-900">@Model.IncompleteCount</p>
         </div>
         <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
             <p class="text-blue-800 font-semibold">Pending Review</p>
-            <p class="text-3xl font-bold text-blue-900">@pending.Count</p>
+            <p class="text-3xl font-bold text-blue-900">@Model.PendingCount</p>
         </div>
         <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded">
             <p class="text-green-800 font-semibold">Approved</p>
-            <p class="text-3xl font-bold text-green-900">@approved.Count</p>
+            <p class="text-3xl font-bold text-green-900">@Model.ApprovedCount</p>
         </div>
         <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded">
             <p class="text-red-800 font-semibold">Rejected</p>
-            <p class="text-3xl font-bold text-red-900">@rejected.Count</p>
+            <p class="text-3xl font-bold text-red-900">@Model.RejectedCount</p>
         </div>
     </div>
 
@@ -47,11 +43,11 @@
         </div>
     }
 
-    @if (incompleteQuickRegs.Any())
+    @if (Model.IncompleteQuickRegs.Any())
     {
         <div class="mb-8">
             <h2 class="text-2xl font-bold text-gray-900 mb-4">⚠️ Incomplete Quick Registrations</h2>
-            <p class="text-gray-600 mb-4">You have <strong>@incompleteQuickRegs.Count</strong> incomplete quick registration(s).</p>
+            <p class="text-gray-600 mb-4">You have <strong>@Model.IncompleteCount</strong> incomplete quick registration(s).</p>
             
             <div class="bg-white rounded-lg shadow-md overflow-hidden">
                 <table class="min-w-full divide-y divide-gray-200">
@@ -64,13 +60,13 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        @foreach (var quickReg in incompleteQuickRegs)
+                        @foreach (var quickReg in Model.IncompleteQuickRegs)
                         {
                             <tr class="hover:bg-gray-50">
                                 <td class="px-6 py-4 text-sm font-medium text-gray-900">#@quickReg.Id</td>
                                 <td class="px-6 py-4 text-sm text-gray-600">
                                     @{
-                                        var coords = quickReg.ObstacleGeometry.Replace("POINT(", "").Replace(")", "").Split(' ');
+                                        var coords = quickReg.Location.Replace("POINT(", "").Replace(")", "").Split(' ');
                                         var displayCoords = coords.Length == 2 ? $"{coords[1]}, {coords[0]}" : "Unknown";
                                     }
                                     📍 @displayCoords
@@ -78,7 +74,7 @@
                                 <td class="px-6 py-4 text-sm text-gray-600">@quickReg.RegisteredDate.ToString("dd.MM.yyyy HH:mm")</td>
                                 <td class="px-6 py-4 text-sm font-medium">
                                     <a asp-action="CompleteQuickRegister" asp-route-id="@quickReg.Id" class="text-blue-600 hover:text-blue-900 mr-4">✏️ Complete</a>
-                                    <form asp-action="DeleteQuickRegistration" asp-route-id="@quickReg.Id" method="post" class="inline" onsubmit="return confirm('Delete this registration?');">
+                                    <form asp-action="DeleteRegistration" asp-route-id="@quickReg.Id" method="post" class="inline" onsubmit="return confirm('Delete this registration?');">
                                         <button type="submit" class="text-red-600 hover:text-red-900">🗑️ Delete</button>
                                     </form>
                                 </td>
@@ -90,7 +86,7 @@
         </div>
     }
 
-    @if (pending.Any())
+    @if (Model.PendingObstacles.Any())
     {
         <div class="mb-8">
             <h2 class="text-2xl font-bold text-gray-900 mb-4">⏳ Pending Review</h2>
@@ -107,13 +103,13 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        @foreach (var obstacle in pending)
+                        @foreach (var obstacle in Model.PendingObstacles)
                         {
                             <tr class="hover:bg-gray-50">
                                 <td class="px-6 py-4 text-sm font-medium text-gray-900">#@obstacle.Id</td>
-                                <td class="px-6 py-4 text-sm text-gray-600">@(obstacle.ObstacleType ?? "N/A")</td>
-                                <td class="px-6 py-4 text-sm text-gray-900">@obstacle.ObstacleName</td>
-                                <td class="px-6 py-4 text-sm text-gray-600">@obstacle.ObstacleHeight m</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">@(obstacle.Type ?? "N/A")</td>
+                                <td class="px-6 py-4 text-sm text-gray-900">@obstacle.Name</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">@obstacle.Height m</td>
                                 <td class="px-6 py-4 text-sm text-gray-600">@obstacle.RegisteredDate.ToString("dd.MM.yyyy")</td>
                                 <td class="px-6 py-4 text-sm font-medium">
                                     <a asp-action="Overview" asp-route-id="@obstacle.Id" class="text-blue-600 hover:text-blue-900 mr-4">👁️ View</a>
@@ -129,7 +125,7 @@
         </div>
     }
 
-    @if (approved.Any())
+    @if (Model.ApprovedObstacles.Any())
     {
         <div class="mb-8">
             <h2 class="text-2xl font-bold text-gray-900 mb-4">✅ Approved</h2>
@@ -146,14 +142,14 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        @foreach (var obstacle in approved)
+                        @foreach (var obstacle in Model.ApprovedObstacles)
                         {
                             <tr class="hover:bg-gray-50">
                                 <td class="px-6 py-4 text-sm font-medium text-gray-900">#@obstacle.Id</td>
-                                <td class="px-6 py-4 text-sm text-gray-600">@(obstacle.ObstacleType ?? "N/A")</td>
-                                <td class="px-6 py-4 text-sm text-gray-900">@obstacle.ObstacleName</td>
-                                <td class="px-6 py-4 text-sm text-gray-600">@obstacle.ObstacleHeight m</td>
-                                <td class="px-6 py-4 text-sm text-gray-600">@obstacle.ApprovedBy</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">@(obstacle.Type ?? "N/A")</td>
+                                <td class="px-6 py-4 text-sm text-gray-900">@obstacle.Name</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">@obstacle.Height m</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">@(obstacle.ProcessedBy ?? "N/A")</td>
                                 <td class="px-6 py-4 text-sm font-medium">
                                     <a asp-action="Overview" asp-route-id="@obstacle.Id" class="text-blue-600 hover:text-blue-900">👁️ View</a>
                                 </td>
@@ -165,7 +161,7 @@
         </div>
     }
 
-    @if (rejected.Any())
+    @if (Model.RejectedObstacles.Any())
     {
         <div class="mb-8">
             <h2 class="text-2xl font-bold text-gray-900 mb-4">❌ Rejected</h2>
@@ -174,7 +170,6 @@
                     <thead class="bg-red-50">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">ID</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Type</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Name</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Rejected By</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Reason</th>
@@ -182,14 +177,13 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        @foreach (var obstacle in rejected)
+                        @foreach (var obstacle in Model.RejectedObstacles)
                         {
                             <tr class="hover:bg-gray-50">
                                 <td class="px-6 py-4 text-sm font-medium text-gray-900">#@obstacle.Id</td>
-                                <td class="px-6 py-4 text-sm text-gray-600">@(obstacle.ObstacleType ?? "N/A")</td>
-                                <td class="px-6 py-4 text-sm text-gray-900">@obstacle.ObstacleName</td>
-                                <td class="px-6 py-4 text-sm text-gray-600">@obstacle.RejectedBy</td>
-                                <td class="px-6 py-4 text-sm text-gray-600">@(string.IsNullOrEmpty(obstacle.RejectionReason) ? "No reason" : obstacle.RejectionReason)</td>
+                                <td class="px-6 py-4 text-sm text-gray-900">@obstacle.Name</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">@(obstacle.ProcessedBy ?? "N/A")</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">@(obstacle.RejectionReason ?? "No reason provided")</td>
                                 <td class="px-6 py-4 text-sm font-medium">
                                     <a asp-action="Overview" asp-route-id="@obstacle.Id" class="text-blue-600 hover:text-blue-900">👁️ View</a>
                                 </td>
@@ -201,11 +195,11 @@
         </div>
     }
 
-    @if (!incompleteQuickRegs.Any() && !pending.Any() && !approved.Any() && !rejected.Any())
+    @if (!Model.IncompleteQuickRegs.Any() && !Model.PendingObstacles.Any() && !Model.ApprovedObstacles.Any() && !Model.RejectedObstacles.Any())
     {
-        <div class="bg-gray-50 rounded-lg p-8 text-center">
-            <p class="text-gray-600 text-lg mb-4">You haven't registered any obstacles yet.</p>
-            <a asp-action="RegisterType" class="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
+            <p class="text-gray-600 text-lg">You haven't registered any obstacles yet.</p>
+            <a asp-action="RegisterType" class="mt-4 inline-block px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition">
                 Register Your First Obstacle
             </a>
         </div>
