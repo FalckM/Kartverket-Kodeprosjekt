@@ -31,6 +31,15 @@
             display: block;
         }
 
+        /* Ensure mobile menu is above other content */
+        .mobile-menu {
+            z-index: 100;
+        }
+
+        nav {
+            z-index: 50;
+        }
+
         /* Hide desktop nav on smaller screens */
         @@media (max-width: 1024px) {
             .desktop-nav {
@@ -336,14 +345,23 @@
             menu.classList.toggle('active');
         }
 
-        // Close mobile menu when clicking outside
+        // Close mobile menu when clicking on links or outside
         document.addEventListener('click', function(event) {
             const menu = document.getElementById('mobile-menu');
             const button = document.querySelector('.mobile-menu-button');
+            const nav = document.querySelector('nav');
 
-            if (!menu.contains(event.target) && !button.contains(event.target)) {
+            // Only close if click is outside the entire nav area
+            if (menu.classList.contains('active') && !nav.contains(event.target)) {
                 menu.classList.remove('active');
             }
+        });
+
+        // Close menu when clicking a link inside it
+        document.querySelectorAll('#mobile-menu a, #mobile-menu button[type="submit"]').forEach(function(link) {
+            link.addEventListener('click', function() {
+                document.getElementById('mobile-menu').classList.remove('active');
+            });
         });
 
         // Dark mode functionality
