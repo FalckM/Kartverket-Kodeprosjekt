@@ -10,9 +10,9 @@
 
 <div class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-900">📋 All Obstacles</h1>
+        <h1 class="text-3xl font-bold text-gray-900">All Obstacles</h1>
         <a asp-action="RegisterforerDashboard" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition">
-            ← Back to Dashboard
+            Back to Dashboard
         </a>
     </div>
 
@@ -74,24 +74,24 @@
         </div>
     </div>
 
-    <!-- Filters and Sorting -->
+    <!-- Filters and Sorting - Reactive -->
     <div class="bg-white rounded-lg shadow p-6 mb-6">
-        <form method="get" asp-action="AllObstacles" class="flex flex-wrap gap-4 items-end">
+        <form id="filterForm" method="get" asp-action="AllObstacles" class="flex flex-wrap gap-4 items-end">
             <!-- Status Filter -->
             <div class="flex-1 min-w-[200px]">
-                <label class="block text-sm font-medium text-gray-700 mb-2">📋 Filter by Status</label>
-                <select name="status" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Filter by Status</label>
+                <select name="status" class="filter-select w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                     <option value="all" selected="@(currentStatus == "all" ? "selected" : null)">All Statuses</option>
-                    <option value="pending" selected="@(currentStatus == "pending" ? "selected" : null)">⏳ Pending</option>
-                    <option value="approved" selected="@(currentStatus == "approved" ? "selected" : null)">✅ Approved</option>
-                    <option value="rejected" selected="@(currentStatus == "rejected" ? "selected" : null)">❌ Rejected</option>
+                    <option value="pending" selected="@(currentStatus == "pending" ? "selected" : null)">Pending</option>
+                    <option value="approved" selected="@(currentStatus == "approved" ? "selected" : null)">Approved</option>
+                    <option value="rejected" selected="@(currentStatus == "rejected" ? "selected" : null)">Rejected</option>
                 </select>
             </div>
 
             <!-- Sort By -->
             <div class="flex-1 min-w-[200px]">
-                <label class="block text-sm font-medium text-gray-700 mb-2">🔄 Sort By</label>
-                <select name="sortBy" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Sort By</label>
+                <select name="sortBy" class="filter-select w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                     <option value="registereddate" selected="@(currentSortBy == "registereddate" ? "selected" : null)">Registration Date</option>
                     <option value="name" selected="@(currentSortBy == "name" ? "selected" : null)">Name</option>
                     <option value="type" selected="@(currentSortBy == "type" ? "selected" : null)">Type</option>
@@ -102,18 +102,11 @@
 
             <!-- Sort Order -->
             <div class="flex-1 min-w-[200px]">
-                <label class="block text-sm font-medium text-gray-700 mb-2">↕️ Order</label>
-                <select name="sortOrder" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
-                    <option value="desc" selected="@(currentSortOrder == "desc" ? "selected" : null)">Descending (↓)</option>
-                    <option value="asc" selected="@(currentSortOrder == "asc" ? "selected" : null)">Ascending (↑)</option>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Order</label>
+                <select name="sortOrder" class="filter-select w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    <option value="desc" selected="@(currentSortOrder == "desc" ? "selected" : null)">Newest First</option>
+                    <option value="asc" selected="@(currentSortOrder == "asc" ? "selected" : null)">Oldest First</option>
                 </select>
-            </div>
-
-            <!-- Apply Button -->
-            <div>
-                <button type="submit" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition font-medium">
-                    Apply Filters
-                </button>
             </div>
 
             <!-- Reset Button -->
@@ -125,103 +118,85 @@
         </form>
     </div>
 
-    <!-- Obstacles Table -->
+    <!-- Obstacles Cards Grid -->
     @if (Model.Any())
     {
-        <div class="bg-white rounded-lg shadow overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Height</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Registered By</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Registered Date</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Processed By</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        @foreach (var obstacle in Model)
-                        {
-                            <tr class="hover:bg-gray-50 transition">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-medium text-gray-900">@obstacle.Name</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-600">@(obstacle.Type ?? "Unknown")</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-600">@obstacle.Height m</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    @if (obstacle.IsApproved)
-                                    {
-                                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                            ✅ Approved
-                                        </span>
-                                    }
-                                    else if (obstacle.IsPending)
-                                    {
-                                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                            ⏳ Pending
-                                        </span>
-                                    }
-                                    else if (obstacle.IsRejected)
-                                    {
-                                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                            ❌ Rejected
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
-                                            ❓ Unknown
-                                        </span>
-                                    }
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-600">@obstacle.RegisteredBy</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-600">@obstacle.RegisteredDate.ToString("dd.MM.yyyy HH:mm")</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    @if (!string.IsNullOrEmpty(obstacle.ProcessedBy))
-                                    {
-                                        <div class="text-sm text-gray-600">@obstacle.ProcessedBy</div>
-                                        <div class="text-xs text-gray-400">@obstacle.ProcessedDate?.ToString("dd.MM.yyyy")</div>
-                                    }
-                                    else
-                                    {
-                                        <div class="text-sm text-gray-400">Not processed</div>
-                                    }
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <div class="flex gap-2">
-                                        @if (obstacle.IsPending)
-                                        {
-                                            <a asp-action="ReviewObstacle" asp-route-id="@obstacle.Id" 
-                                               class="text-indigo-600 hover:text-indigo-900 font-medium">
-                                                👁️ Review
-                                            </a>
-                                        }
-                                        else
-                                        {
-                                            <a asp-action="ViewObstacle" asp-route-id="@obstacle.Id" 
-                                               class="text-blue-600 hover:text-blue-900 font-medium">
-                                                👁️ View
-                                            </a>
-                                        }
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach (var obstacle in Model)
+            {
+                var borderColor = obstacle.IsApproved ? "border-green-500" :
+                                  obstacle.IsPending ? "border-yellow-500" :
+                                  obstacle.IsRejected ? "border-red-500" : "border-gray-300";
+                var bgColor = obstacle.IsApproved ? "bg-green-50" :
+                              obstacle.IsPending ? "bg-yellow-50" :
+                              obstacle.IsRejected ? "bg-red-50" : "bg-gray-50";
+                var headerBg = obstacle.IsApproved ? "bg-green-500" :
+                               obstacle.IsPending ? "bg-yellow-500" :
+                               obstacle.IsRejected ? "bg-red-500" : "bg-gray-500";
+                var statusText = obstacle.IsApproved ? "Approved" :
+                                 obstacle.IsPending ? "Pending" :
+                                 obstacle.IsRejected ? "Rejected" : "Unknown";
+                var statusIcon = obstacle.IsApproved ? "✅" :
+                                 obstacle.IsPending ? "⏳" :
+                                 obstacle.IsRejected ? "❌" : "❓";
+
+                <div class="rounded-lg shadow-lg overflow-hidden border-l-4 @borderColor @bgColor hover:shadow-xl transition-shadow cursor-pointer">
+                    <!-- Card Header with Status -->
+                    <div class="@headerBg text-white px-4 py-3 flex justify-between items-center">
+                        <span class="font-semibold">@statusIcon @statusText</span>
+                        <span class="text-sm opacity-90">@obstacle.RegisteredDate.ToString("dd.MM.yyyy")</span>
+                    </div>
+
+                    <!-- Card Body -->
+                    <div class="p-4">
+                        <h3 class="text-lg font-bold text-gray-900 mb-3">@obstacle.Name</h3>
+
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Type:</span>
+                                <span class="font-medium text-gray-900">@(obstacle.Type ?? "Unknown")</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Height:</span>
+                                <span class="font-medium text-gray-900">@obstacle.Height m</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Registered by:</span>
+                                <span class="font-medium text-gray-900">@obstacle.RegisteredBy</span>
+                            </div>
+                            @if (!string.IsNullOrEmpty(obstacle.ProcessedBy))
+                            {
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Processed by:</span>
+                                    <span class="font-medium text-gray-900">@obstacle.ProcessedBy</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Processed date:</span>
+                                    <span class="font-medium text-gray-900">@obstacle.ProcessedDate?.ToString("dd.MM.yyyy")</span>
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Card Action -->
+                        <div class="mt-4 pt-3 border-t border-gray-200">
+                            @if (obstacle.IsPending)
+                            {
+                                <a asp-action="ReviewObstacle" asp-route-id="@obstacle.Id"
+                                   class="block w-full text-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition font-medium">
+                                    Review
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-action="ViewObstacle" asp-route-id="@obstacle.Id"
+                                   class="block w-full text-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition font-medium">
+                                    View Details
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     }
     else
@@ -234,3 +209,14 @@
         </div>
     }
 </div>
+
+@section Scripts {
+    <script>
+        // Auto-submit form when any filter changes
+        document.querySelectorAll('.filter-select').forEach(function(select) {
+            select.addEventListener('change', function() {
+                document.getElementById('filterForm').submit();
+            });
+        });
+    </script>
+}
