@@ -512,5 +512,104 @@ namespace FirstWebApplication.Controllers
         {
             return View();
         }
+
+        // ============================================================
+        // CHECK DUPLICATES - Sjekk for eksisterende obstacles innen radius
+        // ============================================================
+        [HttpGet]
+        public async Task<IActionResult> CheckDuplicates(double latitude, double longitude, double radiusMeters = 10)
+        {
+            try
+            {
+                // Hent alle obstacles som er fullstendig registrert (ikke StatusTypeId = 1)
+                var obstacles = await _context.Obstacles
+                    .Include(o => o.ObstacleType)
+                    .Include(o => o.CurrentStatus)
+                    .Where(o => o.CurrentStatusId != null
+                        && o.CurrentStatus != null
+                        && o.CurrentStatus.StatusTypeId != 1  // Ekskluder ufullstendige
+                        && !string.IsNullOrEmpty(o.Location))
+                    .ToListAsync();
+
+                var nearbyObstacles = new List<object>();
+
+                foreach (var obstacle in obstacles)
+                {
+                    // Parse WKT POINT format: "POINT(lng lat)"
+                    var coords = ParseWktPoint(obstacle.Location);
+                    if (coords == null) continue;
+
+                    var distance = CalculateDistance(latitude, longitude, coords.Value.lat, coords.Value.lng);
+
+                    if (distance <= radiusMeters)
+                    {
+                        nearbyObstacles.Add(new
+                        {
+                            id = obstacle.Id,
+                            name = obstacle.Name ?? "Unnamed",
+                            type = obstacle.ObstacleType?.Name ?? "Unknown",
+                            height = obstacle.Height ?? 0,
+                            description = obstacle.Description ?? "No description",
+                            distance = Math.Round(distance, 1)
+                        });
+                    }
+                }
+
+                return Json(new
+                {
+                    success = true,
+                    count = nearbyObstacles.Count,
+                    obstacles = nearbyObstacles.OrderBy(o => ((dynamic)o).distance).ToList()
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error checking for duplicates");
+                return Json(new { success = false, error = ex.Message });
+            }
+        }
+
+        // Parse WKT POINT format: "POINT(lng lat)"
+        private (double lat, double lng)? ParseWktPoint(string? wkt)
+        {
+            if (string.IsNullOrEmpty(wkt)) return null;
+
+            try
+            {
+                // Format: POINT(longitude latitude)
+                var match = System.Text.RegularExpressions.Regex.Match(wkt, @"POINT\s*\(\s*([\d\.\-]+)\s+([\d\.\-]+)\s*\)");
+                if (match.Success)
+                {
+                    var lng = double.Parse(match.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture);
+                    var lat = double.Parse(match.Groups[2].Value, System.Globalization.CultureInfo.InvariantCulture);
+                    return (lat, lng);
+                }
+            }
+            catch { }
+
+            return null;
+        }
+
+        // Haversine formula to calculate distance between two points in meters
+        private double CalculateDistance(double lat1, double lon1, double lat2, double lon2)
+        {
+            const double R = 6371000; // Earth's radius in meters
+
+            var dLat = ToRadians(lat2 - lat1);
+            var dLon = ToRadians(lon2 - lon1);
+
+            var a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                    Math.Cos(ToRadians(lat1)) * Math.Cos(ToRadians(lat2)) *
+                    Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+
+            var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+
+            return R * c;
+        }
+
+        private double ToRadians(double degrees)
+        {
+            return degrees * (Math.PI / 180);
+        }
     }
 }
