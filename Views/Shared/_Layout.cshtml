@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using NRLWebApp.Models.Entities
+@inject NRLWebApp.Data.ApplicationDbContext _context
+@inject UserManager<ApplicationUser> _userManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -31,20 +36,30 @@
                         
                         @if (User.IsInRole("Pilot"))
                         {
+                            var userId = _userManager.GetUserId(User);
+
+                            var harUferdige = _context.Hindre.Any(h => h.ApplicationUserId == userId && h.Status.Navn == "Uferdig");
+
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Hinder" asp-action="MineHindre">Mine Hindre</a>
+                                <a class="nav-link text-dark" asp-controller="Hinder" asp-action="MineHindre">Mine Hindre</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Hinder" asp-action="Create">Registrer Hinder</a>
+                                <a class="nav-link text-dark" asp-controller="Hinder" asp-action="Create">Registrer Hinder</a>
                             </li>
                             <li class="nav-item">
                                 <button id="hurtigRegistrerKnapp" class="nav-link btn btn-link text-danger font-weight-bold">
                                     Hurtigregistrering
                                 </button>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Hinder" asp-action="UferdigeHindre">Uferdige Hindre</a>
-                            </li>
+
+                            if (harUferdige)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Hinder" asp-action="UferdigeHindre">
+                                        Uferdige Hindre
+                                    </a>
+                                </li>
+                            }
                         }
                        
                         @if (User.IsInRole("Registerfører") || User.IsInRole("Admin"))

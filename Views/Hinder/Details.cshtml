@@ -68,7 +68,11 @@
 </div>
 
 <div class="mt-4">
-    <a asp-action="Index" class="btn btn-secondary">Tilbake til Hovedlisten</a>
+    @if (!User.IsInRole("Pilot"))
+    {
+        <a asp-action="Index" class="btn btn-secondary">Tilbake til Hovedlisten</a>
+    }
+
     <a asp-action="MineHindre" class="btn btn-secondary">Tilbake til Mine Hindre</a>
 </div>
 

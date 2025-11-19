@@ -43,7 +43,7 @@ namespace NRLWebApp.Controllers
             }
 
             var mineHindre = await _context.Hindre
-                .Where(h => h.ApplicationUserId == user.Id) 
+                .Where(h => h.ApplicationUserId == user.Id && h.Status.Navn != "Uferdig")
                 .Include(h => h.Status)
                 .Include(h => h.HinderType)
                 .OrderByDescending(h => h.Tidsstempel) 
