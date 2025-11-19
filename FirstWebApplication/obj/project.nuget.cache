@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "GwM4j90UDXY=",
+  "dgSpecHash": "tAmgs/MsDRE=",
   "success": true,
-  "projectFilePath": "C:\\Users\\matsf\\Documents\\Skole\\Kodeprosjekt_2_sem\\Kartverket-Kodeprosjekt\\FirstWebApplication\\FirstWebApplication.csproj",
+  "projectFilePath": "C:\\Users\\matsf\\Documents\\Skole\\Semester3\\Kartverket-Kodeprosjekt\\FirstWebApplication\\FirstWebApplication.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\matsf\\.nuget\\packages\\closedxml\\0.105.0\\closedxml.0.105.0.nupkg.sha512",
     "C:\\Users\\matsf\\.nuget\\packages\\closedxml.parser\\2.0.0\\closedxml.parser.2.0.0.nupkg.sha512",
