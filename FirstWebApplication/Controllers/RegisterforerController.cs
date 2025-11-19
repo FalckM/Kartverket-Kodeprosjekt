@@ -239,7 +239,7 @@ namespace FirstWebApplication.Controllers
             await _context.SaveChangesAsync();
 
             TempData["SuccessMessage"] = $"Obstacle '{obstacle.Name}' has been approved.";
-            return RedirectToAction("PendingObstacles");
+            return RedirectToAction("AllObstacles");
         }
 
         [HttpPost]
@@ -284,7 +284,7 @@ namespace FirstWebApplication.Controllers
             await _context.SaveChangesAsync();
 
             TempData["SuccessMessage"] = $"Obstacle '{obstacle.Name}' has been rejected.";
-            return RedirectToAction("PendingObstacles");
+            return RedirectToAction("AllObstacles");
         }
 
         [HttpGet]
