@@ -2664,23 +2664,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\kj4sp\\.nuget\\packages\\": {},
+    "C:\\Users\\matsf\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\kj4sp\\Desktop\\Kartverket-Kodeprosjekt\\FirstWebApplication\\FirstWebApplication.csproj",
+      "projectUniqueName": "C:\\Users\\matsf\\Documents\\Skole\\Kodeprosjekt_2_sem\\Kartverket-Kodeprosjekt\\FirstWebApplication\\FirstWebApplication.csproj",
       "projectName": "FirstWebApplication",
-      "projectPath": "C:\\Users\\kj4sp\\Desktop\\Kartverket-Kodeprosjekt\\FirstWebApplication\\FirstWebApplication.csproj",
-      "packagesPath": "C:\\Users\\kj4sp\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\kj4sp\\Desktop\\Kartverket-Kodeprosjekt\\FirstWebApplication\\obj\\",
+      "projectPath": "C:\\Users\\matsf\\Documents\\Skole\\Kodeprosjekt_2_sem\\Kartverket-Kodeprosjekt\\FirstWebApplication\\FirstWebApplication.csproj",
+      "packagesPath": "C:\\Users\\matsf\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\matsf\\Documents\\Skole\\Kodeprosjekt_2_sem\\Kartverket-Kodeprosjekt\\FirstWebApplication\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\kj4sp\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\matsf\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -2764,7 +2764,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
