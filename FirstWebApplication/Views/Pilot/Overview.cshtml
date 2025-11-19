@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Obstacle Overview";
+    var formattedHeight = Model.Height.ToString("F2");
 }
 
 <style>
@@ -81,122 +82,130 @@
 
     <h1 class="text-3xl font-bold text-gray-900 mb-6">Obstacle Details #@Model.Id</h1>
 
-    <!-- Obstacle Information -->
-    <div class="details-card">
-        <h2 class="text-2xl font-bold text-gray-900 mb-4">Obstacle Information</h2>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+        <!-- Left Column: Obstacle Info + Status Details -->
+        <div class="space-y-6">
+            <!-- Obstacle Information -->
+            <div class="details-card">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Obstacle Information</h2>
 
-        <div class="detail-row">
-            <div class="detail-label">ID:</div>
-            <div class="detail-value">#@Model.Id</div>
-        </div>
-
-        <div class="detail-row">
-            <div class="detail-label">Status:</div>
-            <div class="detail-value">
-                @if (Model.IsApproved)
-                {
-                    <span class="status-badge status-approved">✓ Approved</span>
-                }
-                else if (Model.IsRejected)
-                {
-                    <span class="status-badge status-rejected">✗ Rejected</span>
-                }
-                else
-                {
-                    <span class="status-badge status-pending">⏳ Pending Approval</span>
-                }
-            </div>
-        </div>
-
-        <div class="detail-row">
-            <div class="detail-label">Name:</div>
-            <div class="detail-value">@Model.Name</div>
-        </div>
-
-        @if (!string.IsNullOrEmpty(Model.Type))
-        {
-            <div class="detail-row">
-                <div class="detail-label">Type:</div>
-                <div class="detail-value">@Model.Type</div>
-            </div>
-        }
-
-        <div class="detail-row">
-            <div class="detail-label">Height:</div>
-            <div class="detail-value">@Model.Height m</div>
-        </div>
-
-        <div class="detail-row">
-            <div class="detail-label">Description:</div>
-            <div class="detail-value">@Model.Description</div>
-        </div>
-
-        <div class="detail-row">
-            <div class="detail-label">Registered By:</div>
-            <div class="detail-value">@Model.RegisteredBy</div>
-        </div>
-
-        <div class="detail-row">
-            <div class="detail-label">Registered Date:</div>
-            <div class="detail-value">@Model.RegisteredDate.ToString("dd.MM.yyyy HH:mm")</div>
-        </div>
-    </div>
-
-    @if (Model.IsApproved && Model.ProcessedBy != null)
-    {
-        <div class="details-card bg-green-50">
-            <h2 class="text-2xl font-bold text-green-900 mb-4">Approval Details</h2>
-            <div class="detail-row">
-                <div class="detail-label">Approved By:</div>
-                <div class="detail-value">@Model.ProcessedBy</div>
-            </div>
-            <div class="detail-row">
-                <div class="detail-label">Approved Date:</div>
-                <div class="detail-value">@Model.ProcessedDate?.ToString("dd.MM.yyyy HH:mm")</div>
-            </div>
-            @if (!string.IsNullOrEmpty(Model.ProcessComments))
-            {
                 <div class="detail-row">
-                    <div class="detail-label">Comments:</div>
-                    <div class="detail-value">@Model.ProcessComments</div>
+                    <div class="detail-label">ID:</div>
+                    <div class="detail-value">#@Model.Id</div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">Status:</div>
+                    <div class="detail-value">
+                        @if (Model.IsApproved)
+                        {
+                            <span class="status-badge status-approved">Approved</span>
+                        }
+                        else if (Model.IsRejected)
+                        {
+                            <span class="status-badge status-rejected">Rejected</span>
+                        }
+                        else
+                        {
+                            <span class="status-badge status-pending">Pending Approval</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">Name:</div>
+                    <div class="detail-value">@Model.Name</div>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.Type))
+                {
+                    <div class="detail-row">
+                        <div class="detail-label">Type:</div>
+                        <div class="detail-value">@Model.Type</div>
+                    </div>
+                }
+
+                <div class="detail-row">
+                    <div class="detail-label">Height:</div>
+                    <div class="detail-value">@formattedHeight m</div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">Description:</div>
+                    <div class="detail-value">@Model.Description</div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">Registered By:</div>
+                    <div class="detail-value">@Model.RegisteredBy</div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">Registered Date:</div>
+                    <div class="detail-value">@Model.RegisteredDate.ToString("dd.MM.yyyy HH:mm")</div>
+                </div>
+            </div>
+
+            @if (Model.IsApproved && Model.ProcessedBy != null)
+            {
+                <div class="details-card bg-green-50">
+                    <h2 class="text-2xl font-bold text-green-900 mb-4">Approval Details</h2>
+                    <div class="detail-row">
+                        <div class="detail-label">Approved By:</div>
+                        <div class="detail-value">@Model.ProcessedBy</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Approved Date:</div>
+                        <div class="detail-value">@Model.ProcessedDate?.ToString("dd.MM.yyyy HH:mm")</div>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.ProcessComments))
+                    {
+                        <div class="detail-row">
+                            <div class="detail-label">Comments:</div>
+                            <div class="detail-value">@Model.ProcessComments</div>
+                        </div>
+                    }
+                </div>
+            }
+
+            @if (Model.IsRejected && Model.ProcessedBy != null)
+            {
+                <div class="details-card bg-red-50">
+                    <h2 class="text-2xl font-bold text-red-900 mb-4">Rejection Details</h2>
+                    <div class="detail-row">
+                        <div class="detail-label">Rejected By:</div>
+                        <div class="detail-value">@Model.ProcessedBy</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Rejected Date:</div>
+                        <div class="detail-value">@Model.ProcessedDate?.ToString("dd.MM.yyyy HH:mm")</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Reason:</div>
+                        <div class="detail-value text-red-700 font-semibold">@Model.RejectionReason</div>
+                    </div>
                 </div>
             }
         </div>
-    }
 
-    @if (Model.IsRejected && Model.ProcessedBy != null)
-    {
-        <div class="details-card bg-red-50">
-            <h2 class="text-2xl font-bold text-red-900 mb-4">Rejection Details</h2>
-            <div class="detail-row">
-                <div class="detail-label">Rejected By:</div>
-                <div class="detail-value">@Model.ProcessedBy</div>
+        <!-- Right Column: Map + Actions -->
+        <div class="space-y-6">
+            <!-- Map -->
+            <div class="details-card">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Location</h2>
+                <div id="map"></div>
             </div>
-            <div class="detail-row">
-                <div class="detail-label">Rejected Date:</div>
-                <div class="detail-value">@Model.ProcessedDate?.ToString("dd.MM.yyyy HH:mm")</div>
-            </div>
-            <div class="detail-row">
-                <div class="detail-label">Reason:</div>
-                <div class="detail-value text-red-700 font-semibold">@Model.RejectionReason</div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col gap-4">
+                <a asp-action="RegisterType" class="text-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition">
+                    Register Another Obstacle
+                </a>
+                <a asp-action="MyRegistrations" class="text-center px-6 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition">
+                    View All My Registrations
+                </a>
             </div>
         </div>
-    }
-
-    <!-- Map -->
-    <div class="details-card">
-        <h2 class="text-2xl font-bold text-gray-900 mb-4">Location</h2>
-        <div id="map"></div>
-    </div>
-
-    <!-- Action Buttons -->
-    <div class="flex gap-4 mb-8">
-        <a asp-action="RegisterType" class="flex-1 text-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition">
-            Register Another Obstacle
-        </a>
-        <a asp-action="MyRegistrations" class="flex-1 text-center px-6 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition">
-            View All My Registrations
-        </a>
     </div>
 </div>
 
@@ -223,7 +232,7 @@
                         var lng = parseFloat(coords[0]);
                         
                         var marker = L.marker([lat, lng]).addTo(map);
-                        marker.bindPopup('<b>@Model.Name</b><br>@Model.Height m').openPopup();
+                        marker.bindPopup('<b>@Model.Name</b><br>@formattedHeight m').openPopup();
                         map.setView([lat, lng], 13);
                     } else if (geometryWKT.startsWith('LINESTRING')) {
                         var coordsStr = geometryWKT.replace('LINESTRING(', '').replace(')', '');
@@ -232,9 +241,9 @@
                             var coords = pair.trim().split(' ');
                             return [parseFloat(coords[1]), parseFloat(coords[0])];
                         });
-                        
+
                         var polyline = L.polyline(latlngs, {color: 'blue'}).addTo(map);
-                        polyline.bindPopup('<b>@Model.Name</b><br>@Model.Height m');
+                        polyline.bindPopup('<b>@Model.Name</b><br>@formattedHeight m');
                         map.fitBounds(polyline.getBounds());
                     } else if (geometryWKT.startsWith('POLYGON')) {
                         var coordsStr = geometryWKT.replace('POLYGON((', '').replace('))', '');
@@ -243,9 +252,9 @@
                             var coords = pair.trim().split(' ');
                             return [parseFloat(coords[1]), parseFloat(coords[0])];
                         });
-                        
+
                         var polygon = L.polygon(latlngs, {color: 'blue'}).addTo(map);
-                        polygon.bindPopup('<b>@Model.Name</b><br>@Model.Height m');
+                        polygon.bindPopup('<b>@Model.Name</b><br>@formattedHeight m');
                         map.fitBounds(polygon.getBounds());
                     }
                 } catch (e) {

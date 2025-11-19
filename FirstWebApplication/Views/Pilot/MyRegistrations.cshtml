@@ -67,7 +67,9 @@
                                 <td class="px-6 py-4 text-sm text-gray-600">
                                     @{
                                         var coords = quickReg.Location.Replace("POINT(", "").Replace(")", "").Split(' ');
-                                        var displayCoords = coords.Length == 2 ? $"{coords[1]}, {coords[0]}" : "Unknown";
+                                        var displayCoords = coords.Length == 2
+                                            ? $"{double.Parse(coords[1]).ToString("F4")}, {double.Parse(coords[0]).ToString("F4")}"
+                                            : "Unknown";
                                     }
                                     📍 @displayCoords
                                 </td>
@@ -109,7 +111,7 @@
                                 <td class="px-6 py-4 text-sm font-medium text-gray-900">#@obstacle.Id</td>
                                 <td class="px-6 py-4 text-sm text-gray-600">@(obstacle.Type ?? "N/A")</td>
                                 <td class="px-6 py-4 text-sm text-gray-900">@obstacle.Name</td>
-                                <td class="px-6 py-4 text-sm text-gray-600">@obstacle.Height m</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">@obstacle.Height.ToString("F2") m</td>
                                 <td class="px-6 py-4 text-sm text-gray-600">@obstacle.RegisteredDate.ToString("dd.MM.yyyy")</td>
                                 <td class="px-6 py-4 text-sm font-medium">
                                     <a asp-action="Overview" asp-route-id="@obstacle.Id" class="text-blue-600 hover:text-blue-900 mr-4">👁️ View</a>
@@ -148,7 +150,7 @@
                                 <td class="px-6 py-4 text-sm font-medium text-gray-900">#@obstacle.Id</td>
                                 <td class="px-6 py-4 text-sm text-gray-600">@(obstacle.Type ?? "N/A")</td>
                                 <td class="px-6 py-4 text-sm text-gray-900">@obstacle.Name</td>
-                                <td class="px-6 py-4 text-sm text-gray-600">@obstacle.Height m</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">@obstacle.Height.ToString("F2") m</td>
                                 <td class="px-6 py-4 text-sm text-gray-600">@(obstacle.ProcessedBy ?? "N/A")</td>
                                 <td class="px-6 py-4 text-sm font-medium">
                                     <a asp-action="Overview" asp-route-id="@obstacle.Id" class="text-blue-600 hover:text-blue-900">👁️ View</a>
