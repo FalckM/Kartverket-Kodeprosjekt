@@ -366,6 +366,7 @@ namespace FirstWebApplication.Controllers
                     .Include(o => o.CurrentStatus)
                         .ThenInclude(s => s.ChangedByUser)
                     .Where(o => o.CurrentStatusId != null) // Kun obstacles med status
+                    .Where(o => o.CurrentStatus != null && o.CurrentStatus.StatusTypeId != 1) // Exclude incomplete quick registrations
                     .AsQueryable();
 
                 // Filter by status
