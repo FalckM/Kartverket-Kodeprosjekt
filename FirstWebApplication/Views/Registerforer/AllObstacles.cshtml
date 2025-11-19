@@ -1,0 +1,236 @@
+@model List<FirstWebApplication.Models.Obstacle.ObstacleListItemViewModel>
+
+
+@{
+    ViewData["Title"] = "All Obstacles";
+    var currentStatus = ViewBag.CurrentStatus as string ?? "all";
+    var currentSortBy = ViewBag.CurrentSortBy as string ?? "registereddate";
+    var currentSortOrder = ViewBag.CurrentSortOrder as string ?? "desc";
+}
+
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-900">📋 All Obstacles</h1>
+        <a asp-action="RegisterforerDashboard" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition">
+            ← Back to Dashboard
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    <!-- Statistics Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600 text-sm font-medium">Total</p>
+                    <p class="text-3xl font-bold text-gray-900">@Model.Count</p>
+                </div>
+                <div class="bg-blue-100 rounded-full p-3">
+                    <span class="text-2xl">📊</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600 text-sm font-medium">Approved</p>
+                    <p class="text-3xl font-bold text-green-600">@Model.Count(o => o.IsApproved)</p>
+                </div>
+                <div class="bg-green-100 rounded-full p-3">
+                    <span class="text-2xl">✅</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600 text-sm font-medium">Pending</p>
+                    <p class="text-3xl font-bold text-yellow-600">@Model.Count(o => o.IsPending)</p>
+                </div>
+                <div class="bg-yellow-100 rounded-full p-3">
+                    <span class="text-2xl">⏳</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600 text-sm font-medium">Rejected</p>
+                    <p class="text-3xl font-bold text-red-600">@Model.Count(o => o.IsRejected)</p>
+                </div>
+                <div class="bg-red-100 rounded-full p-3">
+                    <span class="text-2xl">❌</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters and Sorting -->
+    <div class="bg-white rounded-lg shadow p-6 mb-6">
+        <form method="get" asp-action="AllObstacles" class="flex flex-wrap gap-4 items-end">
+            <!-- Status Filter -->
+            <div class="flex-1 min-w-[200px]">
+                <label class="block text-sm font-medium text-gray-700 mb-2">📋 Filter by Status</label>
+                <select name="status" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    <option value="all" selected="@(currentStatus == "all" ? "selected" : null)">All Statuses</option>
+                    <option value="pending" selected="@(currentStatus == "pending" ? "selected" : null)">⏳ Pending</option>
+                    <option value="approved" selected="@(currentStatus == "approved" ? "selected" : null)">✅ Approved</option>
+                    <option value="rejected" selected="@(currentStatus == "rejected" ? "selected" : null)">❌ Rejected</option>
+                </select>
+            </div>
+
+            <!-- Sort By -->
+            <div class="flex-1 min-w-[200px]">
+                <label class="block text-sm font-medium text-gray-700 mb-2">🔄 Sort By</label>
+                <select name="sortBy" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    <option value="registereddate" selected="@(currentSortBy == "registereddate" ? "selected" : null)">Registration Date</option>
+                    <option value="name" selected="@(currentSortBy == "name" ? "selected" : null)">Name</option>
+                    <option value="type" selected="@(currentSortBy == "type" ? "selected" : null)">Type</option>
+                    <option value="height" selected="@(currentSortBy == "height" ? "selected" : null)">Height</option>
+                    <option value="status" selected="@(currentSortBy == "status" ? "selected" : null)">Status</option>
+                </select>
+            </div>
+
+            <!-- Sort Order -->
+            <div class="flex-1 min-w-[200px]">
+                <label class="block text-sm font-medium text-gray-700 mb-2">↕️ Order</label>
+                <select name="sortOrder" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    <option value="desc" selected="@(currentSortOrder == "desc" ? "selected" : null)">Descending (↓)</option>
+                    <option value="asc" selected="@(currentSortOrder == "asc" ? "selected" : null)">Ascending (↑)</option>
+                </select>
+            </div>
+
+            <!-- Apply Button -->
+            <div>
+                <button type="submit" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition font-medium">
+                    Apply Filters
+                </button>
+            </div>
+
+            <!-- Reset Button -->
+            <div>
+                <a asp-action="AllObstacles" class="inline-block px-6 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition font-medium">
+                    Reset
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Obstacles Table -->
+    @if (Model.Any())
+    {
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Height</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Registered By</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Registered Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Processed By</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @foreach (var obstacle in Model)
+                        {
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-gray-900">@obstacle.Name</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-600">@(obstacle.Type ?? "Unknown")</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-600">@obstacle.Height m</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    @if (obstacle.IsApproved)
+                                    {
+                                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                            ✅ Approved
+                                        </span>
+                                    }
+                                    else if (obstacle.IsPending)
+                                    {
+                                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                            ⏳ Pending
+                                        </span>
+                                    }
+                                    else if (obstacle.IsRejected)
+                                    {
+                                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                            ❌ Rejected
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                            ❓ Unknown
+                                        </span>
+                                    }
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-600">@obstacle.RegisteredBy</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-600">@obstacle.RegisteredDate.ToString("dd.MM.yyyy HH:mm")</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    @if (!string.IsNullOrEmpty(obstacle.ProcessedBy))
+                                    {
+                                        <div class="text-sm text-gray-600">@obstacle.ProcessedBy</div>
+                                        <div class="text-xs text-gray-400">@obstacle.ProcessedDate?.ToString("dd.MM.yyyy")</div>
+                                    }
+                                    else
+                                    {
+                                        <div class="text-sm text-gray-400">Not processed</div>
+                                    }
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <div class="flex gap-2">
+                                        @if (obstacle.IsPending)
+                                        {
+                                            <a asp-action="ReviewObstacle" asp-route-id="@obstacle.Id" 
+                                               class="text-indigo-600 hover:text-indigo-900 font-medium">
+                                                👁️ Review
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="ViewObstacle" asp-route-id="@obstacle.Id" 
+                                               class="text-blue-600 hover:text-blue-900 font-medium">
+                                                👁️ View
+                                            </a>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
+            <p class="text-gray-600 text-lg">No obstacles found matching your filters.</p>
+            <a asp-action="AllObstacles" class="mt-4 inline-block px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition">
+                Show All Obstacles
+            </a>
+        </div>
+    }
+</div>
