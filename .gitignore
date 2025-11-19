@@ -1,25 +1,40 @@
-# Visual Studio
+# === ASP.NET Core ===
+
+# Visual Studio og Rider IDE-filer
 .vs/
+.idea/
 *.user
 *.suo
-*.userosscache
 *.sln.docstates
+*.userosscache
 
-# Build resultater
-bin/
-obj/
-Debug/
-Release/
-publish/
+# Build-resultater
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+[Pp]ublish/
+TestResults/
 
-# Node
-node_modules/
-
-# Publisering
-wwwroot/css/site.css
-
-# Diverse
+# Brukergenererte filer
 *.log
 *.tmp
 *.cache
+*.bak
 
+# === Frontend-pakker (Bootstrap, Leaflet etc.) ===
+# Ignorerer mappen der npm/yarn installerer pakker
+node_modules/
+npm-debug.log*
+yarn-error.log
+
+# === Hemmeligheter og lokale innstillinger ===
+# Filer som IKKE skal sjekkes inn (API-nøkler, passord)
+*.Secret.json
+*.secrets.json
+appsettings.Development.json
+*.env
+
+# Unntak:
+# Ikke ignorer .gitignore-filen selv
+!.gitignore
