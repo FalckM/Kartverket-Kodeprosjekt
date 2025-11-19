@@ -175,6 +175,7 @@ namespace NRLWebApp.Controllers
 
             var hinder = await _context.Hindre
                 .Include(h => h.Status)
+                .Include(h => h.HinderType)
                 .Include(h => h.ApplicationUser)
                     .ThenInclude(u => u.Organisasjon)
                 .FirstOrDefaultAsync(m => m.HinderID == id);

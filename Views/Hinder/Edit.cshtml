@@ -11,6 +11,7 @@
     <div class="col-md-4">
         <form asp-action="Edit" method="post">
             <input type="hidden" asp-for="HinderID" />
+            <input type="hidden" asp-for="Lokasjon" />
 
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -45,11 +46,8 @@
             <dt class="col-sm-4">Rapportert dato:</dt>
             <dd class="col-sm-8">@Model.Tidsstempel.ToString("g")</dd>
 
-            <div class="form-group">
-                <label asp-for="HinderTypeID" class="control-label"></label>
-                <select asp-for="HinderTypeID" class="form-control" asp-items="@ViewBag.HinderTypeID"></select>
-                <span asp-validation-for="HinderTypeID" class="text-danger"></span>
-            </div>
+            <dt class="col-sm-4">Type:</dt>
+            <dd class="col-sm-8">@Model.HinderType?.Navn</dd>
 
             <dt class="col-sm-4">Høyde (m):</dt>
             <dd class="col-sm-8">@Model.Hoyde</dd>
@@ -70,22 +68,31 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
-        var lokasjonDataElement = document.getElementById('lokasjonDataSkjult');
-        var lokasjonGeoJsonString = lokasjonDataElement.getAttribute('data-lokasjon');
+        var lokasjonStreng = '@Html.Raw(Model.Lokasjon)';
 
-        var map = L.map('map').setView([60.47, 8.46], 7);
+        var startKoordinater = parseLokasjon(lokasjonStreng);
+
+        var map = L.map('map').setView(startKoordinater, 15);
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
         }).addTo(map);
 
-        if (lokasjonGeoJsonString) {
-            var geoJsonData = JSON.parse(lokasjonGeoJsonString);
+        var marker = L.marker(startKoordinater).addTo(map);
 
-            var geoJsonLayer = L.geoJSON(geoJsonData).addTo(map);
+        map.on('click', function (e) {
+            var lat = e.latlng.lat.toFixed(6);
+            var lon = e.latlng.lng.toFixed(6);
 
-            map.fitBounds(geoJsonLayer.getBounds());
-        } else {
-            map.setView([60.47, 8.46], 7);
-        }
+            var nyLokasjon = "Lat: " + lat + ", Lon: " + lon;
+
+            var inputFelt = document.getElementById('Lokasjon');
+            if (inputFelt) {
+                inputFelt.value = nyLokasjon;
+            }
+
+            marker.setLatLng(e.latlng);
+        });
     </script>
 }

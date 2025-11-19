@@ -80,18 +80,33 @@ function visGeolokasjonsFeil(error) {
 }
 
 function parseLokasjon(lokasjonStreng) {
-    if (!lokasjonStreng || !lokasjonStreng.startsWith("Lat:")) {
-        console.warn("Ugyldig lokasjonsstreng, bruker standardposisjon.");
+    if (!lokasjonStreng) {
         return [58.1463, 7.9952]; 
     }
 
-    try {
-        var parts = lokasjonStreng.split(',');
-        var lat = parseFloat(parts[0].split(':')[1].trim());
-        var lon = parseFloat(parts[1].split(':')[1].trim());
-        return [lat, lon];
-    } catch (e) {
-        console.error("Klarte ikke parse lokasjon:", lokasjonStreng);
-        return [58.1463, 7.9952]; 
+    if (lokasjonStreng.trim().startsWith("{")) {
+        try {
+            var geoJson = JSON.parse(lokasjonStreng);
+            var lon = geoJson.geometry.coordinates[0];
+            var lat = geoJson.geometry.coordinates[1];
+            return [lat, lon];
+        } catch (e) {
+            console.error("Feil ved parsing av GeoJSON:", e);
+            return [58.1463, 7.9952];
+        }
     }
+
+    if (lokasjonStreng.startsWith("Lat:")) {
+        try {
+            var parts = lokasjonStreng.split(',');
+            var lat = parseFloat(parts[0].split(':')[1].trim());
+            var lon = parseFloat(parts[1].split(':')[1].trim());
+            return [lat, lon];
+        } catch (e) {
+            console.error("Klarte ikke parse lokasjon-streng:", lokasjonStreng);
+            return [58.1463, 7.9952];
+        }
+    }
+
+    return [58.1463, 7.9952];
 }
