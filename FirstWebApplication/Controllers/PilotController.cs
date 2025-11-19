@@ -467,6 +467,26 @@ namespace FirstWebApplication.Controllers
                 return RedirectToAction("MyRegistrations");
             }
 
+            // Remove foreign key reference first
+            obstacle.CurrentStatusId = null;
+            _context.Obstacles.Update(obstacle);
+            await _context.SaveChangesAsync();
+
+            // Delete all related ObstacleStatuses
+            var statuses = await _context.ObstacleStatuses
+                .Where(s => s.ObstacleId == id)
+                .ToListAsync();
+            _context.ObstacleStatuses.RemoveRange(statuses);
+
+            // Delete any related Behandlinger
+            var behandlinger = await _context.Behandlinger
+                .Where(b => b.ObstacleId == id)
+                .ToListAsync();
+            _context.Behandlinger.RemoveRange(behandlinger);
+
+            await _context.SaveChangesAsync();
+
+            // Now delete the obstacle
             _context.Obstacles.Remove(obstacle);
             await _context.SaveChangesAsync();
 
