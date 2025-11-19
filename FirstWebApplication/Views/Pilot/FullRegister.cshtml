@@ -15,7 +15,7 @@
             left: 0;
             right: 400px;
             bottom: 0;
-            z-index: 1;
+            z-index: 0;
         }
 
         .registration-form {
@@ -219,8 +219,14 @@
                     // Clear existing drawings
                     drawnItems.clearLayers();
 
-                    // Add marker at current location
-                    var marker = L.marker([lat, lng]).addTo(drawnItems);
+                    // Add draggable marker at current location
+                    var marker = L.marker([lat, lng], { draggable: true }).addTo(drawnItems);
+
+                    // Update geometry when marker is dragged
+                    marker.on('dragend', function(e) {
+                        var pos = e.target.getLatLng();
+                        document.getElementById('obstacleGeometryInput').value = `POINT(${pos.lng} ${pos.lat})`;
+                    });
 
                     // Set geometry input
                     document.getElementById('obstacleGeometryInput').value = `POINT(${lng} ${lat})`;
@@ -297,7 +303,10 @@
                     rectangle: true,
                     circle: false,
                     circlemarker: false,
-                    marker: true
+                    marker: {
+                        icon: new L.Icon.Default(),
+                        draggable: true
+                    }
                 }
             });
             map.addControl(drawControl);
@@ -307,6 +316,14 @@
 
                 drawnItems.clearLayers();
                 drawnItems.addLayer(layer);
+
+                // If it's a marker, add dragend listener
+                if (layer instanceof L.Marker) {
+                    layer.on('dragend', function(e) {
+                        var pos = e.target.getLatLng();
+                        document.getElementById('obstacleGeometryInput').value = `POINT(${pos.lng} ${pos.lat})`;
+                    });
+                }
 
                 var geometryWKT = convertToWKT(layer);
                 document.getElementById('obstacleGeometryInput').value = geometryWKT;
