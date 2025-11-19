@@ -13,7 +13,7 @@
     <style>
         #map {
             position: absolute;
-            top: 56px;
+            top: 64px;
             left: 0;
             right: 400px;
             bottom: 0;
@@ -22,15 +22,33 @@
 
         .registration-form {
             position: absolute;
-            top: 56px;
+            top: 64px;
             right: 0;
             width: 400px;
-            height: calc(100vh - 56px);
+            height: calc(100vh - 64px);
             background: white;
             padding: 20px;
             overflow-y: auto;
             box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
             z-index: 2;
+        }
+
+        /* Tablet and mobile responsive */
+        @@media (max-width: 1024px) {
+            #map {
+                position: relative;
+                top: 0;
+                right: 0;
+                height: 50vh;
+            }
+
+            .registration-form {
+                position: relative;
+                top: 0;
+                width: 100%;
+                height: auto;
+                min-height: 50vh;
+            }
         }
 
         .form-group {

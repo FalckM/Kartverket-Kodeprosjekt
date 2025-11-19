@@ -7,82 +7,124 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Leaflet CSS for maps -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
+    <style>
+        /* Ensure content doesn't collide with fixed navbar */
+        .main-content {
+            padding-top: 1rem;
+        }
+
+        /* Mobile menu styles */
+        .mobile-menu {
+            display: none;
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        /* Hide desktop nav on smaller screens */
+        @@media (max-width: 1024px) {
+            .desktop-nav {
+                display: none;
+            }
+            .mobile-menu-button {
+                display: flex;
+            }
+        }
+
+        @@media (min-width: 1025px) {
+            .mobile-menu-button {
+                display: none;
+            }
+            .desktop-nav {
+                display: flex;
+            }
+        }
+    </style>
 
     @await RenderSectionAsync("Head", required: false)
 </head>
 <body class="bg-gray-50">
     <header>
-        <nav class="bg-gray-200 shadow shadow-gray-300 w-100 px-8 md:px-auto">
+        <nav class="bg-gray-200 shadow shadow-gray-300 w-100 px-4 lg:px-8">
             <div class="h-16 mx-auto container flex items-center justify-between">
                 <!-- Logo - Left -->
-                <div class="text-indigo-500 flex items-center">
+                <div class="text-indigo-500 flex items-center flex-shrink-0">
                     <a asp-controller="Home" asp-action="Index" class="flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
                         </svg>
-                        <span class="font-bold text-lg">Obstacle Registration</span>
+                        <span class="font-bold text-lg hidden sm:inline">Obstacle Registration</span>
+                        <span class="font-bold text-lg sm:hidden">ORS</span>
                     </a>
                 </div>
 
-                <!-- Right Side: Navigation + User Info + Logout -->
-                <div class="flex items-center gap-6">
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-button items-center justify-center p-2 rounded-md text-gray-600 hover:text-indigo-500 hover:bg-gray-300 focus:outline-none" onclick="toggleMobileMenu()">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+
+                <!-- Desktop Navigation -->
+                <div class="desktop-nav items-center gap-4">
                     @if (User.Identity?.IsAuthenticated == true)
                     {
                         <!-- Navigation Links -->
-                        <ul class="flex font-semibold text-gray-600">
+                        <ul class="flex font-semibold text-gray-600 text-sm">
                             @if (User.IsInRole("Pilot"))
                             {
-                                <li class="px-4 py-2 hover:text-indigo-500">
-                                    <a asp-controller="Pilot" asp-action="RegisterType">Register Obstacle</a>
+                                <li class="px-3 py-2 hover:text-indigo-500 whitespace-nowrap">
+                                    <a asp-controller="Pilot" asp-action="RegisterType">Register</a>
                                 </li>
-                                <li class="px-4 py-2 hover:text-indigo-500">
+                                <li class="px-3 py-2 hover:text-indigo-500 whitespace-nowrap">
                                     <a asp-controller="Pilot" asp-action="MyRegistrations">My Registrations</a>
                                 </li>
-                                <li class="px-4 py-2 hover:text-indigo-500">
+                                <li class="px-3 py-2 hover:text-indigo-500 whitespace-nowrap">
                                     <a asp-controller="Pilot" asp-action="Dashboard">Dashboard</a>
                                 </li>
                             }
 
                             @if (User.IsInRole("Registerfører"))
                             {
-                                <li class="px-4 py-2 hover:text-indigo-500">
+                                <li class="px-3 py-2 hover:text-indigo-500 whitespace-nowrap">
                                     <a asp-controller="Registerforer" asp-action="RegisterforerDashboard">Dashboard</a>
                                 </li>
-                                <li class="px-4 py-2 hover:text-indigo-500">
+                                <li class="px-3 py-2 hover:text-indigo-500 whitespace-nowrap">
                                     <a asp-controller="Registerforer" asp-action="MapView">Map View</a>
                                 </li>
-                                <li class="px-4 py-2 hover:text-indigo-500">
+                                <li class="px-3 py-2 hover:text-indigo-500 whitespace-nowrap">
                                     <a asp-controller="Registerforer" asp-action="AllObstacles">All Obstacles</a>
                                 </li>
                             }
 
                             @if (User.IsInRole("Admin"))
                             {
-                                <li class="px-4 py-2 hover:text-indigo-500">
+                                <li class="px-3 py-2 hover:text-indigo-500 whitespace-nowrap">
                                     <a asp-controller="Admin" asp-action="AdminDashboard">Dashboard</a>
                                 </li>
-                                <li class="px-4 py-2 hover:text-indigo-500">
+                                <li class="px-3 py-2 hover:text-indigo-500 whitespace-nowrap">
                                     <a asp-controller="Admin" asp-action="AdminUsers">Users</a>
                                 </li>
-                                <li class="px-4 py-2 hover:text-indigo-500">
+                                <li class="px-3 py-2 hover:text-indigo-500 whitespace-nowrap">
                                     <a asp-controller="Admin" asp-action="AdminStatistics">Statistics</a>
                                 </li>
                             }
                         </ul>
 
-                        <!-- User Email -->
-                        <span class="text-gray-600 text-sm font-medium">
+                        <!-- User Email - hidden on smaller desktops -->
+                        <span class="text-gray-600 text-xs font-medium hidden xl:inline truncate max-w-32">
                             @User.Identity?.Name
                         </span>
-                        
+
                         <!-- Logout Button -->
-                        <form asp-controller="Account" asp-action="Logout" method="post" class="inline">
-                            <button type="submit" class="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-gray-50 rounded-xl flex items-center gap-2 transition">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="inline flex-shrink-0">
+                            <button type="submit" class="px-3 py-2 bg-indigo-500 hover:bg-indigo-600 text-gray-50 rounded-lg flex items-center gap-1 transition text-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" />
                                 </svg>
                                 <span>Logout</span>
@@ -102,10 +144,77 @@
                     }
                 </div>
             </div>
+
+            <!-- Mobile Menu -->
+            <div class="mobile-menu pb-4" id="mobile-menu">
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <div class="border-t border-gray-300 pt-4">
+                        <!-- User info -->
+                        <div class="px-4 py-2 text-sm text-gray-600 font-medium border-b border-gray-300 mb-2">
+                            @User.Identity?.Name
+                        </div>
+
+                        @if (User.IsInRole("Pilot"))
+                        {
+                            <a asp-controller="Pilot" asp-action="RegisterType" class="block px-4 py-3 text-gray-600 hover:bg-gray-300 hover:text-indigo-500 font-semibold">
+                                Register Obstacle
+                            </a>
+                            <a asp-controller="Pilot" asp-action="MyRegistrations" class="block px-4 py-3 text-gray-600 hover:bg-gray-300 hover:text-indigo-500 font-semibold">
+                                My Registrations
+                            </a>
+                            <a asp-controller="Pilot" asp-action="Dashboard" class="block px-4 py-3 text-gray-600 hover:bg-gray-300 hover:text-indigo-500 font-semibold">
+                                Dashboard
+                            </a>
+                        }
+
+                        @if (User.IsInRole("Registerfører"))
+                        {
+                            <a asp-controller="Registerforer" asp-action="RegisterforerDashboard" class="block px-4 py-3 text-gray-600 hover:bg-gray-300 hover:text-indigo-500 font-semibold">
+                                Dashboard
+                            </a>
+                            <a asp-controller="Registerforer" asp-action="MapView" class="block px-4 py-3 text-gray-600 hover:bg-gray-300 hover:text-indigo-500 font-semibold">
+                                Map View
+                            </a>
+                            <a asp-controller="Registerforer" asp-action="AllObstacles" class="block px-4 py-3 text-gray-600 hover:bg-gray-300 hover:text-indigo-500 font-semibold">
+                                All Obstacles
+                            </a>
+                        }
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-controller="Admin" asp-action="AdminDashboard" class="block px-4 py-3 text-gray-600 hover:bg-gray-300 hover:text-indigo-500 font-semibold">
+                                Dashboard
+                            </a>
+                            <a asp-controller="Admin" asp-action="AdminUsers" class="block px-4 py-3 text-gray-600 hover:bg-gray-300 hover:text-indigo-500 font-semibold">
+                                Users
+                            </a>
+                            <a asp-controller="Admin" asp-action="AdminStatistics" class="block px-4 py-3 text-gray-600 hover:bg-gray-300 hover:text-indigo-500 font-semibold">
+                                Statistics
+                            </a>
+                        }
+
+                        <!-- Logout -->
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="mt-2 px-4">
+                            <button type="submit" class="w-full px-4 py-3 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-semibold">
+                                Logout
+                            </button>
+                        </form>
+                    </div>
+                }
+                else
+                {
+                    <div class="border-t border-gray-300 pt-4 px-4">
+                        <a asp-controller="Home" asp-action="Index" class="block w-full px-4 py-3 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-semibold text-center">
+                            Login
+                        </a>
+                    </div>
+                }
+            </div>
         </nav>
     </header>
 
-    <main role="main" class="min-h-screen">
+    <main role="main" class="min-h-screen main-content">
         @RenderBody()
     </main>
 
@@ -118,10 +227,27 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    
+
     <!-- Leaflet JS for maps -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    
+
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('mobile-menu');
+            const button = document.querySelector('.mobile-menu-button');
+
+            if (!menu.contains(event.target) && !button.contains(event.target)) {
+                menu.classList.remove('active');
+            }
+        });
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
