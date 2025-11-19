@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Review Obstacle";
+    var formattedHeight = Model.Height.ToString("F2");
 }
 
 <style>
@@ -37,7 +38,7 @@
         </div>
     }
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
         <!-- Obstacle Details -->
         <div class="bg-white rounded-lg shadow-md p-6">
             <h2 class="text-2xl font-bold text-gray-900 mb-4">Obstacle Information</h2>
@@ -58,7 +59,7 @@
 
                 <div class="flex justify-between py-2 border-b">
                     <span class="font-semibold text-gray-700">Height:</span>
-                    <span class="text-gray-900">@Model.Height m</span>
+                    <span class="text-gray-900">@formattedHeight m</span>
                 </div>
 
                 <div class="py-2 border-b">
@@ -189,7 +190,7 @@
                         var lng = parseFloat(coords[0]);
                         
                         var marker = L.marker([lat, lng]).addTo(map);
-                        marker.bindPopup('<b>@Model.Name</b><br>@Model.Height m').openPopup();
+                        marker.bindPopup('<b>@Model.Name</b><br>@formattedHeight m').openPopup();
                         map.setView([lat, lng], 13);
                     } else if (geometryWKT.startsWith('LINESTRING')) {
                         var coordsStr = geometryWKT.replace('LINESTRING(', '').replace(')', '');
@@ -200,7 +201,7 @@
                         });
                         
                         var polyline = L.polyline(latlngs, {color: 'blue'}).addTo(map);
-                        polyline.bindPopup('<b>@Model.Name</b><br>@Model.Height m');
+                        polyline.bindPopup('<b>@Model.Name</b><br>@formattedHeight m');
                         map.fitBounds(polyline.getBounds());
                     } else if (geometryWKT.startsWith('POLYGON')) {
                         var coordsStr = geometryWKT.replace('POLYGON((', '').replace('))', '');
@@ -211,7 +212,7 @@
                         });
                         
                         var polygon = L.polygon(latlngs, {color: 'blue'}).addTo(map);
-                        polygon.bindPopup('<b>@Model.Name</b><br>@Model.Height m');
+                        polygon.bindPopup('<b>@Model.Name</b><br>@formattedHeight m');
                         map.fitBounds(polygon.getBounds());
                     }
                 } catch (e) {
