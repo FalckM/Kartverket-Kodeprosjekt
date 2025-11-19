@@ -15,6 +15,7 @@
 
         // Status info
         public string CurrentStatus { get; set; } = string.Empty; // "Registered", "Pending", "Approved", "Rejected"
+        public string? StatusName { get; set; } // Samme som CurrentStatus, men nullable
         public bool IsIncomplete { get; set; } // For Quick Registrations
         public bool IsPending { get; set; }
         public bool IsApproved { get; set; }
