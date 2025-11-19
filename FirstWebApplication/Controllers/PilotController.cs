@@ -93,7 +93,7 @@ namespace FirstWebApplication.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> FullRegister(RegisterObstacleViewModel model)
+        public async Task<IActionResult> FullRegister(RegisterObstacleViewModel model, string? CustomObstacleType)
         {
             // Manuell validering
             if (string.IsNullOrWhiteSpace(model.ObstacleName))
@@ -135,10 +135,36 @@ namespace FirstWebApplication.Controllers
             };
 
             // Finn ObstacleType hvis oppgitt
-            if (!string.IsNullOrWhiteSpace(model.ObstacleType))
+            var typeToFind = model.ObstacleType;
+            if (model.ObstacleType == "Other" && !string.IsNullOrWhiteSpace(CustomObstacleType))
+            {
+                // Check if custom type already exists, otherwise create it
+                var existingType = await _context.ObstacleTypes
+                    .FirstOrDefaultAsync(ot => ot.Name == CustomObstacleType);
+
+                if (existingType != null)
+                {
+                    obstacle.ObstacleTypeId = existingType.Id;
+                }
+                else
+                {
+                    // Create new obstacle type
+                    var newType = new ObstacleType
+                    {
+                        Name = CustomObstacleType,
+                        Description = "Custom type added by user",
+                        MinHeight = 1,
+                        MaxHeight = 1000
+                    };
+                    _context.ObstacleTypes.Add(newType);
+                    await _context.SaveChangesAsync();
+                    obstacle.ObstacleTypeId = newType.Id;
+                }
+            }
+            else if (!string.IsNullOrWhiteSpace(typeToFind))
             {
                 var obstacleType = await _context.ObstacleTypes
-                    .FirstOrDefaultAsync(ot => ot.Name == model.ObstacleType);
+                    .FirstOrDefaultAsync(ot => ot.Name == typeToFind);
 
                 if (obstacleType != null)
                 {
@@ -209,7 +235,7 @@ namespace FirstWebApplication.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CompleteQuickRegister(CompleteQuickRegViewModel model)
+        public async Task<IActionResult> CompleteQuickRegister(CompleteQuickRegViewModel model, string? CustomObstacleType)
         {
             // Manuell validering
             if (string.IsNullOrWhiteSpace(model.ObstacleName))
@@ -254,7 +280,32 @@ namespace FirstWebApplication.Controllers
             obstacle.Description = model.ObstacleDescription;
 
             // Finn ObstacleType hvis oppgitt
-            if (!string.IsNullOrWhiteSpace(model.ObstacleType))
+            if (model.ObstacleType == "Other" && !string.IsNullOrWhiteSpace(CustomObstacleType))
+            {
+                // Check if custom type already exists, otherwise create it
+                var existingType = await _context.ObstacleTypes
+                    .FirstOrDefaultAsync(ot => ot.Name == CustomObstacleType);
+
+                if (existingType != null)
+                {
+                    obstacle.ObstacleTypeId = existingType.Id;
+                }
+                else
+                {
+                    // Create new obstacle type
+                    var newType = new ObstacleType
+                    {
+                        Name = CustomObstacleType,
+                        Description = "Custom type added by user",
+                        MinHeight = 1,
+                        MaxHeight = 1000
+                    };
+                    _context.ObstacleTypes.Add(newType);
+                    await _context.SaveChangesAsync();
+                    obstacle.ObstacleTypeId = newType.Id;
+                }
+            }
+            else if (!string.IsNullOrWhiteSpace(model.ObstacleType))
             {
                 var obstacleType = await _context.ObstacleTypes
                     .FirstOrDefaultAsync(ot => ot.Name == model.ObstacleType);

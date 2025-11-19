@@ -57,13 +57,13 @@ namespace FirstWebApplication.Services
             var types = new List<ObstacleType>
             {
                 new ObstacleType { Name = "Mast", Description = "Radio/TV mast", MinHeight = 10, MaxHeight = 500 },
-                new ObstacleType { Name = "Tårn", Description = "Tower structure", MinHeight = 20, MaxHeight = 300 },
-                new ObstacleType { Name = "Strømledning", Description = "Power line", MinHeight = 5, MaxHeight = 100 },
-                new ObstacleType { Name = "Vindturbin", Description = "Wind turbine", MinHeight = 50, MaxHeight = 250 },
-                new ObstacleType { Name = "Bygning", Description = "Building", MinHeight = 10, MaxHeight = 200 },
-                new ObstacleType { Name = "Kran", Description = "Construction crane", MinHeight = 20, MaxHeight = 150 },
-                new ObstacleType { Name = "Bro", Description = "Bridge", MinHeight = 10, MaxHeight = 100 },
-                new ObstacleType { Name = "Annet", Description = "Other obstacles", MinHeight = 1, MaxHeight = 1000 }
+                new ObstacleType { Name = "Tower", Description = "Tower structure", MinHeight = 20, MaxHeight = 300 },
+                new ObstacleType { Name = "Power Line", Description = "Power line/cables", MinHeight = 5, MaxHeight = 100 },
+                new ObstacleType { Name = "Wind Turbine", Description = "Wind turbine", MinHeight = 50, MaxHeight = 250 },
+                new ObstacleType { Name = "Building", Description = "Building", MinHeight = 10, MaxHeight = 200 },
+                new ObstacleType { Name = "Crane", Description = "Construction crane", MinHeight = 20, MaxHeight = 150 },
+                new ObstacleType { Name = "Bridge", Description = "Bridge", MinHeight = 10, MaxHeight = 100 },
+                new ObstacleType { Name = "Other", Description = "Other obstacles", MinHeight = 1, MaxHeight = 1000 }
             };
 
             _context.ObstacleTypes.AddRange(types);

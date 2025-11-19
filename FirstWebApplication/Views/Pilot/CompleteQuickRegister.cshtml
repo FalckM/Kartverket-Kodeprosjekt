@@ -36,18 +36,23 @@
 
         <div>
             <label asp-for="ObstacleType" class="block text-sm font-medium mb-1 text-gray-700">Obstacle Type:</label>
-            <select asp-for="ObstacleType" class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+            <select asp-for="ObstacleType" class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600" id="obstacleTypeSelect" onchange="toggleCustomType()">
                 <option value="">-- Select Type --</option>
                 <option value="Mast">Mast</option>
-                <option value="Tårn">Tårn</option>
-                <option value="Strømledning">Strømledning</option>
-                <option value="Vindturbin">Vindturbin</option>
-                <option value="Bygning">Bygning</option>
-                <option value="Kran">Kran</option>
-                <option value="Bro">Bro</option>
-                <option value="Annet">Annet</option>
+                <option value="Tower">Tower</option>
+                <option value="Power Line">Power Line</option>
+                <option value="Wind Turbine">Wind Turbine</option>
+                <option value="Building">Building</option>
+                <option value="Crane">Crane</option>
+                <option value="Bridge">Bridge</option>
+                <option value="Other">Other</option>
             </select>
             <span asp-validation-for="ObstacleType" class="text-sm text-red-600"></span>
+        </div>
+
+        <div id="customTypeGroup" style="display: none;">
+            <label for="customTypeName" class="block text-sm font-medium mb-1 text-gray-700">Specify Type:</label>
+            <input type="text" id="customTypeName" class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Enter custom obstacle type..." />
         </div>
 
         <div>
@@ -91,6 +96,36 @@
     <script src="~/lib/leaflet/leaflet.js"></script>
 
     <script>
+        // Toggle custom type input field
+        function toggleCustomType() {
+            var select = document.getElementById('obstacleTypeSelect');
+            var customGroup = document.getElementById('customTypeGroup');
+            var customInput = document.getElementById('customTypeName');
+
+            if (select.value === 'Other') {
+                customGroup.style.display = 'block';
+                customInput.required = true;
+            } else {
+                customGroup.style.display = 'none';
+                customInput.required = false;
+                customInput.value = '';
+            }
+        }
+
+        // Update obstacle type with custom value before form submit
+        document.querySelector('form').addEventListener('submit', function(e) {
+            var select = document.getElementById('obstacleTypeSelect');
+            var customInput = document.getElementById('customTypeName');
+
+            if (select.value === 'Other' && customInput.value.trim()) {
+                var hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'CustomObstacleType';
+                hiddenInput.value = customInput.value.trim();
+                this.appendChild(hiddenInput);
+            }
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize map
             var map = L.map('mapid').setView([60.4720, 8.4689], 6);

@@ -111,18 +111,23 @@
     <form asp-action="FullRegister" method="post">
         <div class="form-group">
             <label asp-for="ObstacleType">Obstacle Type:</label>
-            <select asp-for="ObstacleType" class="form-control">
+            <select asp-for="ObstacleType" class="form-control" id="obstacleTypeSelect" onchange="toggleCustomType()">
                 <option value="">-- Select Type --</option>
                 <option value="Mast">Mast</option>
-                <option value="Tårn">Tårn</option>
-                <option value="Strømledning">Strømledning</option>
-                <option value="Vindturbin">Vindturbin</option>
-                <option value="Bygning">Bygning</option>
-                <option value="Kran">Kran</option>
-                <option value="Bro">Bro</option>
-                <option value="Annet">Annet</option>
+                <option value="Tower">Tower</option>
+                <option value="Power Line">Power Line</option>
+                <option value="Wind Turbine">Wind Turbine</option>
+                <option value="Building">Building</option>
+                <option value="Crane">Crane</option>
+                <option value="Bridge">Bridge</option>
+                <option value="Other">Other</option>
             </select>
             <span asp-validation-for="ObstacleType" class="text-danger"></span>
+        </div>
+
+        <div class="form-group" id="customTypeGroup" style="display: none;">
+            <label for="customTypeName">Specify Type:</label>
+            <input type="text" id="customTypeName" class="form-control" placeholder="Enter custom obstacle type..." />
         </div>
 
         <div class="form-group">
@@ -153,6 +158,37 @@
 
 @section Scripts {
     <script>
+        // Toggle custom type input field
+        function toggleCustomType() {
+            var select = document.getElementById('obstacleTypeSelect');
+            var customGroup = document.getElementById('customTypeGroup');
+            var customInput = document.getElementById('customTypeName');
+
+            if (select.value === 'Other') {
+                customGroup.style.display = 'block';
+                customInput.required = true;
+            } else {
+                customGroup.style.display = 'none';
+                customInput.required = false;
+                customInput.value = '';
+            }
+        }
+
+        // Update obstacle type with custom value before form submit
+        document.querySelector('form').addEventListener('submit', function(e) {
+            var select = document.getElementById('obstacleTypeSelect');
+            var customInput = document.getElementById('customTypeName');
+
+            if (select.value === 'Other' && customInput.value.trim()) {
+                // Create a hidden input with the custom type value
+                var hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'CustomObstacleType';
+                hiddenInput.value = customInput.value.trim();
+                this.appendChild(hiddenInput);
+            }
+        });
+
         var map = L.map('map').setView([60.4720, 8.4689], 6);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
